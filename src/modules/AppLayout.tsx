@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../components/Sidebar/Sidebar";
 import { Outlet } from "react-router";
 import Topbar from "@src/components/Topbar/Topbar";
 

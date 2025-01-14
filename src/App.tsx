@@ -1,12 +1,16 @@
 import "./App.css";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
-import { Outlet } from "react-router";
 import { Routes } from "react-router";
 import { Route } from "react-router";
-import AppLayout from "./pages/app/Layout";
+import AppLayout from "./modules/AppLayout";
+import { ModuleRegistry } from "./core/registry";
 
 function App() {
+  const routes = ModuleRegistry.getRoutes();
   const lightTheme = createTheme({
+    typography: {
+      fontFamily: ["Source Sans 3", "sans-serif"].join(","),
+    },
     palette: {
       mode: "light",
       primary: {
@@ -14,6 +18,7 @@ function App() {
       },
       secondary: {
         main: "#00a3a3",
+        light: "#c6cfd8",
       },
       success: {
         main: "#289f50",
@@ -21,6 +26,10 @@ function App() {
       warning: {
         main: "#e5ab4a",
         dark: "#f77a4a",
+      },
+      common: {
+        white: "#fff",
+        black: "#000",
       },
     },
   });
@@ -31,7 +40,9 @@ function App() {
         <Route path="/app" element={<Box>App</Box>} />
 
         <Route element={<AppLayout />}>
-          <Route path="/dashboard" element={<Box>Dashboard</Box>} />
+          {routes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
         </Route>
       </Routes>
     </ThemeProvider>
