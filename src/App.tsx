@@ -15,6 +15,8 @@ function App() {
       mode: "light",
       primary: {
         main: "#002b5b",
+        light: "#f2f9f9",
+        A400: "",
       },
       secondary: {
         main: "#00a3a3",
@@ -28,6 +30,9 @@ function App() {
         dark: "#f77a4a",
       },
       grey: {
+        A100: "#eaeaea",
+        A200: "#fcfdfd",
+        "50": "#ededed",
         "100": "#f0f1f3",
         "200": "#f6f7f8",
         "300": "#dadde2",

@@ -5,7 +5,16 @@ import Topbar from "@src/components/Topbar/Topbar";
 
 const AppLayout = () => {
   return (
-    <Box sx={{ display: "flex", height: "100dvh", width: "100dvw" }}>
+    <Box
+      sx={{
+        display: "flex",
+        height: "100dvh",
+        width: "100dvw",
+        position: "absolute",
+        left: "50%",
+        transform: "translateX(-50%)",
+      }}
+    >
       <Sidebar />
       <Box
         sx={{
@@ -13,6 +22,7 @@ const AppLayout = () => {
           flexDirection: "column",
           width: "100%",
           gap: 2,
+          overflowY: "scroll",
         }}
       >
         <Topbar />
