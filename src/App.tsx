@@ -27,9 +27,16 @@ function App() {
         main: "#e5ab4a",
         dark: "#f77a4a",
       },
+      grey: {
+        "100": "#f0f1f3",
+        "200": "#f6f7f8",
+        "300": "#dadde2",
+        "400": "#98a2b3",
+        "500": "#9fa6b2",
+      },
       common: {
         white: "#fff",
-        black: "#000",
+        black: "#222522",
       },
     },
   });
