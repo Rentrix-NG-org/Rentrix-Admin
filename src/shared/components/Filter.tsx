@@ -29,7 +29,6 @@ const Filter: React.FC<{ placeholder?: string }> = ({
         sx={{
           border: "none",
           padding: "6px 16px",
-
           background: "none",
           cursor: "pointer",
           width: "100%",

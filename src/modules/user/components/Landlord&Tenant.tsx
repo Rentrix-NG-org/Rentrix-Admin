@@ -82,7 +82,7 @@ const LandlordAndTenant: React.FC<{ search: string }> = ({ search }) => {
       userId: "00AB206",
       name: "Bob Wilson",
       role: "Landlord",
-      status: "Inactive",
+      status: "Suspended",
       registrationDate: "2023-03-10",
     },
     {

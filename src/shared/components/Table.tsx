@@ -66,6 +66,7 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
             row.map((cell, cellIndex) =>
               columns[cellIndex]?.type === "select" ? (
                 <Select
+                  cell={cell}
                   onSelect={(title) => {
                     onSelect(row, { value: title, index: cellIndex });
                   }}
@@ -94,9 +95,10 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
 
 const Select: FC<{
   column: string;
+  cell: string;
   options: string[];
   onSelect: (selected: string) => void;
-}> = ({ column, options, onSelect }) => {
+}> = ({ column, options, onSelect, cell }) => {
   const theme = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const colors: Record<string, { value: string; accent: string }> = {
@@ -109,7 +111,7 @@ const Select: FC<{
     Default: { value: "#002b5b", accent: "#cce3fc" },
   };
 
-  const color = colors[options[0]] || colors.Default;
+  const color = colors[cell || options[0]] || colors.Default;
   return (
     <Box
       sx={{
@@ -137,7 +139,7 @@ const Select: FC<{
         }}
       >
         <Typography sx={{ color: color.value, fontSize: 12, fontWeight: 600 }}>
-          {options[0]}
+          {cell || options[0]}
         </Typography>
         <ChevronLeftRounded
           sx={{
