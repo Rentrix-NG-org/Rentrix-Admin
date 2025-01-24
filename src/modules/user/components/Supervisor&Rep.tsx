@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
+import Action from "./Action";
 
 const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -64,7 +65,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             header: "ROLE",
             label: "role",
             type: "select",
-            options: ["One"],
+            options: ["Supervisor", "Representative"],
           },
           {
             header: "LAST ACTIVE",
@@ -80,6 +81,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             header: "ACTIONS",
             label: "actions",
             type: "action",
+            component: <Action />,
           },
         ]}
         data={searchFilter}

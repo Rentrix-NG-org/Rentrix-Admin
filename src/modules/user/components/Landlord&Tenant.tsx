@@ -3,6 +3,8 @@ import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
+import { icons } from "@src/utils/icons";
+import Action from "./Action";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -47,6 +49,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     label: string;
     type: "select" | "action" | "text";
     options?: string[];
+    component?: React.ReactNode;
   }[] = [
     {
       header: "USER ID",
@@ -79,6 +82,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       header: "ACTIONS",
       label: "actions",
       type: "action",
+      component: <Action />,
     },
   ];
   const data = [
@@ -167,4 +171,5 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     </Box>
   );
 };
+
 export default LandlordAndTenant;

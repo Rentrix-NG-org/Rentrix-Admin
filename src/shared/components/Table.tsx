@@ -9,11 +9,17 @@ interface TableProps {
     label: string;
     type: "select" | "action" | "text";
     options?: string[];
+    component?: React.ReactNode;
   }[];
   data: string[][];
 }
 
-const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
+const Table: React.FC<TableProps> = ({
+  onSelect,
+  columns,
+  data,
+  component,
+}) => {
   const [rows, setRows] = useState<string[][]>(data);
   useEffect(() => {
     const result = data.map((d) => {
@@ -74,6 +80,8 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
                   key={`${rowIndex}-${cellIndex}`}
                   options={columns[cellIndex].options as string[]}
                 />
+              ) : columns[cellIndex]?.type === "action" ? (
+                columns[cellIndex]?.component
               ) : (
                 <Typography
                   key={`${rowIndex}-${cellIndex}`}
