@@ -3,7 +3,10 @@ import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
 
-const SupervisorAndRep: React.FC<{ search: string }> = ({ search }) => {
+const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
+  search,
+  filter,
+}) => {
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
 
   useEffect(() => {

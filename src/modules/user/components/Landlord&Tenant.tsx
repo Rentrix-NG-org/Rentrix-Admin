@@ -4,7 +4,10 @@ import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
 
-const LandlordAndTenant: React.FC<{ search: string }> = ({ search }) => {
+const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
+  search,
+  filter,
+}) => {
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title: string;

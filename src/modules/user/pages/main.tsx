@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<string[]>([]);
   return (
     <Box
       sx={{
@@ -15,9 +16,9 @@ const UserManagement = () => {
         gap: "46px",
       }}
     >
-      <UserHeader search="" setSearch={setSearch} />
-      <LandlordAndTenant search={search} />
-      <SupervisorAndRep search={search} />
+      <UserHeader search="" setSearch={setSearch} setFilter={setFilter} />
+      <LandlordAndTenant search={search} filter={filter} />
+      <SupervisorAndRep search={search} filter={filter} />
     </Box>
   );
 };

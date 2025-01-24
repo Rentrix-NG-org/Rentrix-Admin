@@ -5,7 +5,8 @@ import Search from "@src/shared/components/Search";
 const UserHeader: React.FC<{
   search: string;
   setSearch: (value: string) => void;
-}> = ({ search, setSearch }) => {
+  setFilter: (value: string[]) => void;
+}> = ({ search, setSearch, setFilter }) => {
   const theme = useTheme();
   return (
     <Box
@@ -56,7 +57,7 @@ const UserHeader: React.FC<{
           </Typography>
         </Box>
         <Search placeholder="Search Users" setSearch={setSearch} />
-        <Filter />
+        <Filter onFilter={setFilter} />
       </Box>
     </Box>
   );

@@ -242,7 +242,6 @@ const Menu: React.FC<{
               }}
               checked={selected === option}
               onChange={() => {
-                console.log(option, "here");
                 setSelected(option);
                 onSelect(option);
               }}
