@@ -17,7 +17,6 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
         item.toString().toLowerCase().includes(search.toLowerCase()),
       );
     });
-    console.log(filtered);
     setSearchFilter(filtered);
   }, [search]);
   const data = [
@@ -46,10 +45,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     >
       <TableHeader title="Supervisors & Representatives" />
       <Table
-        onSelect={(title, selected) => {
-          console.log("ping");
-          // console.log(title, selected);
-        }}
+        onSelect={(title, selected) => {}}
         columns={[
           {
             header: "USER ID",

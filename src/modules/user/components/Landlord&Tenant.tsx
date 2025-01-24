@@ -18,7 +18,6 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   } | null>(null);
   const theme = useTheme();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
-  console.log(filter);
   useEffect(() => {
     const arr = data.map((d) => Object.values(d));
     const filtered = arr.filter((d) => {
@@ -26,7 +25,6 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         item.toString().toLowerCase().includes(search.toLowerCase()),
       );
     });
-    console.log(filtered);
     setSearchFilter(filtered);
   }, [search]);
 
@@ -122,7 +120,6 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   ) {
     switch (selected.value) {
       case "Suspended":
-        console.log("Wait!!");
         setModal({
           isOpen: true,
           title: "Suspend",
@@ -137,9 +134,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
               <Typography>{row[1]}?</Typography>
             </Box>
           ),
-          onConfirm: () => {
-            console.log("confirmed");
-          },
+          onConfirm: () => {},
         });
     }
   }

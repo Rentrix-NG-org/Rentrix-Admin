@@ -1,6 +1,7 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
+import { useMenuPosition } from "../hooks/shared.hooks";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
@@ -30,6 +31,7 @@ const Table: React.FC<TableProps> = ({
   const theme = useTheme();
   return (
     <Box
+      data-table-container
       sx={{
         border: `1px solid ${theme.palette.grey[50]}`,
         borderTopLeftRadius: "14px",
@@ -159,6 +161,7 @@ const Select: FC<{
 
       {isMenuOpen && (
         <Menu
+          sx={{}}
           title={column}
           options={options}
           onSelect={(title) => {
@@ -180,14 +183,18 @@ const Menu: React.FC<{
 }> = ({ title, options = [], onSelect, sx, onClose }) => {
   const [selected, setSelected] = useState("");
   const theme = useTheme();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const position = useMenuPosition(menuRef);
+  console.log(position, "posi");
   return (
     <Box
+      ref={menuRef}
       sx={{
         border: `1px solid ${theme.palette.grey[100]}`,
         width: 312,
         position: "absolute",
-        top: -10,
-        left: -140,
+        top: position.top,
+        left: position.left,
         background: theme.palette.common.white,
         zIndex: 999,
         ...sx,
