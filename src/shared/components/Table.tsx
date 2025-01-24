@@ -15,12 +15,7 @@ interface TableProps {
   data: string[][];
 }
 
-const Table: React.FC<TableProps> = ({
-  onSelect,
-  columns,
-  data,
-  component,
-}) => {
+const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
   const [rows, setRows] = useState<string[][]>(data);
   useEffect(() => {
     const result = data.map((d) => {
@@ -112,10 +107,10 @@ const Select: FC<{
   const theme = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const colors: Record<string, { value: string; accent: string }> = {
-    Tenant: { value: "#9747ff", accent: "#efe3ff" },
-    Landlord: { value: "#297dfd", accent: "#f7f7ff" },
-    Suspended: { value: "#cb1a14", accent: "#f7dddc" },
-    Active: { value: "#099137", accent: "#daefe1" },
+    tenant: { value: "#9747ff", accent: "#efe3ff" },
+    landlord: { value: "#297dfd", accent: "#f7f7ff" },
+    suspended: { value: "#cb1a14", accent: "#f7dddc" },
+    active: { value: "#099137", accent: "#daefe1" },
     Supervisor: { value: "#430c7b", accent: "#e3dbeb" },
     "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
     Default: { value: "#002b5b", accent: "#cce3fc" },
@@ -149,7 +144,7 @@ const Select: FC<{
         }}
       >
         <Typography sx={{ color: color.value, fontSize: 12, fontWeight: 600 }}>
-          {cell || options[0]}
+          {cell.slice(0, 1).toUpperCase() + cell.slice(1) || options[0]}
         </Typography>
         <ChevronLeftRounded
           sx={{

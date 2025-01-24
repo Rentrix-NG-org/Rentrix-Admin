@@ -3,13 +3,15 @@ import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
-import { icons } from "@src/utils/icons";
 import Action from "./Action";
+import { UserService } from "../services/user.service";
+import dayjs from "dayjs";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
+  const { getAllUsers } = UserService();
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -18,18 +20,31 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   } | null>(null);
   const theme = useTheme();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   useEffect(() => {
-    const arr = data.map((d) => Object.values(d));
+    async function getUsers() {
+      const response = await getAllUsers();
+
+      if (response.success) {
+        setUsers(response.data as any[]);
+        console.log(response.data, "Is dat");
+      }
+    }
+    getUsers();
+  }, []);
+
+  useEffect(() => {
+    const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
       return d.some((item) =>
         item.toString().toLowerCase().includes(search.toLowerCase()),
       );
     });
     setSearchFilter(filtered);
-  }, [search]);
+  }, [search, users]);
 
   useEffect(() => {
-    const arr = data.map((d) => Object.values(d));
+    const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
       return (
         filter.length === 0 ||
@@ -41,7 +56,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       );
     });
     setSearchFilter(filtered);
-  }, [filter]);
+  }, [filter, users]);
   const columns: {
     header: string;
     label: string;
@@ -81,36 +96,6 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       label: "actions",
       type: "action",
       component: <Action />,
-    },
-  ];
-  const data = [
-    {
-      userId: "00AB204",
-      name: "John Doe",
-      role: "Landlord",
-      status: "Active",
-      registrationDate: "2023-01-15",
-    },
-    {
-      userId: "00AB205",
-      name: "Jane Smith",
-      role: "Tenant",
-      status: "Active",
-      registrationDate: "2023-02-20",
-    },
-    {
-      userId: "00AB206",
-      name: "Bob Wilson",
-      role: "Landlord",
-      status: "Suspended",
-      registrationDate: "2023-03-10",
-    },
-    {
-      userId: "00AB207",
-      name: "Sarah Brown",
-      role: "Tenant",
-      status: "Active",
-      registrationDate: "2023-04-05",
     },
   ];
 
