@@ -2,8 +2,10 @@ import { Box } from "@mui/material";
 import UserHeader from "../components/UserHeader";
 import LandlordAndTenant from "../components/Landlord&Tenant";
 import SupervisorAndRep from "../components/Supervisor&Rep";
+import { useState } from "react";
 
 const UserManagement = () => {
+  const [search, setSearch] = useState("");
   return (
     <Box
       sx={{
@@ -13,9 +15,9 @@ const UserManagement = () => {
         gap: "46px",
       }}
     >
-      <UserHeader />
-      <LandlordAndTenant />
-      <SupervisorAndRep />
+      <UserHeader search="" setSearch={setSearch} />
+      <LandlordAndTenant search={search} />
+      <SupervisorAndRep search={search} />
     </Box>
   );
 };

@@ -1,9 +1,10 @@
 import { Box, useTheme } from "@mui/material";
 import searchicon from "@src/assets/icons/search.svg";
 
-const Search: React.FC<{ placeholder?: string }> = ({
-  placeholder = "Search item",
-}) => {
+const Search: React.FC<{
+  placeholder?: string;
+  setSearch: (value: string) => void;
+}> = ({ placeholder = "Search item", setSearch }) => {
   const theme = useTheme();
   return (
     <Box
@@ -37,6 +38,9 @@ const Search: React.FC<{ placeholder?: string }> = ({
       >
         <Box
           component="input"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
           placeholder={placeholder}
           sx={{
             fontSize: "14px",

@@ -1,10 +1,10 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
 
-const LandlordAndTenant = () => {
+const LandlordAndTenant: React.FC<{ search: string }> = ({ search }) => {
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -12,6 +12,18 @@ const LandlordAndTenant = () => {
     onConfirm: () => void;
   } | null>(null);
   const theme = useTheme();
+  const [searchFilter, setSearchFilter] = useState<string[][]>([]);
+
+  useEffect(() => {
+    const arr = data.map((d) => Object.values(d));
+    const filtered = arr.filter((d) => {
+      return d.some((item) =>
+        item.toString().toLowerCase().includes(search.toLowerCase()),
+      );
+    });
+    console.log(filtered);
+    setSearchFilter(filtered);
+  }, [search]);
   const columns: {
     header: string;
     label: string;
@@ -83,7 +95,7 @@ const LandlordAndTenant = () => {
   ];
 
   function handleTableSelection(
-    row,
+    row: string[],
     selected: { value: string; index: number },
   ) {
     switch (selected.value) {
@@ -129,7 +141,11 @@ const LandlordAndTenant = () => {
         </Modal>
       )}
 
-      <Table onSelect={handleTableSelection} columns={columns} data={data} />
+      <Table
+        onSelect={handleTableSelection}
+        columns={columns}
+        data={searchFilter}
+      />
     </Box>
   );
 };

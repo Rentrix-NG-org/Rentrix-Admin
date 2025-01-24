@@ -1,18 +1,21 @@
 import { Box } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
-import { supervisorTableData } from "../data/table";
 import Table from "@src/shared/components/Table";
+import { useEffect, useState } from "react";
 
-interface TableDataType {
-  columnLabel: string;
-  value: string[];
-  type: "text" | "button" | "select";
-  option?: string[];
-  actionTitle?: string;
-  onAction?: () => void;
-}
+const SupervisorAndRep: React.FC<{ search: string }> = ({ search }) => {
+  const [searchFilter, setSearchFilter] = useState<string[][]>([]);
 
-const SupervisorAndRep = () => {
+  useEffect(() => {
+    const arr = data.map((d) => Object.values(d));
+    const filtered = arr.filter((d) => {
+      return d.some((item) =>
+        item.toString().toLowerCase().includes(search.toLowerCase()),
+      );
+    });
+    console.log(filtered);
+    setSearchFilter(filtered);
+  }, [search]);
   const data = [
     {
       userId: "USR001",
@@ -76,7 +79,7 @@ const SupervisorAndRep = () => {
             type: "action",
           },
         ]}
-        data={data}
+        data={searchFilter}
       />
     </Box>
   );

@@ -2,7 +2,10 @@ import { Box, Typography, useTheme } from "@mui/material";
 import Filter from "@src/shared/components/Filter";
 import Search from "@src/shared/components/Search";
 
-const UserHeader = () => {
+const UserHeader: React.FC<{
+  search: string;
+  setSearch: (value: string) => void;
+}> = ({ search, setSearch }) => {
   const theme = useTheme();
   return (
     <Box
@@ -52,7 +55,7 @@ const UserHeader = () => {
             Add new users
           </Typography>
         </Box>
-        <Search placeholder="Search Users" />
+        <Search placeholder="Search Users" setSearch={setSearch} />
         <Filter />
       </Box>
     </Box>

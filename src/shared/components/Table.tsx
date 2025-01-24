@@ -10,14 +10,14 @@ interface TableProps {
     type: "select" | "action" | "text";
     options?: string[];
   }[];
-  data: any[];
+  data: string[][];
 }
 
 const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
   const [rows, setRows] = useState<string[][]>(data);
   useEffect(() => {
     const result = data.map((d) => {
-      return [...Object.values(d), "Action"] as string[];
+      return [...d, "Action"] as string[];
     });
     setRows(result);
   }, [data]);
