@@ -19,6 +19,21 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     });
     setSearchFilter(filtered);
   }, [search]);
+
+  useEffect(() => {
+    const arr = data.map((d) => Object.values(d)) as string[][];
+    const filtered = arr.filter((d) => {
+      return (
+        filter.length === 0 ||
+        filter.every((filterItem) =>
+          d.some((item) =>
+            item.toString().toLowerCase().includes(filterItem.toLowerCase()),
+          ),
+        )
+      );
+    });
+    setSearchFilter(filtered);
+  }, [filter]);
   const data = [
     {
       userId: "USR001",
