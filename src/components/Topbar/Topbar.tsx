@@ -1,11 +1,16 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import avatar from "@src/assets/images/avatar.jpg";
 import bell from "@src/assets/icons/bell.svg";
 const Topbar = () => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
         height: "fit-content",
+        position: "sticky",
+        top: 0,
+        zIndex: 999,
+        background: theme.palette.common.white,
         padding: "20px 80px",
         boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.05)",
         display: "flex",
