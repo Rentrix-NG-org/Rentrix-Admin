@@ -7,9 +7,11 @@ const Filter: React.FC<{ placeholder?: string }> = ({
   placeholder = "Filter",
 }) => {
   const theme = useTheme();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <Box
       component="button"
+      onClick={() => setIsModalOpen(!isModalOpen)}
       sx={{
         border: `1px solid ${theme.palette.grey[300]}`,
         padding: "6px 16px",
@@ -29,7 +31,7 @@ const Filter: React.FC<{ placeholder?: string }> = ({
       <Typography sx={{ color: theme.palette.common.black, fontWeight: 600 }}>
         {placeholder}
       </Typography>
-      <Modal />
+      {isModalOpen && <Modal />}
     </Box>
   );
 };
