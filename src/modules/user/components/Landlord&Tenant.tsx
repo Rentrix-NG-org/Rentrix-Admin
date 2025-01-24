@@ -127,12 +127,19 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
               <Typography>{row[1]}?</Typography>
             </Box>
           ),
-          onConfirm: () => {},
+          onConfirm: () => {
+            updateUserData(row[0], { status: selected.value.toLowerCase() });
+            setModal(null);
+          },
         });
         break;
       case "Landlord":
       case "Tenant":
         updateUserData(row[0], { role: selected.value.toLowerCase() });
+        break;
+      case "Active":
+        updateUserData(row[0], { status: selected.value.toLowerCase() });
+        break;
     }
   }
   return (
