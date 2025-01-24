@@ -16,7 +16,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   } | null>(null);
   const theme = useTheme();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
-
+  console.log(filter);
   useEffect(() => {
     const arr = data.map((d) => Object.values(d));
     const filtered = arr.filter((d) => {
@@ -27,6 +27,21 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     console.log(filtered);
     setSearchFilter(filtered);
   }, [search]);
+
+  useEffect(() => {
+    const arr = data.map((d) => Object.values(d));
+    const filtered = arr.filter((d) => {
+      return (
+        filter.length === 0 ||
+        filter.every((filterItem) =>
+          d.some((item) =>
+            item.toString().toLowerCase().includes(filterItem.toLowerCase()),
+          ),
+        )
+      );
+    });
+    setSearchFilter(filtered);
+  }, [filter]);
   const columns: {
     header: string;
     label: string;
