@@ -3,7 +3,7 @@ import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
 interface TableProps {
-  onSelect: (row: string[], selected: string) => void;
+  onSelect: (row: string[], selected: { value: string; index: number }) => void;
   columns: {
     header: string;
     label: string;
@@ -67,7 +67,7 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
               columns[cellIndex]?.type === "select" ? (
                 <Select
                   onSelect={(title) => {
-                    onSelect(row, title);
+                    onSelect(row, { value: title, index: cellIndex });
                   }}
                   column={columns[cellIndex].header}
                   key={`${rowIndex}-${cellIndex}`}

@@ -102,7 +102,7 @@ const Modal: React.FC<{
             </Box>
             <Box
               component="button"
-              onClick={onCancel}
+              onClick={onConfirm}
               sx={{
                 borderRadius: "100px",
                 width: 317.5,

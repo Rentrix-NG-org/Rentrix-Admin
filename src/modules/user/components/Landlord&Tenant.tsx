@@ -12,6 +12,45 @@ const LandlordAndTenant = () => {
     onConfirm: () => void;
   } | null>(null);
   const theme = useTheme();
+  const columns: {
+    header: string;
+    label: string;
+    type: "select" | "action" | "text";
+    options?: string[];
+  }[] = [
+    {
+      header: "USER ID",
+      label: "userId",
+      type: "text",
+    },
+    {
+      header: "NAME",
+      label: "name",
+      type: "text",
+    },
+    {
+      header: "ROLE",
+      label: "role",
+      type: "select",
+      options: ["Tenant", "Landlord"],
+    },
+    {
+      header: "STATUS",
+      label: "status",
+      type: "select",
+      options: ["Active", "Suspended"],
+    },
+    {
+      header: "REG DATE",
+      label: "registrationDate",
+      type: "text",
+    },
+    {
+      header: "ACTIONS",
+      label: "actions",
+      type: "action",
+    },
+  ];
   const data = [
     {
       userId: "00AB204",
@@ -43,8 +82,11 @@ const LandlordAndTenant = () => {
     },
   ];
 
-  function handleTableSelection(row, selected) {
-    switch (selected) {
+  function handleTableSelection(
+    row,
+    selected: { value: string; index: number },
+  ) {
+    switch (selected.value) {
       case "Suspended":
         console.log("Wait!!");
         setModal({
@@ -58,10 +100,12 @@ const LandlordAndTenant = () => {
               >
                 Suspend
               </Typography>
-              <Typography>User?</Typography>
+              <Typography>{row[1]}?</Typography>
             </Box>
           ),
-          onConfirm: () => {},
+          onConfirm: () => {
+            console.log("confirmed");
+          },
         });
     }
   }
@@ -85,44 +129,7 @@ const LandlordAndTenant = () => {
         </Modal>
       )}
 
-      <Table
-        onSelect={handleTableSelection}
-        columns={[
-          {
-            header: "USER ID",
-            label: "userId",
-            type: "text",
-          },
-          {
-            header: "NAME",
-            label: "name",
-            type: "text",
-          },
-          {
-            header: "ROLE",
-            label: "role",
-            type: "select",
-            options: ["Tenant", "Landlord"],
-          },
-          {
-            header: "STATUS",
-            label: "status",
-            type: "select",
-            options: ["Active", "Suspended"],
-          },
-          {
-            header: "REG DATE",
-            label: "registrationDate",
-            type: "text",
-          },
-          {
-            header: "ACTIONS",
-            label: "actions",
-            type: "action",
-          },
-        ]}
-        data={data}
-      />
+      <Table onSelect={handleTableSelection} columns={columns} data={data} />
     </Box>
   );
 };
