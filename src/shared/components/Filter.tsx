@@ -1,5 +1,7 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { ChevronLeftRounded } from "@mui/icons-material";
+import { Box, Checkbox, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
+import { useState } from "react";
 
 const Filter: React.FC<{ placeholder?: string }> = ({
   placeholder = "Filter",
@@ -19,6 +21,7 @@ const Filter: React.FC<{ placeholder?: string }> = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        position: "relative",
         gap: 1,
       }}
     >
@@ -26,6 +29,135 @@ const Filter: React.FC<{ placeholder?: string }> = ({
       <Typography sx={{ color: theme.palette.common.black, fontWeight: 600 }}>
         {placeholder}
       </Typography>
+      <Modal />
+    </Box>
+  );
+};
+
+const Modal = () => {
+  const theme = useTheme();
+  const [filterState, setFilterState] = useState<{
+    [key: number]: { isShown: boolean; selected: string };
+  } | null>(null);
+  console.log(filterState, "state");
+  const filters = [
+    { name: "Status", options: ["Active", "Suspended"] },
+    { name: "Role", options: ["Landlord", "Tenant", "Rentrix Rep"] },
+  ];
+
+  function handleFilterState(index: number) {
+    setFilterState((curr) => {
+      if (!curr) {
+        return {
+          [index]: {
+            isShown: true,
+            selected: "",
+          },
+        };
+      }
+      return {
+        ...curr,
+        [index]: {
+          isShown: !curr[index]?.isShown,
+          selected: curr[index]?.selected || "",
+        },
+      };
+    });
+  }
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        left: -240,
+        top: 40,
+        width: 312,
+        border: `1px solid ${theme.palette.grey[300]}`,
+        borderTop: "none",
+        background: theme.palette.grey.A200,
+      }}
+    >
+      {filters.map(({ name, options }, index) => (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            // padding: "6px 8px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "10px 20px",
+              borderTop: `1px solid ${theme.palette.grey[300]}`,
+              borderBottom: `1px solid ${theme.palette.grey[300]}`,
+            }}
+          >
+            <Typography>{name}</Typography>
+            <Box
+              component="button"
+              onClick={() => handleFilterState(index)}
+              sx={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <ChevronLeftRounded
+                sx={{
+                  transform: filterState?.[index]?.isShown
+                    ? "rotate(90deg)"
+                    : "rotate(-90deg)",
+                  color: theme.palette.secondary.main,
+                  width: 32,
+                  height: 32,
+                }}
+              />
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: filterState?.[index]?.isShown ? "block" : "none",
+            }}
+          >
+            {options.map((option) => (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Checkbox
+                  sx={{
+                    color: theme.palette.secondary.main,
+                    "&.Mui-checked": {
+                      color: theme.palette.secondary.main,
+                    },
+                  }}
+                  checked={filterState?.[index]?.selected === option}
+                  onChange={() => {
+                    setFilterState((curr) =>
+                      curr === null
+                        ? null
+                        : {
+                            ...curr,
+                            [index]: {
+                              isShown: curr[index]?.isShown || false,
+                              selected: option,
+                            },
+                          },
+                    );
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: 14,
+                    fontStyle: "normal",
+                    fontWeight: 400,
+                    lineHeight: "normal",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {option}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      ))}
     </Box>
   );
 };
