@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
-import Table from "@src/shared/components/TableAlt";
+import Table from "@src/shared/components/Table";
 import { useState } from "react";
 import Modal from "@src/shared/components/Modal";
 

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import { supervisorTableData } from "../data/table";
-import Table from "@src/shared/components/TableAlt";
+import Table from "@src/shared/components/Table";
 
 interface TableDataType {
   columnLabel: string;

@@ -1,147 +1,104 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
-import { icons } from "@src/utils/icons";
-import { useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-interface TableDataType {
-  columnLabel: string;
-  value: string[];
-  type: "text" | "button" | "select" | "action";
-  option?: string[];
-  actionTitle?: string;
-  onAction?: () => void;
-}
-
-const Table: React.FC<{
+interface TableProps {
+  onSelect: (row: string[], selected: { value: string; index: number }) => void;
   columns: {
     header: string;
     label: string;
+    type: "select" | "action" | "text";
+    options?: string[];
   }[];
-  data: TableDataType[];
-  onSelect?: ({
-    option,
-    index,
-    column,
-  }: {
-    option: string;
-    index: number;
-    column: string[];
-  }) => void;
-}> = ({ columns, data, onSelect }) => {
+  data: any[];
+}
+
+const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
+  const [rows, setRows] = useState<string[][]>(data);
+  useEffect(() => {
+    const result = data.map((d) => {
+      return [...Object.values(d), "Action"] as string[];
+    });
+    setRows(result);
+  }, [data]);
   const theme = useTheme();
   return (
-    <Box>
+    <Box
+      sx={{
+        border: `1px solid ${theme.palette.grey[50]}`,
+        borderTopLeftRadius: "14px",
+        borderTopRightRadius: "14px",
+        overflow: "hidden",
+        overflowX: "scroll",
+      }}
+    >
       <Box
         sx={{
           display: "grid",
-          border: `1px solid ${theme.palette.grey[50]}`,
-          borderTopLeftRadius: "14px",
-          borderTopRightRadius: "14px",
-          overflow: "hidden",
-          overflowX: "scroll",
           gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
         }}
       >
-        {columns.map((column) => (
-          <Box sx={{}}>
-            <Typography
-              sx={{
-                fontWeight: 600,
-                textWrap: "nowrap",
-                color: theme.palette.common.black,
-                background: theme.palette.grey.A200,
-                borderBottom: `1px solid ${theme.palette.grey.A100}`,
-                padding: "13px 31px",
-              }}
-            >
-              {column.header}
-            </Typography>
-
-            {data
-              .filter((d) => d.columnLabel === column.label)
-              .map((row) =>
-                row.value.map((v, index) =>
-                  row.type === "select" ? (
-                    <Select
-                      onSelect={onSelect}
-                      columnLabel={column.label}
-                      options={row?.option}
-                      color={{ value: "#099137", accent: "#daefe1" }}
-                      index={index}
-                      data={data}
-                      value={v}
-                    />
-                  ) : row.type === "action" ? (
-                    <Action row={row} index={index} />
-                  ) : (
-                    <Typography
-                      sx={{
-                        fontWeight: 500,
-                        padding: "26px 31px",
-                        overflow: "hidden",
-                        textWrap: "nowrap",
-                        color: theme.palette.common.black,
-                        borderBottom:
-                          row.value.length === index + 1
-                            ? "none"
-                            : `1px solid ${theme.palette.grey.A100}`,
-                      }}
-                    >
-                      {v}
-                    </Typography>
-                  ),
-                ),
-              )}
-          </Box>
+        {columns.map(({ header, label }) => (
+          <Typography
+            key={label}
+            sx={{
+              fontWeight: 600,
+              textWrap: "nowrap",
+              color: theme.palette.common.black,
+              background: theme.palette.grey.A200,
+              borderBottom: `1px solid ${theme.palette.grey.A100}`,
+              padding: "13px 31px",
+            }}
+          >
+            {header}
+          </Typography>
         ))}
+      </Box>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+        }}
+      >
+        {rows.map(
+          (row, rowIndex) =>
+            Array.isArray(row) &&
+            row.map((cell, cellIndex) =>
+              columns[cellIndex]?.type === "select" ? (
+                <Select
+                  onSelect={(title) => {
+                    onSelect(row, { value: title, index: cellIndex });
+                  }}
+                  column={columns[cellIndex].header}
+                  key={`${rowIndex}-${cellIndex}`}
+                  options={columns[cellIndex].options as string[]}
+                />
+              ) : (
+                <Typography
+                  key={`${rowIndex}-${cellIndex}`}
+                  sx={{
+                    textWrap: "nowrap",
+                    padding: "28px 32px",
+                    borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                  }}
+                >
+                  {cell}
+                </Typography>
+              ),
+            ),
+        )}
       </Box>
     </Box>
   );
 };
 
-const Action: React.FC<{ index: number; row: TableDataType }> = ({
-  index,
-  row,
-}) => {
+const Select: FC<{
+  column: string;
+  options: string[];
+  onSelect: (selected: string) => void;
+}> = ({ column, options, onSelect }) => {
   const theme = useTheme();
-  return (
-    <Box
-      sx={{
-        padding: "29px 15px",
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        gap: 2,
-        borderBottom:
-          row.value.length === index + 1
-            ? "none"
-            : `1px solid ${theme.palette.grey.A100}`,
-      }}
-    >
-      <Box component="img" src={icons.eye} />
-      <Box component="img" src={icons.edit} />
-      <Box component="img" src={icons.bin} />
-    </Box>
-  );
-};
-
-const Select: React.FC<{
-  columnLabel: string;
-  index: number;
-  options?: string[];
-  color?: { value: string; accent: string };
-  value?: string;
-  data: TableDataType[];
-  onSelect?: ({
-    option,
-    index,
-    column,
-  }: {
-    option: string;
-    index: number;
-    column: string[];
-  }) => void;
-}> = ({ columnLabel, options, onSelect, data, value, index }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const colors: Record<string, { value: string; accent: string }> = {
     Tenant: { value: "#9747ff", accent: "#efe3ff" },
     Landlord: { value: "#297dfd", accent: "#f7f7ff" },
@@ -151,61 +108,53 @@ const Select: React.FC<{
     "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
     Default: { value: "#002b5b", accent: "#cce3fc" },
   };
-  const [isOpen, setIsOpen] = useState(false);
-  const theme = useTheme();
-  const column = data.map((d) => d.value[0]);
-  const row = data.find((d) => d.columnLabel === columnLabel)!;
+
+  const color = colors[options[0]] || colors.Default;
   return (
     <Box
       sx={{
-        padding: "23px 15px",
+        borderBottom: `1px solid ${theme.palette.grey.A100}`,
+        display: "flex",
+        alignItems: "center",
         position: "relative",
-        borderBottom:
-          row.value.length === index + 1
-            ? "none"
-            : `1px solid ${theme.palette.grey.A100}`,
+        padding: "28px 32px",
+        // justifyContent: "center",
       }}
     >
       <Box
         component="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsMenuOpen(true)}
         sx={{
-          background: colors[value ?? "Default"]?.accent,
-          display: "flex",
-          width: "fit-content",
-          alignItems: "center",
-          border: "none",
-          cursor: "pointer",
-          borderRadius: 3,
+          background: color.accent,
           padding: "3px 16px",
+          borderRadius: 3,
+          cursor: "pointer",
+          width: "fit-content",
+          border: "none",
+          display: "flex",
+          alignItems: "center",
+          gap: 0.5,
         }}
       >
-        <Typography
-          sx={{
-            fontSize: 12,
-            fontWeight: 600,
-            color: colors[value || "Default"]?.value,
-          }}
-        >
-          {value}
+        <Typography sx={{ color: color.value, fontSize: 12, fontWeight: 600 }}>
+          {options[0]}
         </Typography>
         <ChevronLeftRounded
           sx={{
             transform: "rotate(-90deg) ",
-            color: colors[value || "Default"]?.value,
+            color: color.value,
           }}
         />
       </Box>
 
-      {isOpen && (
+      {isMenuOpen && (
         <Menu
-          onSelect={(title) =>
-            onSelect && onSelect({ option: title, column, index })
-          }
-          sx={{ top: row.value.length === index + 1 ? -80 : -10 }}
-          onClose={() => setIsOpen(false)}
-          title={columnLabel as string}
-          options={options as string[]}
+          title={column}
+          options={options}
+          onSelect={(title) => {
+            onSelect(title);
+          }}
+          onClose={() => setIsMenuOpen(false)}
         />
       )}
     </Box>
@@ -217,7 +166,7 @@ const Menu: React.FC<{
   sx?: SxProps;
   options: string[];
   onClose: VoidFunction;
-  onSelect?: (title: string) => void;
+  onSelect: (title: string) => void;
 }> = ({ title, options = [], onSelect, sx, onClose }) => {
   const [selected, setSelected] = useState("");
   const theme = useTheme();
@@ -291,8 +240,9 @@ const Menu: React.FC<{
               }}
               checked={selected === option}
               onChange={() => {
+                console.log(option, "here");
                 setSelected(option);
-                onSelect?.(option);
+                onSelect(option);
               }}
             />
             <Typography
