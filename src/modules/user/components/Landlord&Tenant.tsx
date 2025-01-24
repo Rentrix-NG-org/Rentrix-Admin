@@ -5,13 +5,12 @@ import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
 import Action from "./Action";
 import { UserService } from "../services/user.service";
-import dayjs from "dayjs";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
-  const { getAllUsers } = UserService();
+  const { getAllUsers, updateUser } = UserService();
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -21,17 +20,19 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   const theme = useTheme();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<any[]>([]);
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     async function getUsers() {
       const response = await getAllUsers();
 
       if (response.success) {
+        setRefresh(false);
         setUsers(response.data as any[]);
-        console.log(response.data, "Is dat");
       }
     }
     getUsers();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
@@ -99,6 +100,13 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     },
   ];
 
+  async function updateUserData(id: string, data: any) {
+    const response = await updateUser(id, data);
+    if (response.success) {
+      setRefresh(true);
+    }
+  }
+
   function handleTableSelection(
     row: string[],
     selected: { value: string; index: number },
@@ -121,6 +129,10 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
           ),
           onConfirm: () => {},
         });
+        break;
+      case "Landlord":
+      case "Tenant":
+        updateUserData(row[0], { role: selected.value.toLowerCase() });
     }
   }
   return (

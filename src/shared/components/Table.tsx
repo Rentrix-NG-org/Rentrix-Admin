@@ -180,7 +180,6 @@ const Menu: React.FC<{
   const theme = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
   const position = useMenuPosition(menuRef);
-  console.log(position, "posi");
   return (
     <Box
       ref={menuRef}
