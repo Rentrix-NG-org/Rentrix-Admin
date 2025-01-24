@@ -10,11 +10,8 @@ const Filter: React.FC<{ placeholder?: string }> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <Box
-      component="button"
-      onClick={() => setIsModalOpen(!isModalOpen)}
       sx={{
         border: `1px solid ${theme.palette.grey[300]}`,
-        padding: "6px 16px",
         background: theme.palette.grey[100],
         borderRadius: 10,
         cursor: "pointer",
@@ -24,13 +21,29 @@ const Filter: React.FC<{ placeholder?: string }> = ({
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        gap: 1,
       }}
     >
-      <Box component="img" src={icons.settings} sx={{ width: 16 }} />
-      <Typography sx={{ color: theme.palette.common.black, fontWeight: 600 }}>
-        {placeholder}
-      </Typography>
+      <Box
+        component="button"
+        onClick={() => setIsModalOpen(!isModalOpen)}
+        sx={{
+          border: "none",
+          padding: "6px 16px",
+
+          background: "none",
+          cursor: "pointer",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 1,
+        }}
+      >
+        <Box component="img" src={icons.settings} sx={{ width: 16 }} />
+        <Typography sx={{ color: theme.palette.common.black, fontWeight: 600 }}>
+          {placeholder}
+        </Typography>
+      </Box>
       {isModalOpen && <Modal />}
     </Box>
   );
