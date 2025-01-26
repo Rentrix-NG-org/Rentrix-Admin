@@ -2,8 +2,8 @@ import axios from "@src/core/axios";
 
 export const UserService = () => {
   return {
-    getAllUsers: async () => {
-      const response = await axios.get("/admin/users");
+    getAllUsers: async (query?: string) => {
+      const response = await axios.get(`/admin/users?${query}`);
 
       return {
         success: response.status === 200,

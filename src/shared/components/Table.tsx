@@ -111,7 +111,7 @@ const Select: FC<{
     landlord: { value: "#297dfd", accent: "#f7f7ff" },
     suspended: { value: "#cb1a14", accent: "#f7dddc" },
     active: { value: "#099137", accent: "#daefe1" },
-    Supervisor: { value: "#430c7b", accent: "#e3dbeb" },
+    supervisor: { value: "#430c7b", accent: "#e3dbeb" },
     "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
     Default: { value: "#002b5b", accent: "#cce3fc" },
   };

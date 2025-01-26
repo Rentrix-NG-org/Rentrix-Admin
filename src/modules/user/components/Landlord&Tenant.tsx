@@ -24,7 +24,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
   useEffect(() => {
     async function getUsers() {
-      const response = await getAllUsers();
+      const response = await getAllUsers("landlord=true&tenant=true");
 
       if (response.success) {
         setRefresh(false);
