@@ -21,7 +21,6 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 
       if (response.success) {
         setRefresh(false);
-        console.log(response.data, "is rep");
         setUsers(response.data as any[]);
       }
     }

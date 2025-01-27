@@ -1,5 +1,7 @@
 import { RouteObject } from "react-router";
 import UserManagement from "./pages/main";
+import { Box } from "@mui/material";
+import UserDetails from "./components/UserDetails";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -10,7 +12,7 @@ export interface UserManagementModule {
 export const UserManagementModule: UserManagementModule = {
   routes: [
     { path: "/user", element: <UserManagement />, title: "User Management" },
-    { path: "/user/something" },
+    { path: "/user/:userId", element: <UserDetails /> },
   ],
   name: "User Management",
   enabled: true,

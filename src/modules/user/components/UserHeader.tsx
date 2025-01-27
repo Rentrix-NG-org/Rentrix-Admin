@@ -6,7 +6,7 @@ const UserHeader: React.FC<{
   search: string;
   setSearch: (value: string) => void;
   setFilter: (value: string[]) => void;
-}> = ({ search, setSearch, setFilter }) => {
+}> = ({ setSearch, setFilter }) => {
   const theme = useTheme();
   return (
     <Box

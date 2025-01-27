@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
 import Action from "./Action";
 import { UserService } from "../services/user.service";
+import { useNavigate } from "react-router";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -21,6 +22,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [refresh, setRefresh] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getUsers() {
@@ -164,6 +166,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
       <Table
         onSelect={handleTableSelection}
+        onRowClick={(row) => navigate(`/user/2`)}
         columns={columns}
         data={searchFilter}
       />

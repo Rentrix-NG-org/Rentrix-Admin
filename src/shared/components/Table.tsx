@@ -6,6 +6,7 @@ import { icons } from "@src/utils/icons";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
+  onRowClick: (row: string[]) => void;
   columns: {
     header: string;
     label: string;
@@ -16,7 +17,12 @@ interface TableProps {
   data: string[][];
 }
 
-const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
+const Table: React.FC<TableProps> = ({
+  onSelect,
+  onRowClick,
+  columns,
+  data,
+}) => {
   const [rows, setRows] = useState<string[][]>(data);
   const [paginatedRows, setPaginatedRows] = useState<string[][]>([]);
   const [page, setPage] = useState(1);
@@ -43,7 +49,6 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
     const end = start + limit;
     const paginatedData = rows.slice(start, end);
     setPaginatedRows(paginatedData);
-    console.log(paginatedData, "is paginated");
   }, [page, rows]);
   return (
     <Box
@@ -101,16 +106,28 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
               ) : columns[cellIndex]?.type === "action" ? (
                 columns[cellIndex]?.component
               ) : (
-                <Typography
+                <Box
+                  component="button"
+                  onClick={() => onRowClick(row)}
                   key={`${rowIndex}-${cellIndex}`}
                   sx={{
                     textWrap: "nowrap",
                     padding: "28px 32px",
+                    border: "none",
                     borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                    background: "none",
+                    width: "100%",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "flex-start",
                   }}
                 >
-                  {cell}
-                </Typography>
+                  <Typography
+                    sx={{ fontSize: 14, color: theme.palette.common.black }}
+                  >
+                    {cell}
+                  </Typography>
+                </Box>
               ),
             ),
         )}
