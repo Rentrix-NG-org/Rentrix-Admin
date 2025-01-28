@@ -80,7 +80,19 @@ const ActivityLogs = () => {
         Activity Logs
       </Typography>
 
-      {logs.length && <LogTable columns={columns} data={logs} />}
+      {logs.length ? (
+        <LogTable columns={columns} data={logs} />
+      ) : (
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: 14,
+            color: theme.palette.grey[600],
+          }}
+        >
+          No Activity Logs
+        </Typography>
+      )}
       <Box
         component="button"
         sx={{
@@ -89,7 +101,7 @@ const ActivityLogs = () => {
           padding: "16px",
           color: "white",
           cursor: "pointer",
-          display: "flex",
+          display: logs.length ? "flex" : "none",
           mt: "10px",
           width: "178px",
           borderRadius: "100px",

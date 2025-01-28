@@ -45,7 +45,13 @@ const TransactionHistory: React.FC<{ transactions: TransactionType[] }> = ({
               />
             ))
           ) : (
-            <Typography sx={{ fontWeight: 600, fontSize: 14 }}>
+            <Typography
+              sx={{
+                fontWeight: 500,
+                fontSize: 14,
+                color: theme.palette.grey[600],
+              }}
+            >
               No transactions
             </Typography>
           )}
@@ -60,7 +66,7 @@ const TransactionHistory: React.FC<{ transactions: TransactionType[] }> = ({
           color: "white",
           cursor: "pointer",
           mt: "8px",
-          display: "flex",
+          display: transactions?.length ? "flex" : "none",
           width: "178px",
           borderRadius: "100px",
           height: "40px",

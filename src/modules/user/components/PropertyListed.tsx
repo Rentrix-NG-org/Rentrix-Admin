@@ -29,8 +29,19 @@ const PropertyListed: React.FC<{ listings: Partial<ListingType>[] }> = ({
           gap: "24px",
         }}
       >
-        {listings?.length &&
-          listings.slice(0, 3).map((listing) => <Listing listing={listing} />)}
+        {listings?.length ? (
+          listings.slice(0, 3).map((listing) => <Listing listing={listing} />)
+        ) : (
+          <Typography
+            sx={{
+              fontWeight: 500,
+              fontSize: 14,
+              color: theme.palette.grey[600],
+            }}
+          >
+            No Property Listed
+          </Typography>
+        )}
       </Box>
       <Box
         component="button"
@@ -41,7 +52,7 @@ const PropertyListed: React.FC<{ listings: Partial<ListingType>[] }> = ({
           color: "white",
           cursor: "pointer",
           mt: "20.04px",
-          display: "flex",
+          display: listings?.length ? "flex" : "none",
           width: "178px",
           borderRadius: "100px",
           height: "40px",

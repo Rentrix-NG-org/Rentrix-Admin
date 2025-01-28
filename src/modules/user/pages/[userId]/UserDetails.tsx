@@ -8,6 +8,7 @@ import { UserService } from "../../services/user.service";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ListingType, TransactionType, User } from "../../types/user.types";
+import { useNavigate } from "react-router";
 
 const UserDetails = () => {
   const { getUser } = UserService();
@@ -49,11 +50,13 @@ const UserDetails = () => {
 
 const Header = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <Box
         component="button"
+        onClick={() => navigate(-1)}
         sx={{
           border: "none",
           cursor: "pointer",

@@ -86,6 +86,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       <TableHeader title="Supervisors & Representatives" />
       <Table
         onSelect={handleTableSelection}
+        onRowClick={(row) => navigate(`/user/${row[0]}`)}
         columns={[
           {
             header: "USER ID",

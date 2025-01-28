@@ -18,7 +18,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
 
   const colors: Record<string, { value: string; accent: string }> = {
     Tenant: { value: "#9747ff", accent: "#efe3ff" },
-    landlord: { value: "#297dfd", accent: "#f7f7ff" },
+    Landlord: { value: "#297dfd", accent: "#f7f7ff" },
     suspended: { value: "#cb1a14", accent: "#f7dddc" },
     active: { value: "#099137", accent: "#daefe1" },
     supervisor: { value: "#430c7b", accent: "#e3dbeb" },
@@ -29,7 +29,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
   const userRoles = {
     representative: "Rentrix Rep",
     tenant: "Tenant",
-    landlord: "landlord",
+    landlord: "Landlord",
     supervisor: "Supervisor",
   };
 

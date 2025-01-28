@@ -166,7 +166,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
       <Table
         onSelect={handleTableSelection}
-        onRowClick={(row) => navigate(`/user/2`)}
+        onRowClick={(row) => navigate(`/user/${row[0]}`)}
         columns={columns}
         data={searchFilter}
       />
