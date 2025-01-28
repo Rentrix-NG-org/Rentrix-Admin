@@ -64,7 +64,6 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     row: string[],
     selected: { value: string; index: number },
   ) {
-    console.log(selected, "is selected");
     switch (selected.value) {
       case "Supervisor":
         updateUserData(row[0], { role: selected.value.toLowerCase() });
