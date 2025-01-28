@@ -1,7 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import UserNav from "@src/modules/user/components/UserNav";
 import { icons } from "@src/utils/icons";
-import { images } from "@src/utils/images";
 
 const UserEdit = () => {
   return (
