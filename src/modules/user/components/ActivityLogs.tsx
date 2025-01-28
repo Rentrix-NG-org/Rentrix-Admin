@@ -1,8 +1,60 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import LogTable from "@src/shared/components/LogTable";
+import { LogService } from "@src/shared/services/log.service";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+
+type ActivityType =
+  | "login-event"
+  | "update"
+  | "download"
+  | "payment-made"
+  | "document-viewed";
+
+interface LogType {
+  createdAt: string;
+  description: string;
+  date: string;
+  time: string;
+  details: string;
+  activityType: ActivityType;
+}
 
 const ActivityLogs = () => {
   const theme = useTheme();
+  const { getLogs } = LogService();
+  const params = useParams();
+  const [logs, setLogs] = useState<LogType[]>([]);
+
+  const activityTypes: Record<ActivityType, string> = {
+    "login-event": "Login Event",
+    update: "Update",
+    download: "Download",
+    "payment-made": "Payment Made",
+    "document-viewed": "Document Viewed",
+  };
+
+  useEffect(() => {
+    async function fetchLogs() {
+      const response = await getLogs(params?.userId || "");
+
+      if (response.success) {
+        const formatted = (response.data as any[]).map((log) => {
+          return {
+            date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
+            time: dayjs(Number(log.createdAt)).format("HH:mm"),
+            details: log.description,
+            actitityType: activityTypes[log.activityType as ActivityType],
+          };
+        });
+        console.log(formatted, "is formatted");
+        setLogs(formatted as unknown as LogType[]);
+      }
+    }
+    fetchLogs();
+  }, [params]);
+
   const columns = [
     { header: "Date", label: "date" },
     { header: "Time", label: "time" },
@@ -10,26 +62,6 @@ const ActivityLogs = () => {
     { header: "Details", label: "details" },
   ];
 
-  const data = [
-    {
-      date: "2023-12-01",
-      time: "10:30",
-      activityType: "Login",
-      details: "User logged in successfully",
-    },
-    {
-      date: "2023-12-01",
-      time: "11:15",
-      activityType: "Update",
-      details: "Profile information updated",
-    },
-    {
-      date: "2023-12-01",
-      time: "14:45",
-      activityType: "Download",
-      details: "Downloaded report file",
-    },
-  ];
   return (
     <Box
       sx={{
@@ -48,7 +80,7 @@ const ActivityLogs = () => {
         Activity Logs
       </Typography>
 
-      <LogTable columns={columns} data={data} />
+      {logs.length && <LogTable columns={columns} data={logs} />}
       <Box
         component="button"
         sx={{
