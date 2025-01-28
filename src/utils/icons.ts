@@ -16,4 +16,5 @@ export const icons = {
   headcircle: (await import("@src/assets/icons/head-circle.png")).default,
   profilehead: (await import("@src/assets/icons/profile-head.svg")).default,
   apartment: (await import("@src/assets/icons/apartment.svg")).default,
+  camera: (await import("@src/assets/icons/camera.svg")).default,
 };

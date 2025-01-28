@@ -16,6 +16,7 @@ function App() {
       primary: {
         main: "#002b5b",
         light: "#f2f9f9",
+        dark: "#297dfd",
         A400: "",
       },
       secondary: {
@@ -28,6 +29,7 @@ function App() {
       background: {
         default: "#eef5f5",
       },
+
       warning: {
         main: "#e5ab4a",
         dark: "#f77a4a",
