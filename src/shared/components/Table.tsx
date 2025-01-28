@@ -2,9 +2,11 @@ import { ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
+import { icons } from "@src/utils/icons";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
+  onRowClick: (row: string[]) => void;
   columns: {
     header: string;
     label: string;
@@ -15,8 +17,15 @@ interface TableProps {
   data: string[][];
 }
 
-const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
+const Table: React.FC<TableProps> = ({
+  onSelect,
+  onRowClick,
+  columns,
+  data,
+}) => {
   const [rows, setRows] = useState<string[][]>(data);
+  const [paginatedRows, setPaginatedRows] = useState<string[][]>([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const result = data.map((d) => {
       return [...d, "Action"] as string[];
@@ -24,6 +33,23 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
     setRows(result);
   }, [data]);
   const theme = useTheme();
+
+  function handlePage(op: string) {
+    const limit = 2;
+    if (op === "+" && paginatedRows.length && page * limit < rows.length) {
+      setPage(page + 1);
+    } else if (op === "-") {
+      setPage(page === 1 ? 1 : page - 1);
+    }
+  }
+
+  useEffect(() => {
+    const limit = 2;
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const paginatedData = rows.slice(start, end);
+    setPaginatedRows(paginatedData);
+  }, [page, rows]);
   return (
     <Box
       data-table-container
@@ -63,7 +89,7 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
           gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
         }}
       >
-        {rows.map(
+        {paginatedRows.map(
           (row, rowIndex) =>
             Array.isArray(row) &&
             row.map((cell, cellIndex) =>
@@ -80,19 +106,72 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
               ) : columns[cellIndex]?.type === "action" ? (
                 columns[cellIndex]?.component
               ) : (
-                <Typography
+                <Box
+                  component="button"
+                  onClick={() => onRowClick(row)}
                   key={`${rowIndex}-${cellIndex}`}
                   sx={{
                     textWrap: "nowrap",
                     padding: "28px 32px",
+                    border: "none",
                     borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                    background: "none",
+                    width: "100%",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "flex-start",
                   }}
                 >
-                  {cell}
-                </Typography>
+                  <Typography
+                    sx={{ fontSize: 14, color: theme.palette.common.black }}
+                  >
+                    {cell}
+                  </Typography>
+                </Box>
               ),
             ),
         )}
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20.3px",
+          mt: "43px",
+        }}
+      >
+        <Box
+          onClick={() => handlePage("-")}
+          sx={{ border: "none", background: "none", width: 33.6 }}
+          component="button"
+        >
+          <Box component="img" src={icons.arrowleft} sx={{}} />
+        </Box>
+        <Box
+          sx={{
+            width: 32,
+            height: 32,
+            background: theme.palette.primary.main,
+            display: "flex",
+            justifyContent: "center",
+            borderRadius: "50%",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{ color: theme.palette.common.white, fontWeight: 600 }}
+          >
+            {page}
+          </Typography>
+        </Box>
+        <Box
+          onClick={() => handlePage("+")}
+          sx={{ border: "none", background: "none", width: 33.6 }}
+          component="button"
+        >
+          <Box component="img" src={icons.arrowright} sx={{}} />
+        </Box>
       </Box>
     </Box>
   );
@@ -111,7 +190,7 @@ const Select: FC<{
     landlord: { value: "#297dfd", accent: "#f7f7ff" },
     suspended: { value: "#cb1a14", accent: "#f7dddc" },
     active: { value: "#099137", accent: "#daefe1" },
-    Supervisor: { value: "#430c7b", accent: "#e3dbeb" },
+    supervisor: { value: "#430c7b", accent: "#e3dbeb" },
     "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
     Default: { value: "#002b5b", accent: "#cce3fc" },
   };
@@ -180,7 +259,6 @@ const Menu: React.FC<{
   const theme = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
   const position = useMenuPosition(menuRef);
-  console.log(position, "posi");
   return (
     <Box
       ref={menuRef}

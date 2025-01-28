@@ -151,17 +151,31 @@ const Modal: React.FC<{ onFilter: (value: string[]) => void }> = ({
                   }}
                   checked={filterState?.[index]?.selected === option}
                   onChange={() => {
-                    setFilterState((curr) =>
-                      curr === null
-                        ? null
-                        : {
-                            ...curr,
-                            [index]: {
-                              isShown: curr[index]?.isShown || false,
-                              selected: option,
+                    if (filterState?.[index]?.selected === option) {
+                      setFilterState((curr) =>
+                        curr === null
+                          ? null
+                          : {
+                              ...curr,
+                              [index]: {
+                                isShown: curr[index]?.isShown || false,
+                                selected: "",
+                              },
                             },
-                          },
-                    );
+                      );
+                    } else {
+                      setFilterState((curr) =>
+                        curr === null
+                          ? null
+                          : {
+                              ...curr,
+                              [index]: {
+                                isShown: curr[index]?.isShown || false,
+                                selected: option,
+                              },
+                            },
+                      );
+                    }
                   }}
                 />
                 <Typography

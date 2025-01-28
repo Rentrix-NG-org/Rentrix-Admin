@@ -9,7 +9,7 @@ const Topbar = () => {
         height: "fit-content",
         position: "sticky",
         top: 0,
-        zIndex: 999,
+        zIndex: 99999,
         background: theme.palette.common.white,
         padding: "20px 80px",
         boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.05)",
