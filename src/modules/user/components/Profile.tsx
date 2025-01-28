@@ -2,9 +2,11 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
 import { User } from "../types/user.types";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router";
 
 const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const userDetails: { label: string; value: string }[] = [
     { label: "Email", value: user?.account?.email || "" },
@@ -195,6 +197,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
 
         <Box
           component="button"
+          onClick={() => navigate("edit")}
           sx={{
             background: "transparent",
             border: "none",

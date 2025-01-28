@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ListingType, TransactionType, User } from "../../types/user.types";
 import { useNavigate } from "react-router";
+import UserNav from "../../components/UserNav";
 
 const UserDetails = () => {
   const { getUser } = UserService();
@@ -37,7 +38,7 @@ const UserDetails = () => {
         gap: "25px",
       }}
     >
-      <Header />
+      <UserNav routes={["User Management", "User Details"]} />
       <Profile user={user} />
       <PropertyListed listings={user.listings as ListingType[]} />
       <TransactionHistory
@@ -48,48 +49,4 @@ const UserDetails = () => {
   );
 };
 
-const Header = () => {
-  const theme = useTheme();
-  const navigate = useNavigate();
-
-  return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-      <Box
-        component="button"
-        onClick={() => navigate(-1)}
-        sx={{
-          border: "none",
-          cursor: "pointer",
-          width: 40,
-          height: 40,
-          background: theme.palette.grey[200],
-          borderRadius: "50%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          component="img"
-          src={icons.arrowback}
-          sx={{ width: 20, height: 20 }}
-        />
-      </Box>
-      <Box>
-        <Typography
-          sx={{
-            fontSize: 20,
-            fontWeight: 600,
-            color: theme.palette.common.black,
-          }}
-        >
-          User Management &gt;{" "}
-          <span style={{ color: theme.palette.secondary.main }}>
-            User Details
-          </span>{" "}
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
 export default UserDetails;
