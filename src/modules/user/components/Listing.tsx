@@ -1,29 +1,31 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
-import { images } from "@src/utils/images";
+import { ListingType } from "../types/user.types";
+import { useEffect, useState } from "react";
 
-const Listing: React.FC<{
-  image: string;
-  title: string;
-  description: string;
-  features: { icon: ""; name: string; value: number }[];
-  price: number;
-  frequency: "monthly" | "annually";
-  status: "available" | "rented";
-}> = ({
-  image = "",
-  title = "Spacious 2-bedroom Apartment",
-  description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  features = [
-    { icon: icons.bed, name: "Bed", value: 2 },
-    { icon: icons.shower, name: "Bed", value: 2 },
-    { icon: icons.toilet, name: "Toilet", value: 2 },
-  ],
-  price = 2500,
-  frequency = "monthly",
-  status = "available",
-}) => {
+const Listing: React.FC<{ listing: Partial<ListingType> }> = ({ listing }) => {
   const theme = useTheme();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [currentMedia, setCurrentMedia] = useState(1);
+  const features: { icon: string; name: string; value: string | number }[] = [
+    { icon: icons.bed, name: "Bed", value: listing.bedrooms },
+    { icon: icons.shower, name: "Bath", value: listing.bathrooms },
+    { icon: icons.toilet, name: "Toilet", value: listing.toilets },
+  ];
+
+  useEffect(() => {
+    const image = new Image();
+    image.onload = () => setImageLoaded(true);
+    image.src = listing.media[currentMedia - 1].url;
+  }, [currentMedia, listing.media]);
+
+  function handleMedia() {
+    if (currentMedia === listing.media.length) {
+      setCurrentMedia(1);
+    } else {
+      setCurrentMedia(currentMedia + 1);
+    }
+  }
   return (
     <Box
       sx={{
@@ -40,58 +42,118 @@ const Listing: React.FC<{
           component="img"
           sx={{
             width: "100%",
+            aspectRatio: "16 / 9",
           }}
-          src={image || images.apartment}
+          src={imageLoaded ? listing.media[0].url : icons.apartment}
         />
 
         <Box
           sx={{
             position: "absolute",
+            boxSizing: "border-box",
             display: "flex",
-            alignItems: "center",
+            width: "100%",
             bottom: "10.02px",
-            left: "10.02px",
-            gap: "3.34px",
-            padding: "3.34px 6.68px",
-            background: theme.palette.common.white,
-            border: `1px solid ${theme.palette.success.main}`,
-            borderRadius: "83.518px",
+            px: "10.02px",
+            justifyContent: "space-between",
           }}
         >
           <Box
             sx={{
-              background: theme.palette.grey[200],
-              width: "6px",
-              height: "6px",
-              position: "relative",
-              borderRadius: "50%",
-              "&::after": {
-                position: "absolute",
-                content: "''",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                zIndex: 999,
-                width: 4,
-                height: 4,
-                background: theme.palette.success.main,
-                borderRadius: "50%",
-              },
-            }}
-          ></Box>
-
-          <Typography
-            sx={{
-              color: theme.palette.success.main,
-              fontSize: "10px",
-              fontStyle: "normal",
-              fontWeight: 600,
-              lineHeight: "120%",
-              letterSpacing: "0.5px",
+              display: "flex",
+              alignItems: "center",
+              gap: "3.34px",
+              padding: "3.34px 6.68px",
+              background: theme.palette.common.white,
+              border: `1px solid ${theme.palette.success.main}`,
+              borderRadius: "83.518px",
             }}
           >
-            AVAILABLE
-          </Typography>
+            <Box
+              sx={{
+                background: theme.palette.grey[200],
+                width: "6px",
+                height: "6px",
+                position: "relative",
+                borderRadius: "50%",
+                "&::after": {
+                  position: "absolute",
+                  content: "''",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 999,
+                  width: 4,
+                  height: 4,
+                  background: theme.palette.success.main,
+                  borderRadius: "50%",
+                },
+              }}
+            ></Box>
+
+            <Typography
+              sx={{
+                color: theme.palette.success.main,
+                fontSize: "10px",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "120%",
+                letterSpacing: "0.5px",
+              }}
+            >
+              {listing.availabilityStatus.toUpperCase()}
+            </Typography>
+          </Box>
+
+          <Box
+            component="button"
+            onClick={handleMedia}
+            sx={{
+              display: "flex",
+              background: theme.palette.grey[700],
+              height: "20.044px",
+              padding: "3.341px 13.363px",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1px",
+              border: "none",
+              borderRadius: "83.518px",
+            }}
+          >
+            <Typography
+              sx={{
+                color: theme.palette.common.white,
+                fontSize: "12px",
+                fontWeight: 700,
+                lineHeight: "120%",
+                letterSpacing: "0.6px",
+              }}
+            >
+              {currentMedia}
+            </Typography>
+            <Typography
+              sx={{
+                color: theme.palette.common.white,
+                fontSize: "12px",
+                fontWeight: 700,
+                lineHeight: "120%",
+                letterSpacing: "0.6px",
+              }}
+            >
+              /
+            </Typography>
+            <Typography
+              sx={{
+                color: theme.palette.common.white,
+                fontSize: "12px",
+                fontWeight: 700,
+                lineHeight: "120%",
+                letterSpacing: "0.6px",
+              }}
+            >
+              {listing.media.length}
+            </Typography>
+          </Box>
         </Box>
       </Box>
       <Box
@@ -112,7 +174,7 @@ const Listing: React.FC<{
             letterSpacing: "-0.32px",
           }}
         >
-          {title}
+          {listing.title}
         </Typography>
         <Typography
           sx={{
@@ -126,7 +188,7 @@ const Listing: React.FC<{
             letterSpacing: "-0.28px",
           }}
         >
-          {description}
+          {listing.description}
         </Typography>
       </Box>
       <Box
@@ -201,7 +263,11 @@ const Listing: React.FC<{
               letterSpacing: "-0.48px",
             }}
           >
-            {price}
+            {Number(listing.fee.fee) >= 1000000
+              ? `${Number(listing.fee.fee) / 1000000}M`
+              : Number(listing.fee.fee) >= 1000
+                ? `${Number(listing.fee.fee) / 1000}K`
+                : listing.fee.fee.toLocaleString()}
           </Typography>
           <Typography
             sx={{
@@ -215,7 +281,7 @@ const Listing: React.FC<{
               transform: "translateX(-2px)",
             }}
           >
-            / {frequency === "annually" ? "yearly" : "monthly"}
+            / {listing.fee.rentalPeriod}
           </Typography>
         </Box>
 
@@ -232,6 +298,7 @@ const Listing: React.FC<{
             justifyContent: "center",
             height: "30.066px",
             width: "126.112px",
+            cursor: "pointer",
           }}
         >
           <Box

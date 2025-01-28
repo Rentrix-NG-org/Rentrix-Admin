@@ -2,35 +2,14 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
 import { images } from "@src/utils/images";
 import React from "react";
+import { TransactionType } from "../types/user.types";
+import dayjs from "dayjs";
 
-const TransactionHistory = () => {
-  const LATEST_TRANSACTIONS = [
-    {
-      profileImg: images.avatar,
-      fullName: "John Smith",
-      date: "15 Oct 2023",
-      amount: 50,
-      currencyIcon: icons.naira,
-      status: "pending" as const,
-    },
-    {
-      profileImg: images.avatar,
-      fullName: "Sarah Johnson",
-      date: "14 Oct 2023",
-      amount: 25,
-      currencyIcon: icons.naira,
-      status: "pending" as const,
-    },
-    {
-      profileImg: images.avatar,
-      fullName: "Mike Wilson",
-      date: "13 Oct 2023",
-      amount: 75,
-      currencyIcon: icons.naira,
-      status: "pending" as const,
-    },
-  ];
+const TransactionHistory: React.FC<{ transactions: TransactionType[] }> = ({
+  transactions,
+}) => {
   const theme = useTheme();
+
   return (
     <Box>
       <Box
@@ -51,17 +30,25 @@ const TransactionHistory = () => {
         </Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {LATEST_TRANSACTIONS.map((transaction, index) => (
-            <Transaction
-              key={index}
-              profileImg={transaction.profileImg}
-              fullName={transaction.fullName}
-              date={transaction.date}
-              amount={transaction.amount}
-              currencyIcon={transaction.currencyIcon}
-              status={transaction.status}
-            />
-          ))}
+          {transactions?.length ? (
+            transactions.map((transaction, index) => (
+              <Transaction
+                key={index}
+                profileImg={""}
+                description={transaction.description}
+                date={transaction.createdAt}
+                amount={Number(transaction.amount)}
+                currencyIcon={icons.naira}
+                status={
+                  transaction.status as "successful" | "pending" | "failed"
+                }
+              />
+            ))
+          ) : (
+            <Typography sx={{ fontWeight: 600, fontSize: 14 }}>
+              No transactions
+            </Typography>
+          )}
         </Box>
       </Box>
       <Box
@@ -99,20 +86,25 @@ const TransactionHistory = () => {
 
 const Transaction: React.FC<{
   profileImg: string;
-  fullName: string;
+  description: string;
   date: string;
   amount: number;
   currencyIcon: string;
   status: "successful" | "pending" | "failed";
 }> = ({
   profileImg,
-  fullName,
+  description,
   date,
   amount,
   currencyIcon = icons.naira,
   status,
 }) => {
   const theme = useTheme();
+  const statusColors = {
+    success: theme.palette.success.main,
+    failed: theme.palette.error.main,
+    pending: theme.palette.warning.main,
+  };
   return (
     <Box
       sx={{
@@ -144,7 +136,7 @@ const Transaction: React.FC<{
             letterSpacing: "-0.32px",
           }}
         >
-          {fullName}
+          {description}
         </Typography>
         <Typography
           sx={{
@@ -159,7 +151,7 @@ const Transaction: React.FC<{
             letterSpacing: "-0.28px",
           }}
         >
-          {date}
+          {dayjs(Number(date)).format("MMMM DD, YYYY")}
         </Typography>
       </Box>
       <Box
@@ -188,7 +180,9 @@ const Transaction: React.FC<{
               letterSpacing: "-0.32px",
             }}
           >
-            {amount}K
+            {amount >= 1000000
+              ? `${(amount / 1000000).toFixed(1)}M`
+              : `${(amount / 1000).toFixed(1)}K`}
           </Typography>
         </Box>
 
@@ -197,7 +191,7 @@ const Transaction: React.FC<{
             sx={{
               width: 6,
               height: 6,
-              background: theme.palette.success.main,
+              background: statusColors[status as keyof typeof statusColors],
               borderRadius: "50%",
             }}
           ></Box>
@@ -208,10 +202,11 @@ const Transaction: React.FC<{
               fontWeight: 400,
               lineHeight: "120%",
               letterSpacing: "-0.24px",
-              color: theme.palette.success.main,
+              color: statusColors[status as keyof typeof statusColors],
             }}
           >
-            {status}
+            {status.slice(0, 1).toUpperCase()}
+            {status.slice(1)}
           </Typography>
         </Box>
       </Box>

@@ -11,7 +11,7 @@ const LogTable: React.FC<{
   useEffect(() => {
     const formatted = data.map((d) => Object.values(d)) as string[][];
     setRows(formatted);
-    console.log(formatted, "f");
+    // console.log(formatted, "f");
   }, [data]);
   return (
     <Box sx={{ border: `1px solid ${theme.palette.grey[300]}` }}>

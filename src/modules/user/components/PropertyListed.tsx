@@ -1,7 +1,10 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Listing from "./Listing";
+import { ListingType } from "../types/user.types";
 
-const PropertyListed = () => {
+const PropertyListed: React.FC<{ listings: Partial<ListingType>[] }> = ({
+  listings,
+}) => {
   const theme = useTheme();
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "15.59px" }}>
@@ -26,11 +29,8 @@ const PropertyListed = () => {
           gap: "24px",
         }}
       >
-        {Array(5)
-          .fill(null)
-          .map(() => (
-            <Listing />
-          ))}
+        {listings?.length &&
+          listings.slice(0, 3).map((listing) => <Listing listing={listing} />)}
       </Box>
       <Box
         component="button"

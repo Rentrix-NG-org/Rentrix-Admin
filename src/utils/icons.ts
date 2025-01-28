@@ -13,4 +13,7 @@ export const icons = {
   bed: (await import("@src/assets/icons/bed.svg")).default,
   shower: (await import("@src/assets/icons/shower.svg")).default,
   toilet: (await import("@src/assets/icons/toilet.svg")).default,
+  headcircle: (await import("@src/assets/icons/head-circle.png")).default,
+  profilehead: (await import("@src/assets/icons/profile-head.svg")).default,
+  apartment: (await import("@src/assets/icons/apartment.svg")).default,
 };

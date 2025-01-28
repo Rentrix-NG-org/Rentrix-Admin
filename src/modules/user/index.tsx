@@ -1,7 +1,6 @@
 import { RouteObject } from "react-router";
 import UserManagement from "./pages/main";
-import { Box } from "@mui/material";
-import UserDetails from "./components/UserDetails";
+import UserDetails from "./pages/[userId]/UserDetails";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];

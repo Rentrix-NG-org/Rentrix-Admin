@@ -1,27 +1,37 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
-import { images } from "@src/utils/images";
+import { User } from "../types/user.types";
+import dayjs from "dayjs";
 
-const Profile = () => {
+const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
   const theme = useTheme();
 
   const userDetails: { label: string; value: string }[] = [
-    { label: "Email", value: "johndoe@example.com" },
-    { label: "Phone Number", value: "+123 456 789 012" },
-    { label: "Date of Birth", value: "09 Nov 1890" },
+    { label: "Email", value: user?.account?.email || "" },
+    { label: "Phone Number", value: user?.phoneNumber || "" },
+    {
+      label: "Date of Birth",
+      value:
+        dayjs(Number(user?.dateOfBirth)).format("DD MMM YYYY").toString() || "",
+    },
   ];
 
   const colors: Record<string, { value: string; accent: string }> = {
     Tenant: { value: "#9747ff", accent: "#efe3ff" },
     landlord: { value: "#297dfd", accent: "#f7f7ff" },
     suspended: { value: "#cb1a14", accent: "#f7dddc" },
-    Active: { value: "#099137", accent: "#daefe1" },
+    active: { value: "#099137", accent: "#daefe1" },
     supervisor: { value: "#430c7b", accent: "#e3dbeb" },
     "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
     Default: { value: "#002b5b", accent: "#cce3fc" },
   };
 
-  const userRoles = ["Tenant", "Rentrix Rep"];
+  const userRoles = {
+    representative: "Rentrix Rep",
+    tenant: "Tenant",
+    landlord: "landlord",
+    supervisor: "Supervisor",
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -68,11 +78,15 @@ const Profile = () => {
               sx={{
                 overflow: "hidden",
                 borderRadius: "50%",
-                width: 180,
-                height: 180,
+                width: user?.photoUrl ? 180 : 200,
+                height: user?.photoUrl ? 180 : 200,
               }}
             >
-              <Box component="img" src={images.avatar} sx={{ width: "100%" }} />
+              <Box
+                component="img"
+                src={user?.photoUrl || icons.profilehead}
+                sx={{ width: "100%" }}
+              />
             </Box>
           </Box>
           <Typography
@@ -86,7 +100,7 @@ const Profile = () => {
               letterSpacing: "-0.057px",
             }}
           >
-            John Doe
+            {user?.firstName} {user?.lastName}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "32px" }}>
@@ -123,25 +137,29 @@ const Profile = () => {
             >
               Roles:
             </Typography>
-            {userRoles.map((role) => (
-              <Box
-                sx={{
-                  background: colors?.[role]?.accent,
-                  padding: "6px 16px",
-                  borderRadius: "10px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: colors?.[role]?.value,
-                    fontSize: 12,
-                    fontWeight: 600,
-                  }}
-                >
-                  {role}
-                </Typography>
-              </Box>
-            ))}
+            {user?.roles &&
+              user.roles.map((role) => {
+                const roleKey = role as keyof typeof userRoles;
+                return (
+                  <Box
+                    sx={{
+                      background: colors?.[userRoles[roleKey]]?.accent,
+                      padding: "6px 16px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: colors?.[userRoles[roleKey]]?.value,
+                        fontSize: 12,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {userRoles[roleKey]}
+                    </Typography>
+                  </Box>
+                );
+              })}
           </Box>
 
           <Box sx={{ display: "flex", gap: "14px" }}>
@@ -156,19 +174,20 @@ const Profile = () => {
             </Typography>
             <Box
               sx={{
-                background: colors["Active"].accent,
+                background: colors[user?.account?.status || "Default"].accent,
                 padding: "6px 16px",
                 borderRadius: "10px",
               }}
             >
               <Typography
                 sx={{
-                  color: colors["Active"].value,
+                  color: colors[user?.account?.status || "Default"].value,
                   fontSize: 12,
                   fontWeight: 600,
                 }}
               >
-                Active
+                {user?.account?.status?.slice(0, 1).toUpperCase()}
+                {user?.account?.status?.slice(1)}
               </Typography>
             </Box>
           </Box>
