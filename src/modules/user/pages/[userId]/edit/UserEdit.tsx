@@ -17,6 +17,9 @@ const UserEdit = () => {
   const { uploadFile } = MediaService();
   const params = useParams();
   const navigate = useNavigate();
+  const [formStatus, setFormStatus] = useState<
+    "not-set" | "pending" | "success" | "failure"
+  >("not-set");
   const [image, setImage] = useState<File | null>(null);
   const [form, setForm] = useState({
     photoUrl: "",
@@ -33,7 +36,6 @@ const UserEdit = () => {
       const response = await getUser(params?.userId || "");
 
       if (response.success) {
-        // console.log(response.data);
         const { data } = response;
 
         const getMonth =
@@ -45,6 +47,7 @@ const UserEdit = () => {
           firstName: data.firstName,
           lastName: data.lastName,
           phoneNumber: data.phoneNumber,
+          photoUrl: data.photoUrl,
           email: data.account.email,
           gender: data.account.gender,
           dateOfBirth: {
@@ -60,40 +63,42 @@ const UserEdit = () => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    // console.log(form, "is form");
-  }, [form]);
-
   async function uploadImage() {
     const formData = new FormData();
-    if (!image) return null;
+    if (!image) {
+      return null;
+    }
     formData.append("file", image, image.name);
     const response = await uploadFile(formData);
     if (response.success) {
-      console.log(response.data.data, "is res");
-      setForm((curr) => ({ ...curr, photoUrl: response.data.data.url }));
+      return response.data.data.url as string;
     }
+    return null;
   }
 
   async function handleSave() {
+    setFormStatus("pending");
     if (!form.firstName || !form.lastName || !form.phoneNumber || !form.email) {
+      setFormStatus("failure");
       alert("Fill in the required field");
     } else {
       const dateOfBirth = dayjs(
         `${form.dateOfBirth.year}-${months.indexOf(form.dateOfBirth.month) + 1}-${form.dateOfBirth.day}`,
       ).valueOf();
 
-      await uploadImage();
+      const url = await uploadImage();
 
       const constructed = {
         ...form,
         gender: form.gender.toLowerCase(),
         dateOfBirth,
+        photoUrl: url,
       };
 
       const response = await updateUser(params?.userId || "", constructed);
 
       if (response.success) {
+        setFormStatus("success");
         navigate(-1);
       }
     }
@@ -121,6 +126,7 @@ const UserEdit = () => {
         }}
       >
         <ImageEdit
+          value={form.photoUrl}
           onImage={(v, file) => {
             setForm((curr) => ({ ...curr, photoUrl: v }));
             setImage(file);
@@ -242,14 +248,21 @@ const UserEdit = () => {
         </Box>
         <Box
           component="button"
-          onClick={handleSave}
+          onClick={formStatus === "not-set" ? handleSave : () => {}}
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             border: "none",
             padding: "16px",
-            backgroundColor: theme.palette.secondary.main,
+            backgroundColor:
+              formStatus === "pending"
+                ? theme.palette.grey[400]
+                : formStatus === "success"
+                  ? theme.palette.success.main
+                  : formStatus === "failure"
+                    ? theme.palette.error.main
+                    : theme.palette.secondary.main,
             color: theme.palette.common.white,
             borderRadius: "100px",
             cursor: "pointer",
@@ -263,7 +276,13 @@ const UserEdit = () => {
               lineHeight: "150%",
             }}
           >
-            Save
+            {formStatus === "pending"
+              ? "Saving..."
+              : formStatus === "success"
+                ? "Saved!"
+                : formStatus === "failure"
+                  ? "Failed to Save"
+                  : "Save"}
           </Typography>
         </Box>
       </Box>
@@ -271,12 +290,19 @@ const UserEdit = () => {
   );
 };
 
-const ImageEdit: React.FC<{ onImage: (value: string, file: File) => void }> = ({
-  onImage,
-}) => {
+const ImageEdit: React.FC<{
+  onImage: (value: string, file: File) => void;
+  value: string;
+}> = ({ onImage, value }) => {
   const theme = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(value || null);
+
+  useEffect(() => {
+    if (value) {
+      setImage(value);
+    }
+  }, [value]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target || !e.target.files) return;
