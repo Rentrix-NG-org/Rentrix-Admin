@@ -17,4 +17,8 @@ export const icons = {
   profilehead: (await import("@src/assets/icons/profile-head.svg")).default,
   apartment: (await import("@src/assets/icons/apartment.svg")).default,
   camera: (await import("@src/assets/icons/camera.svg")).default,
+  user: (await import("@src/assets/icons/user.svg")).default,
+  usercircle: (await import("@src/assets/icons/user-circle.svg")).default,
+  call: (await import("@src/assets/icons/call.svg")).default,
+  mail: (await import("@src/assets/icons/mail.svg")).default,
 };
