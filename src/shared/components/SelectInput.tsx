@@ -5,12 +5,14 @@ import React, { useEffect, useRef, useState } from "react";
 const SelectInput: React.FC<{
   label: string;
   icon?: string;
+  value?: string | number;
   options: string[];
   type?: "text" | "number";
   onChange?: (value: string) => void;
   required?: boolean;
-}> = ({ label, icon, options = ["None"], type, onChange, required }) => {
+}> = ({ label, icon, options = ["None"], value, type, onChange, required }) => {
   const [selected, setSelected] = useState("");
+  console.log(value, "for", label);
   const labelRef = useRef<HTMLInputElement>(null);
   const [labelWidth, setLabelWidth] = useState(0);
 
@@ -22,6 +24,21 @@ const SelectInput: React.FC<{
       setLabelWidth(labelRef.current.clientWidth);
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      value &&
+      options
+        .map((o) => String(o).toLowerCase())
+        .includes(String(value).toLowerCase())
+    ) {
+      setSelected(
+        options.find(
+          (o) => String(o).toLowerCase() === String(value).toLowerCase(),
+        ) || "",
+      );
+    }
+  }, [value, options]);
   return (
     <Box
       component="button"
@@ -110,6 +127,8 @@ const SelectInput: React.FC<{
           flexDirection: "column",
           gap: 0.5,
           borderRadius: "10px",
+          maxHeight: 180,
+          overflowY: "scroll",
           alignItems: "flex-start",
         }}
       >

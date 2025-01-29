@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from "react";
 
 const TextInput: React.FC<{
   label: string;
+  value: string;
   icon?: string;
   type?: "text" | "number";
   onChange?: (value: string) => void;
   required?: boolean;
-}> = ({ label, icon, type = "text", required, onChange }) => {
+}> = ({ label, icon, value, type = "text", required, onChange }) => {
   const theme = useTheme();
   const labelRef = useRef<HTMLInputElement>(null);
   const [labelWidth, setLabelWidth] = useState(0);
@@ -96,6 +97,7 @@ const TextInput: React.FC<{
           placeholder={`Enter ${label.toLowerCase()}`}
           onChange={(e) => onChange?.(e.target.value)}
           type={type}
+          value={value}
           sx={{
             outline: "none",
             border: "none",
