@@ -4,18 +4,22 @@ import SelectInput from "@src/shared/components/SelectInput";
 import TextInput from "@src/shared/components/TextInput";
 import { icons } from "@src/utils/icons";
 import { days, months } from "./date";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import { UserService } from "@src/modules/user/services/user.service";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
+import { MediaService } from "@src/shared/services/media.service";
 
 const UserEdit = () => {
   const theme = useTheme();
   const { updateUser, getUser } = UserService();
+  const { uploadFile } = MediaService();
   const params = useParams();
   const navigate = useNavigate();
+  const [image, setImage] = useState<File | null>(null);
   const [form, setForm] = useState({
+    photoUrl: "",
     firstName: "",
     lastName: "",
     gender: "",
@@ -29,7 +33,7 @@ const UserEdit = () => {
       const response = await getUser(params?.userId || "");
 
       if (response.success) {
-        console.log(response.data);
+        // console.log(response.data);
         const { data } = response;
 
         const getMonth =
@@ -57,8 +61,19 @@ const UserEdit = () => {
   }, []);
 
   useEffect(() => {
-    console.log(form, "is form");
+    // console.log(form, "is form");
   }, [form]);
+
+  async function uploadImage() {
+    const formData = new FormData();
+    if (!image) return null;
+    formData.append("file", image, image.name);
+    const response = await uploadFile(formData);
+    if (response.success) {
+      console.log(response.data.data, "is res");
+      setForm((curr) => ({ ...curr, photoUrl: response.data.data.url }));
+    }
+  }
 
   async function handleSave() {
     if (!form.firstName || !form.lastName || !form.phoneNumber || !form.email) {
@@ -67,6 +82,8 @@ const UserEdit = () => {
       const dateOfBirth = dayjs(
         `${form.dateOfBirth.year}-${months.indexOf(form.dateOfBirth.month) + 1}-${form.dateOfBirth.day}`,
       ).valueOf();
+
+      await uploadImage();
 
       const constructed = {
         ...form,
@@ -103,7 +120,12 @@ const UserEdit = () => {
           width: 700,
         }}
       >
-        <ImageEdit />
+        <ImageEdit
+          onImage={(v, file) => {
+            setForm((curr) => ({ ...curr, photoUrl: v }));
+            setImage(file);
+          }}
+        />
         <Box
           sx={{
             display: "flex",
@@ -249,8 +271,30 @@ const UserEdit = () => {
   );
 };
 
-const ImageEdit = () => {
+const ImageEdit: React.FC<{ onImage: (value: string, file: File) => void }> = ({
+  onImage,
+}) => {
   const theme = useTheme();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [image, setImage] = useState<string | null>(null);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target || !e.target.files) return;
+    const file = e.target.files[0];
+    const validImageTypes = [
+      "image/png",
+      "image/jpeg",
+      "image/webp",
+      "image/jpg",
+    ];
+
+    if (!validImageTypes.includes(file.type)) {
+      alert("Only Images with format PNG, JPEG, WEBP and JPG are allowed");
+    }
+    const url = URL.createObjectURL(file);
+    onImage(url, file);
+    setImage(url);
+  }
   return (
     <Box
       sx={{
@@ -261,6 +305,13 @@ const ImageEdit = () => {
         gap: "12px",
       }}
     >
+      <Box
+        onChange={handleFileChange}
+        ref={inputRef}
+        component="input"
+        type="file"
+        hidden
+      />
       <Box
         sx={{
           display: "flex",
@@ -284,7 +335,7 @@ const ImageEdit = () => {
         >
           <Box
             component="img"
-            src={icons.profilehead}
+            src={image || icons.profilehead}
             sx={{
               width: "90%",
               height: "90%",
@@ -319,7 +370,15 @@ const ImageEdit = () => {
       </Box>
 
       <Box>
-        <Box sx={{ border: "none", backgroundColor: "transparent" }}>
+        <Box
+          onClick={() => inputRef.current?.click()}
+          component="button"
+          sx={{
+            border: "none",
+            backgroundColor: "transparent",
+            cursor: "pointer",
+          }}
+        >
           <Typography
             sx={{
               color: theme.palette.common.black,
