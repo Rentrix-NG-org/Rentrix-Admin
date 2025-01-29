@@ -1,5 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import { icons } from "@src/utils/icons";
+import { Box } from "@mui/material";
 import Profile from "../../components/Profile";
 import PropertyListed from "../../components/PropertyListed";
 import TransactionHistory from "../../components/TransactionHistory";
@@ -8,7 +7,6 @@ import { UserService } from "../../services/user.service";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ListingType, TransactionType, User } from "../../types/user.types";
-import { useNavigate } from "react-router";
 import UserNav from "../../components/UserNav";
 
 const UserDetails = () => {
