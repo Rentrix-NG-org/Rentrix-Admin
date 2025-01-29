@@ -19,7 +19,6 @@ const ViewListings = () => {
     async function fetchListings() {
       const response = await getUserListings(params?.userId || "");
       if (response.success) {
-        console.log(response.data, "is listing");
         setListings(response.data);
       }
     }
