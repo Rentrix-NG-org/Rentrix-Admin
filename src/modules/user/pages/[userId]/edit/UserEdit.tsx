@@ -44,18 +44,19 @@ const UserEdit = () => {
           ];
         setForm((curr) => ({
           ...curr,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          phoneNumber: data.phoneNumber,
-          photoUrl: data.photoUrl,
-          email: data.account.email,
-          gender: data.account.gender,
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          phoneNumber: data.phoneNumber || "",
+          photoUrl: data.photoUrl || "",
+          email: data.account.email || "",
+          gender: data.account.gender || "unknown",
           dateOfBirth: {
-            day: Number(dayjs(Number(data.account.dateOfBirth)).format("D")),
-            month: getMonth,
-            year: Number(
-              dayjs(Number(data.account.dateOfBirth)).format("YYYY"),
-            ),
+            day:
+              Number(dayjs(Number(data.account.dateOfBirth)).format("D")) || 0,
+            month: getMonth || "",
+            year:
+              Number(dayjs(Number(data.account.dateOfBirth)).format("YYYY")) ||
+              0,
           },
         }));
       }
@@ -96,10 +97,13 @@ const UserEdit = () => {
       };
 
       const response = await updateUser(params?.userId || "", constructed);
-
+      console.log(response.success, "JEDKJK");
       if (response.success) {
         setFormStatus("success");
-        navigate(-1);
+
+        setTimeout(() => {
+          navigate(-1);
+        }, 1000);
       }
     }
   }
