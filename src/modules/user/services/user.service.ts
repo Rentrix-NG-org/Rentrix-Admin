@@ -53,5 +53,21 @@ export const UserService = () => {
         data: response.data,
       };
     },
+    getUserTransactions: async (userId: string) => {
+      if (!userId) {
+        return {
+          success: false,
+          message: "UserId missing",
+          data: null,
+        };
+      }
+      const response = await axios.get(`/admin/users/${userId}/transactions`);
+
+      return {
+        success: response.status === 200,
+        message: "Fetched",
+        data: response.data,
+      };
+    },
   };
 };

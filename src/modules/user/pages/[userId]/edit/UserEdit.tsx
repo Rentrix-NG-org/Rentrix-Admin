@@ -97,7 +97,6 @@ const UserEdit = () => {
       };
 
       const response = await updateUser(params?.userId || "", constructed);
-      console.log(response.success, "JEDKJK");
       if (response.success) {
         setFormStatus("success");
 
