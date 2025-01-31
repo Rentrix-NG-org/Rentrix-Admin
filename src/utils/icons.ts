@@ -1,3 +1,5 @@
+import { ArrowRight } from "@mui/icons-material";
+
 export const icons = {
   edit: (await import("@src/assets/icons/edit.svg")).default,
   bin: (await import("@src/assets/icons/bin.svg")).default,
@@ -5,4 +7,5 @@ export const icons = {
   info: (await import("@src/assets/icons/info.svg")).default,
   settings: (await import("@src/assets/icons/settings.svg")).default,
   cancel: (await import("@src/assets/icons/cancel.svg")).default,
+  ArrowRight: (await import("@src/assets/icons/cancel.svg")).default,
 };

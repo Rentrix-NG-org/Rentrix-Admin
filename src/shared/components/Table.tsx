@@ -1,4 +1,4 @@
-import { ChevronLeftRounded } from "@mui/icons-material";
+import { BorderAll, ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
@@ -10,7 +10,10 @@ interface TableProps {
     label: string;
     type: "select" | "action" | "text";
     options?: string[];
-    component?: React.ReactNode;
+    component?: {
+      component: React.ReactNode;
+      onClick: (id?: string) => void;
+    }[];
   }[];
   data: string[][];
 }
@@ -78,7 +81,22 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
                   options={columns[cellIndex].options as string[]}
                 />
               ) : columns[cellIndex]?.type === "action" ? (
-                columns[cellIndex]?.component
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  {columns[cellIndex]?.component?.map((x) => (
+                    <Box
+                      component="button"
+                      onClick={() => x.onClick(String(row[0]))}
+                      sx={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        p: 0,
+                      }}
+                    >
+                      {x.component}
+                    </Box>
+                  ))}
+                </Box>
               ) : (
                 <Typography
                   key={`${rowIndex}-${cellIndex}`}
@@ -90,8 +108,8 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
                 >
                   {cell}
                 </Typography>
-              ),
-            ),
+              )
+            )
         )}
       </Box>
     </Box>
@@ -106,14 +124,28 @@ const Select: FC<{
 }> = ({ column, options, onSelect, cell }) => {
   const theme = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const colors: Record<string, { value: string; accent: string }> = {
-    tenant: { value: "#9747ff", accent: "#efe3ff" },
-    landlord: { value: "#297dfd", accent: "#f7f7ff" },
-    suspended: { value: "#cb1a14", accent: "#f7dddc" },
-    active: { value: "#099137", accent: "#daefe1" },
-    Supervisor: { value: "#430c7b", accent: "#e3dbeb" },
-    "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
-    Default: { value: "#002b5b", accent: "#cce3fc" },
+  const colors: Record<
+    string,
+    { value: string; accent: string; border: string }
+  > = {
+    tenant: { value: "#9747ff", border: "transparent", accent: "#efe3ff" },
+    landlord: { value: "#297dfd", border: "transparent", accent: "#f7f7ff" },
+    suspended: { value: "#cb1a14", border: "transparent", accent: "#f7dddc" },
+    active: { value: "#099137", border: "transparent", accent: "#daefe1" },
+    Supervisor: { value: "#430c7b", border: "transparent", accent: "#e3dbeb" },
+    LISTED: { value: "#099137", border: "#099137", accent: "transparent" },
+    "UNDER REVIEW": {
+      value: "#DD900D",
+      border: "#DD900D",
+      accent: "transparent",
+    },
+    RENTED: { value: "#297DFD", border: "#297DFD", accent: "transparent" },
+    "Rentrix Rep": {
+      value: "#00a3a3",
+      border: "transparent",
+      accent: "#e5f6f6",
+    },
+    Default: { value: "#002b5b", border: "transparent", accent: "#cce3fc" },
   };
 
   const color = colors[cell || options[0]] || colors.Default;
@@ -132,12 +164,12 @@ const Select: FC<{
         component="button"
         onClick={() => setIsMenuOpen(true)}
         sx={{
-          background: color.accent,
+          background: color.accent ? color.accent : "transparent",
           padding: "3px 16px",
           borderRadius: 3,
           cursor: "pointer",
           width: "fit-content",
-          border: "none",
+          border: color.border ? `1px solid ${color.border}` : "none",
           display: "flex",
           alignItems: "center",
           gap: 0.5,
