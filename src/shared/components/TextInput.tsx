@@ -1,14 +1,25 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, SxProps, Typography, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 const TextInput: React.FC<{
   label: string;
-  value: string;
+  value?: string;
   icon?: string;
   type?: "text" | "number";
   onChange?: (value: string) => void;
   required?: boolean;
-}> = ({ label, icon, value, type = "text", required, onChange }) => {
+  containerSx?: SxProps;
+  inputSx?: SxProps;
+}> = ({
+  label,
+  icon,
+  value,
+  type = "text",
+  required,
+  onChange,
+  containerSx,
+  inputSx,
+}) => {
   const theme = useTheme();
   const labelRef = useRef<HTMLInputElement>(null);
   const [labelWidth, setLabelWidth] = useState(0);
@@ -40,6 +51,7 @@ const TextInput: React.FC<{
           background: theme.palette.common.white,
           zIndex: 1,
         },
+        ...containerSx,
       }}
     >
       <Box
@@ -81,6 +93,7 @@ const TextInput: React.FC<{
             height: "20px",
             width: "20px",
             left: 8,
+            pointerEvents: "none",
           }}
         />
 
@@ -105,6 +118,7 @@ const TextInput: React.FC<{
             background: "none",
             fontSize: 14,
             color: theme.palette.common.black,
+            ...inputSx,
           }}
         />
       </Box>

@@ -1,5 +1,5 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, SxProps, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 const SelectInput: React.FC<{
@@ -7,12 +7,25 @@ const SelectInput: React.FC<{
   icon?: string;
   value?: string | number;
   options: string[];
-  type?: "text" | "number";
+  typeable?: boolean;
   onChange?: (value: string) => void;
+  containerSx?: SxProps;
+  inputSx?: SxProps;
   required?: boolean;
-}> = ({ label, icon, options = ["None"], value, type, onChange, required }) => {
+}> = ({
+  label,
+  icon,
+  options = ["None"],
+  typeable,
+  value,
+  onChange,
+  containerSx,
+  inputSx,
+  required,
+}) => {
   const [selected, setSelected] = useState("");
-  console.log(value, "for", label);
+  const [typeableValue, setTypeableValue] = useState("");
+  const [filterOptions, setFilterOptions] = useState(options);
   const labelRef = useRef<HTMLInputElement>(null);
   const [labelWidth, setLabelWidth] = useState(0);
 
@@ -39,6 +52,18 @@ const SelectInput: React.FC<{
       );
     }
   }, [value, options]);
+
+  useEffect(() => {
+    if (typeableValue && typeableValue !== selected) {
+      const filtered = options.filter((option) =>
+        option.toLowerCase().includes(typeableValue.toLowerCase()),
+      );
+      setFilterOptions(filtered);
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [typeableValue]);
   return (
     <Box
       component="button"
@@ -52,13 +77,14 @@ const SelectInput: React.FC<{
         background: theme.palette.grey[300],
         borderRadius: "10px",
         alignItems: "center",
-        height: 50,
+        // height: 50,
         position: "relative",
         cursor: "pointer",
-        p: "8px 16px",
+        padding: icon ? "8px 16px" : "8px 12px",
         gap: "12px",
         "&::before": {
           content: '""',
+          display: icon ? "block" : "none",
           position: "absolute",
           top: -1,
           left: 40,
@@ -67,6 +93,7 @@ const SelectInput: React.FC<{
           background: theme.palette.common.white,
           zIndex: 1,
         },
+        ...containerSx,
       }}
     >
       <Box
@@ -81,19 +108,25 @@ const SelectInput: React.FC<{
         }}
       >
         <Typography
+          display={icon ? "inline" : "none"}
           sx={{
             color: theme.palette.grey[700],
             fontSize: 14,
             lineHeight: 1,
             padding: 0,
             margin: 0,
+            display: icon ? "inline" : "none",
           }}
         >
           {label} {required && "*"}
         </Typography>
       </Box>
-      <Box>
-        <Box component="img" src={icon} sx={{ width: 18, height: 18 }} />
+      <Box display={icon ? "inline" : "none"}>
+        <Box
+          component="img"
+          src={icon}
+          sx={{ width: 18, height: 18, pointerEvents: "none" }}
+        />
       </Box>
       <Box
         sx={{
@@ -101,13 +134,88 @@ const SelectInput: React.FC<{
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
+          width: typeable ? "100%" : "auto",
+          ...inputSx,
         }}
-      ></Box>
+      >
+        <Box
+          display={typeable ? "flex" : "none"}
+          component="input"
+          value={typeableValue}
+          onChange={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onChange?.(e.target.value);
+            setTypeableValue(e.target.value);
+          }}
+          type="text"
+          sx={{
+            width: "100%",
+            outline: "none",
+            background: "none",
+            border: "none",
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: typeable ? "none" : "flex",
+          flexDirection: "column",
+          gap: "2px",
+          width: "100%",
+        }}
+      >
+        <Typography
+          display={icon ? "none" : "inline"}
+          sx={{
+            color: theme.palette.grey[800],
+            fontSize: 14,
+            lineHeight: 1,
+            textAlign: "left",
+            padding: 0,
+            margin: 0,
+          }}
+        >
+          {label} {required && "*"}
+        </Typography>
 
-      <Box>{selected || "Select " + label.toLowerCase()} </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: icon ? 14 : 16,
+              fontStyle: "normal",
+              fontWeight: icon ? 500 : 600,
+              lineHeight: "120%",
+              color: icon ? theme.palette.grey[700] : theme.palette.grey[500],
+
+              textAlign: "left",
+              letterSpacing: "-0.32px",
+            }}
+          >
+            {selected || "Select " + label.toLowerCase()}{" "}
+          </Typography>
+
+          <ChevronLeftRounded
+            sx={{
+              ml: "auto",
+              display: icon ? "none" : "block",
+              transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
+              color: theme.palette.grey[500],
+            }}
+          />
+        </Box>
+      </Box>
       <ChevronLeftRounded
         sx={{
           ml: "auto",
+          display: icon ? "block" : "none",
           transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
           color: theme.palette.common.black,
         }}
@@ -120,7 +228,6 @@ const SelectInput: React.FC<{
           left: 0,
           right: 0,
           zIndex: 99,
-
           top: 56,
           padding: "16px",
           background: theme.palette.background.default,
@@ -132,11 +239,12 @@ const SelectInput: React.FC<{
           alignItems: "flex-start",
         }}
       >
-        {options.map((option) => (
+        {filterOptions.map((option) => (
           <Box
             component="button"
             onClick={() => {
               onChange?.(option);
+              setTypeableValue(option);
               setSelected(option);
             }}
             sx={{

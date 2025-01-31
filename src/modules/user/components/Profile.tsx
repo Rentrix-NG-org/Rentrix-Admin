@@ -25,6 +25,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
     active: { value: "#099137", accent: "#daefe1" },
     Supervisor: { value: "#430c7b", accent: "#e3dbeb" },
     "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
+    enabled: { value: "#002b5b", accent: "#cce3fc" },
     Default: { value: "#002b5b", accent: "#cce3fc" },
   };
 
@@ -176,14 +177,15 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
             </Typography>
             <Box
               sx={{
-                background: colors[user?.account?.status || "Default"].accent,
+                background:
+                  colors?.[user?.account?.status || "Default"]?.accent,
                 padding: "6px 16px",
                 borderRadius: "10px",
               }}
             >
               <Typography
                 sx={{
-                  color: colors[user?.account?.status || "Default"].value,
+                  color: colors?.[user?.account?.status || "Default"]?.value,
                   fontSize: 12,
                   fontWeight: 600,
                 }}

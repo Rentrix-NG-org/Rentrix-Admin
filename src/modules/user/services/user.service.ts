@@ -28,6 +28,15 @@ export const UserService = () => {
         data: response.data,
       };
     },
+
+    addUser: async (data: any) => {
+      const response = await axios.post(`/admin/user`, data);
+      return {
+        success: response.status === 201,
+        message: "User added",
+        data: response.data,
+      };
+    },
     updateUser: async (id: string, data: any) => {
       const response = await axios.patch(`/admin/users/${id}`, data);
       return {

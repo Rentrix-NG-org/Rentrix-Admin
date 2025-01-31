@@ -4,6 +4,7 @@ import { Routes } from "react-router";
 import { Route } from "react-router";
 import AppLayout from "./modules/AppLayout";
 import { ModuleRegistry } from "./core/registry";
+import { Navigate } from "react-router";
 
 function App() {
   const routes = ModuleRegistry.getRoutes();
@@ -54,7 +55,7 @@ function App() {
   return (
     <ThemeProvider theme={lightTheme}>
       <Routes>
-        <Route path="/" element={<Box>Hi</Box>} />
+        <Route path="/" element={<Navigate to="/users" />} />
         <Route path="/app" element={<Box>App</Box>} />
 
         <Route element={<AppLayout />}>

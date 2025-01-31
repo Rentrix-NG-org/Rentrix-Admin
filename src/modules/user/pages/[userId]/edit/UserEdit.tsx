@@ -187,7 +187,6 @@ const UserEdit = () => {
               <SelectInput
                 value={form.dateOfBirth.day}
                 label="Day"
-                icon={icons.usercircle}
                 options={days["January"] as unknown as string[]}
                 onChange={(value: string) => {
                   setForm((curr) => ({
@@ -199,7 +198,6 @@ const UserEdit = () => {
               <SelectInput
                 value={form.dateOfBirth.month}
                 label="Month"
-                icon={icons.usercircle}
                 options={months}
                 onChange={(value: string) => {
                   setForm((curr) => ({
@@ -214,7 +212,6 @@ const UserEdit = () => {
               <SelectInput
                 value={form.dateOfBirth.year}
                 label="Year"
-                icon={icons.usercircle}
                 options={Array.from(
                   { length: new Date().getFullYear() - 1949 },
                   (_, i) => (1950 + i).toString(),
