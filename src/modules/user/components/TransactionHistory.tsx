@@ -33,19 +33,21 @@ const TransactionHistory: React.FC<{ transactions: TransactionType[] }> = ({
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           {transactions?.length ? (
-            transactions.map((transaction, index) => (
-              <Transaction
-                key={index}
-                profileImg={""}
-                description={transaction.description}
-                date={transaction.createdAt}
-                amount={Number(transaction.amount)}
-                currencyIcon={icons.naira}
-                status={
-                  transaction.status as "successful" | "pending" | "failed"
-                }
-              />
-            ))
+            transactions
+              .slice(0, 4)
+              .map((transaction, index) => (
+                <Transaction
+                  key={index}
+                  profileImg={""}
+                  description={transaction.description}
+                  date={transaction.createdAt}
+                  amount={Number(transaction.amount)}
+                  currencyIcon={icons.naira}
+                  status={
+                    transaction.status as "successful" | "pending" | "failed"
+                  }
+                />
+              ))
           ) : (
             <Typography
               sx={{

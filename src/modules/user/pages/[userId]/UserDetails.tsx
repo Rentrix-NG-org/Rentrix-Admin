@@ -37,7 +37,7 @@ const UserDetails = () => {
       <Profile user={user} />
       <PropertyListed listings={user.listings as ListingType[]} />
       <TransactionHistory
-        transactions={user.transactions?.slice(0, 4) as TransactionType[]}
+        transactions={user.transactions as TransactionType[]}
       />
       <ActivityLogs logs={user.logs!} />
     </Box>
