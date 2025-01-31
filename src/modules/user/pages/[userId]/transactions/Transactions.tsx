@@ -1,4 +1,5 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
+import PaginationControl from "@src/modules/user/components/PaginationControl";
 import Transaction from "@src/modules/user/components/Transaction";
 import UserNav from "@src/modules/user/components/UserNav";
 import { UserService } from "@src/modules/user/services/user.service";
@@ -8,22 +9,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 const TransactionHistories = () => {
-  const theme = useTheme();
   const params = useParams();
-
   const { getUserTransactions } = UserService();
   const [page, setPage] = useState(1);
-
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [paginatedData, setPaginatedData] = useState<TransactionType[]>([]);
 
-  function handlePage(op: string) {
-    if (op === "+" && page * 8 < transactions.length) {
-      setPage(page + 1);
-    } else if (op === "-") {
-      setPage(page === 1 ? 1 : page - 1);
-    }
-  }
   useEffect(() => {
     async function fetchTransactions() {
       const response = await getUserTransactions(params?.userId || "");
@@ -73,46 +64,7 @@ const TransactionHistories = () => {
           />
         ))}
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: "20.3px",
-          mt: "46.97px",
-        }}
-      >
-        <Box
-          onClick={() => handlePage("-")}
-          sx={{ border: "none", background: "none", width: 33.6 }}
-          component="button"
-        >
-          <Box component="img" src={icons.arrowleft} sx={{}} />
-        </Box>
-        <Box
-          sx={{
-            width: 32,
-            height: 32,
-            background: theme.palette.primary.main,
-            display: "flex",
-            justifyContent: "center",
-            borderRadius: "50%",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{ color: theme.palette.common.white, fontWeight: 600 }}
-          >
-            {page}
-          </Typography>
-        </Box>
-        <Box
-          onClick={() => handlePage("+")}
-          sx={{ border: "none", background: "none", width: 33.6 }}
-          component="button"
-        >
-          <Box component="img" src={icons.arrowright} sx={{}} />
-        </Box>
-      </Box>
+      <PaginationControl data={transactions} onPage={(page) => setPage(page)} />
     </Box>
   );
 };

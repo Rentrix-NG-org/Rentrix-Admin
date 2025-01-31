@@ -3,6 +3,7 @@ import LogTable from "@src/shared/components/LogTable";
 import { LogService } from "@src/shared/services/log.service";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 
 type ActivityType =
@@ -25,6 +26,7 @@ const ActivityLogs = () => {
   const theme = useTheme();
   const { getLogs } = LogService();
   const params = useParams();
+  const navigate = useNavigate();
   const [logs, setLogs] = useState<LogType[]>([]);
 
   const activityTypes: Record<ActivityType, string> = {
@@ -95,6 +97,7 @@ const ActivityLogs = () => {
       )}
       <Box
         component="button"
+        onClick={() => navigate("logs")}
         sx={{
           background: theme.palette.grey[500],
           border: "none",

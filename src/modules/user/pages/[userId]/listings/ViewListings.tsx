@@ -1,14 +1,13 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import Listing from "@src/modules/user/components/Listing";
+import PaginationControl from "@src/modules/user/components/PaginationControl";
 import UserNav from "@src/modules/user/components/UserNav";
 import { UserService } from "@src/modules/user/services/user.service";
 import { ListingType } from "@src/modules/user/types/user.types";
-import { icons } from "@src/utils/icons";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 const ViewListings = () => {
-  const theme = useTheme();
   const [page, setPage] = useState(1);
   const params = useParams();
   const { getUserListings } = UserService();
@@ -31,14 +30,6 @@ const ViewListings = () => {
     const paginatedResults = listings.slice(start, end);
     setPaginatedData(paginatedResults);
   }, [listings, page]);
-
-  function handlePage(op: string) {
-    if (op === "+" && page * 6 < listings.length) {
-      setPage(page + 1);
-    } else if (op === "-") {
-      setPage(page === 1 ? 1 : page - 1);
-    }
-  }
 
   return (
     <Box
@@ -75,46 +66,7 @@ const ViewListings = () => {
         ))}
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: "20.3px",
-          mt: "46.97px",
-        }}
-      >
-        <Box
-          onClick={() => handlePage("-")}
-          sx={{ border: "none", background: "none", width: 33.6 }}
-          component="button"
-        >
-          <Box component="img" src={icons.arrowleft} sx={{}} />
-        </Box>
-        <Box
-          sx={{
-            width: 32,
-            height: 32,
-            background: theme.palette.primary.main,
-            display: "flex",
-            justifyContent: "center",
-            borderRadius: "50%",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{ color: theme.palette.common.white, fontWeight: 600 }}
-          >
-            {page}
-          </Typography>
-        </Box>
-        <Box
-          onClick={() => handlePage("+")}
-          sx={{ border: "none", background: "none", width: 33.6 }}
-          component="button"
-        >
-          <Box component="img" src={icons.arrowright} sx={{}} />
-        </Box>
-      </Box>
+      <PaginationControl data={listings} onPage={(page) => setPage(page)} />
     </Box>
   );
 };

@@ -4,6 +4,7 @@ import UserDetails from "./pages/[userId]/UserDetails";
 import UserEdit from "./pages/[userId]/edit/UserEdit";
 import ViewListings from "./pages/[userId]/listings/ViewListings";
 import TransactionHistories from "./pages/[userId]/transactions/Transactions";
+import ActivityLogs from "./pages/[userId]/logs/ActivityLogs";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -18,6 +19,7 @@ export const UserManagementModule: UserManagementModule = {
     { path: "/user/:userId/edit", element: <UserEdit /> },
     { path: "/user/:userId/listings", element: <ViewListings /> },
     { path: "/user/:userId/transactions", element: <TransactionHistories /> },
+    { path: "/user/:userId/logs", element: <ActivityLogs /> },
   ],
   name: "User Management",
   enabled: true,
