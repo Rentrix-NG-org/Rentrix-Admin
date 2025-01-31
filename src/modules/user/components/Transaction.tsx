@@ -1,6 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
-import { images } from "@src/utils/images";
 import dayjs from "dayjs";
 
 const Transaction: React.FC<{
@@ -41,7 +40,7 @@ const Transaction: React.FC<{
       >
         <Box
           component="img"
-          src={profileImg || images.avatar}
+          src={profileImg || icons.profilehead}
           sx={{ width: 48 }}
         />
       </Box>

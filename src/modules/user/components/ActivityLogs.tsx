@@ -22,12 +22,13 @@ interface LogType {
   activityType: ActivityType;
 }
 
-const ActivityLogs = () => {
+const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
+  // console.log(logs, "logs");
   const theme = useTheme();
-  const { getLogs } = LogService();
+  // const { getLogs } = LogService();
   const params = useParams();
   const navigate = useNavigate();
-  const [logs, setLogs] = useState<LogType[]>([]);
+  const [allLogs, setLogs] = useState<LogType[]>([]);
 
   const activityTypes: Record<ActivityType, string> = {
     "login-event": "Login Event",
@@ -39,23 +40,19 @@ const ActivityLogs = () => {
 
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getLogs(params?.userId || "");
-
-      if (response.success) {
-        const formatted = (response.data as any[]).map((log) => {
-          return {
-            date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
-            time: dayjs(Number(log.createdAt)).format("HH:mm"),
-            details: log.description,
-            actitityType: activityTypes[log.activityType as ActivityType],
-          };
-        });
-        console.log(formatted, "is formatted");
-        setLogs(formatted as unknown as LogType[]);
-      }
+      const formatted = (logs as any[]).slice(0, 8).map((log) => {
+        return {
+          date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
+          time: dayjs(Number(log.createdAt)).format("HH:mm"),
+          details: log.description,
+          actitityType: activityTypes[log.activityType as ActivityType],
+        };
+      });
+      console.log(formatted, "is formatted");
+      setLogs(formatted as unknown as LogType[]);
     }
     fetchLogs();
-  }, [params]);
+  }, [params, logs]);
 
   const columns = [
     { header: "Date", label: "date" },
@@ -82,8 +79,8 @@ const ActivityLogs = () => {
         Activity Logs
       </Typography>
 
-      {logs.length ? (
-        <LogTable columns={columns} data={logs} />
+      {allLogs.length ? (
+        <LogTable columns={columns} data={allLogs} />
       ) : (
         <Typography
           sx={{
@@ -104,7 +101,7 @@ const ActivityLogs = () => {
           padding: "16px",
           color: "white",
           cursor: "pointer",
-          display: logs.length ? "flex" : "none",
+          display: allLogs.length ? "flex" : "none",
           mt: "10px",
           width: "178px",
           borderRadius: "100px",

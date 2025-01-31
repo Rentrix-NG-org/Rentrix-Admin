@@ -90,6 +90,22 @@ export interface ListingType {
   transactions: TransactionType[];
 }
 
+type ActivityType =
+  | "login-event"
+  | "update"
+  | "download"
+  | "payment-made"
+  | "document-viewed";
+
+interface LogType {
+  createdAt: string;
+  description: string;
+  date: string;
+  time: string;
+  details: string;
+  activityType: ActivityType;
+}
+
 export interface User {
   firstName: string;
   lastName: string;
@@ -100,4 +116,5 @@ export interface User {
   roles: string[];
   listings: ListingType[];
   transactions: TransactionType[];
+  logs: LogType[];
 }

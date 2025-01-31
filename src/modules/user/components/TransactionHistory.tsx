@@ -131,7 +131,7 @@ const Transaction: React.FC<{
       >
         <Box
           component="img"
-          src={profileImg || images.avatar}
+          src={profileImg || icons.profilehead}
           sx={{ width: 48 }}
         />
       </Box>

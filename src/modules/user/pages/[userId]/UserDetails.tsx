@@ -39,7 +39,7 @@ const UserDetails = () => {
       <TransactionHistory
         transactions={user.transactions?.slice(0, 4) as TransactionType[]}
       />
-      <ActivityLogs />
+      <ActivityLogs logs={user.logs!} />
     </Box>
   );
 };
