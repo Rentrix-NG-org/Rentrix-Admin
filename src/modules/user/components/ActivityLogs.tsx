@@ -2,7 +2,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 import LogTable from "@src/shared/components/LogTable";
 import { LogService } from "@src/shared/services/log.service";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 
@@ -23,20 +23,19 @@ interface LogType {
 }
 
 const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
-  // console.log(logs, "logs");
-  const theme = useTheme();
-  // const { getLogs } = LogService();
-  const params = useParams();
-  const navigate = useNavigate();
-  const [allLogs, setLogs] = useState<LogType[]>([]);
-
-  const activityTypes: Record<ActivityType, string> = {
+  const types: Record<ActivityType, string> = {
     "login-event": "Login Event",
     update: "Update",
     download: "Download",
     "payment-made": "Payment Made",
     "document-viewed": "Document Viewed",
   };
+
+  const activityTypes = useMemo(() => types, []);
+  const theme = useTheme();
+  const params = useParams();
+  const navigate = useNavigate();
+  const [allLogs, setLogs] = useState<LogType[]>([]);
 
   useEffect(() => {
     async function fetchLogs() {
@@ -52,7 +51,7 @@ const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
       setLogs(formatted as unknown as LogType[]);
     }
     fetchLogs();
-  }, [params, logs]);
+  }, [params, logs, activityTypes]);
 
   const columns = [
     { header: "Date", label: "date" },
