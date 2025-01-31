@@ -39,7 +39,7 @@ const UserHeader: React.FC<{
             padding: "16px",
             borderRadius: 30,
             border: "none",
-            background: theme.palette.grey[500],
+            background: theme.palette.secondary.main,
             justifyContent: "center",
             alignItems: "center",
             gap: "8px",
@@ -52,7 +52,6 @@ const UserHeader: React.FC<{
               color: theme.palette.common.white,
             }}
           >
-            {" "}
             Add new users
           </Typography>
         </Box>

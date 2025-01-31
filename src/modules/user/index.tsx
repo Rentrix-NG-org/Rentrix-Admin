@@ -14,12 +14,12 @@ export interface UserManagementModule {
 
 export const UserManagementModule: UserManagementModule = {
   routes: [
-    { path: "/user", element: <UserManagement />, title: "User Management" },
-    { path: "/user/:userId", element: <UserDetails /> },
-    { path: "/user/:userId/edit", element: <UserEdit /> },
-    { path: "/user/:userId/listings", element: <ViewListings /> },
-    { path: "/user/:userId/transactions", element: <TransactionHistories /> },
-    { path: "/user/:userId/logs", element: <ActivityLogs /> },
+    { path: "/users", element: <UserManagement />, title: "User Management" },
+    { path: "/users/:userId", element: <UserDetails /> },
+    { path: "/users/:userId/edit", element: <UserEdit /> },
+    { path: "/users/:userId/listings", element: <ViewListings /> },
+    { path: "/users/:userId/transactions", element: <TransactionHistories /> },
+    { path: "/users/:userId/logs", element: <ActivityLogs /> },
   ],
   name: "User Management",
   enabled: true,

@@ -29,7 +29,7 @@ export const UserService = () => {
       };
     },
     updateUser: async (id: string, data: any) => {
-      const response = await axios.patch(`/admin/user/${id}`, data);
+      const response = await axios.patch(`/admin/users/${id}`, data);
       return {
         success: response.status === 200,
         message: "Updated",
