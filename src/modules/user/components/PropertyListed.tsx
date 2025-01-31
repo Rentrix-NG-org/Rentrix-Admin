@@ -1,11 +1,13 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Listing from "./Listing";
 import { ListingType } from "../types/user.types";
+import { useNavigate } from "react-router";
 
 const PropertyListed: React.FC<{ listings: Partial<ListingType>[] }> = ({
   listings,
 }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "15.59px" }}>
       <Typography
@@ -44,6 +46,7 @@ const PropertyListed: React.FC<{ listings: Partial<ListingType>[] }> = ({
         )}
       </Box>
       <Box
+        onClick={() => navigate("listings")}
         component="button"
         sx={{
           background: theme.palette.grey[500],

@@ -2,7 +2,8 @@ import { Box, Typography, useTheme } from "@mui/material";
 import LogTable from "@src/shared/components/LogTable";
 import { LogService } from "@src/shared/services/log.service";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 
 type ActivityType =
@@ -21,13 +22,8 @@ interface LogType {
   activityType: ActivityType;
 }
 
-const ActivityLogs = () => {
-  const theme = useTheme();
-  const { getLogs } = LogService();
-  const params = useParams();
-  const [logs, setLogs] = useState<LogType[]>([]);
-
-  const activityTypes: Record<ActivityType, string> = {
+const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
+  const types: Record<ActivityType, string> = {
     "login-event": "Login Event",
     update: "Update",
     download: "Download",
@@ -35,25 +31,27 @@ const ActivityLogs = () => {
     "document-viewed": "Document Viewed",
   };
 
+  const activityTypes = useMemo(() => types, []);
+  const theme = useTheme();
+  const params = useParams();
+  const navigate = useNavigate();
+  const [allLogs, setLogs] = useState<LogType[]>([]);
+
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getLogs(params?.userId || "");
-
-      if (response.success) {
-        const formatted = (response.data as any[]).map((log) => {
-          return {
-            date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
-            time: dayjs(Number(log.createdAt)).format("HH:mm"),
-            details: log.description,
-            actitityType: activityTypes[log.activityType as ActivityType],
-          };
-        });
-        console.log(formatted, "is formatted");
-        setLogs(formatted as unknown as LogType[]);
-      }
+      const formatted = (logs as any[]).slice(0, 8).map((log) => {
+        return {
+          date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
+          time: dayjs(Number(log.createdAt)).format("HH:mm"),
+          details: log.description,
+          actitityType: activityTypes[log.activityType as ActivityType],
+        };
+      });
+      console.log(formatted, "is formatted");
+      setLogs(formatted as unknown as LogType[]);
     }
     fetchLogs();
-  }, [params]);
+  }, [params, logs, activityTypes]);
 
   const columns = [
     { header: "Date", label: "date" },
@@ -80,8 +78,8 @@ const ActivityLogs = () => {
         Activity Logs
       </Typography>
 
-      {logs.length ? (
-        <LogTable columns={columns} data={logs} />
+      {allLogs.length ? (
+        <LogTable columns={columns} data={allLogs} />
       ) : (
         <Typography
           sx={{
@@ -95,13 +93,14 @@ const ActivityLogs = () => {
       )}
       <Box
         component="button"
+        onClick={() => navigate("logs")}
         sx={{
           background: theme.palette.grey[500],
           border: "none",
           padding: "16px",
           color: "white",
           cursor: "pointer",
-          display: logs.length ? "flex" : "none",
+          display: allLogs.length ? "flex" : "none",
           mt: "10px",
           width: "178px",
           borderRadius: "100px",

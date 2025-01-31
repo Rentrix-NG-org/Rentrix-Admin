@@ -1,6 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Filter from "@src/shared/components/Filter";
 import Search from "@src/shared/components/Search";
+import { useNavigate } from "react-router";
 
 const UserHeader: React.FC<{
   search: string;
@@ -8,6 +9,7 @@ const UserHeader: React.FC<{
   setFilter: (value: string[]) => void;
 }> = ({ setSearch, setFilter }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -31,6 +33,7 @@ const UserHeader: React.FC<{
       <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }}>
         <Box
           component="button"
+          onClick={() => navigate("create")}
           sx={{
             display: "flex",
             width: "178px",
@@ -39,7 +42,7 @@ const UserHeader: React.FC<{
             padding: "16px",
             borderRadius: 30,
             border: "none",
-            background: theme.palette.grey[500],
+            background: theme.palette.secondary.main,
             justifyContent: "center",
             alignItems: "center",
             gap: "8px",
@@ -52,7 +55,6 @@ const UserHeader: React.FC<{
               color: theme.palette.common.white,
             }}
           >
-            {" "}
             Add new users
           </Typography>
         </Box>

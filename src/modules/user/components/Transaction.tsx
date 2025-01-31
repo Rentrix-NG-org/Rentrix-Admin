@@ -1,99 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
-import { images } from "@src/utils/images";
-import React from "react";
-import { TransactionType } from "../types/user.types";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router";
-
-const TransactionHistory: React.FC<{ transactions: TransactionType[] }> = ({
-  transactions,
-}) => {
-  const theme = useTheme();
-  const navigate = useNavigate();
-
-  return (
-    <Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: 600,
-            fontSize: "14px",
-            color: theme.palette.common.black,
-          }}
-        >
-          Transaction History
-        </Typography>
-
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {transactions?.length ? (
-            transactions
-              .slice(0, 4)
-              .map((transaction, index) => (
-                <Transaction
-                  key={index}
-                  profileImg={""}
-                  description={transaction.description}
-                  date={transaction.createdAt}
-                  amount={Number(transaction.amount)}
-                  currencyIcon={icons.naira}
-                  status={
-                    transaction.status as "successful" | "pending" | "failed"
-                  }
-                />
-              ))
-          ) : (
-            <Typography
-              sx={{
-                fontWeight: 500,
-                fontSize: 14,
-                color: theme.palette.grey[600],
-              }}
-            >
-              No transactions
-            </Typography>
-          )}
-        </Box>
-      </Box>
-      <Box
-        component="button"
-        onClick={() => navigate("transactions")}
-        sx={{
-          background: theme.palette.grey[500],
-          border: "none",
-          padding: "16px",
-          color: "white",
-          cursor: "pointer",
-          mt: "8px",
-          display: transactions?.length ? "flex" : "none",
-          width: "178px",
-          borderRadius: "100px",
-          height: "40px",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "8px",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: "14px",
-            fontWeight: 600,
-            lineHeight: "140%",
-            letterSpacing: "-0.28px",
-          }}
-        >
-          View all
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
 
 const Transaction: React.FC<{
   profileImg: string;
@@ -224,4 +131,5 @@ const Transaction: React.FC<{
     </Box>
   );
 };
-export default TransactionHistory;
+
+export default Transaction;
