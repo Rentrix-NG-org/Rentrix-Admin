@@ -30,24 +30,33 @@ const Transaction: React.FC<{
         alignItems: "center",
         padding: "12px",
         borderRadius: "12px",
-        border: `2px solid ${theme.palette.grey[300]}`,
+        border: `1px solid ${theme.palette.grey[300]}`,
         background: theme.palette.grey[200],
         gap: "12px",
       }}
     >
       <Box
-        sx={{ borderRadius: "50%", overflow: "hidden", width: 48, height: 48 }}
+        sx={{
+          borderRadius: "50%",
+          overflow: "hidden",
+          width: 48,
+          height: 48,
+          border: `1px solid ${theme.palette.common.white}`,
+        }}
       >
         <Box
           component="img"
           src={profileImg || icons.profilehead}
-          sx={{ width: 48 }}
+          sx={{
+            width: "100%",
+            transform: profileImg ? "scale(1)" : "scale(1.2)",
+          }}
         />
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         <Typography
           sx={{
-            color: theme.palette.common.black,
+            color: theme.palette.text.primary,
             fontSize: "16px",
             fontWeight: 600,
             lineHeight: "140%",

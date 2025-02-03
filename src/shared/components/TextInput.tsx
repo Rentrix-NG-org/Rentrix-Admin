@@ -39,7 +39,7 @@ const TextInput: React.FC<{
         paddingX: "16px",
         display: "flex",
         alignItems: "center",
-        background: theme.palette.grey[300],
+        background: theme.palette.grey[100],
         boxSizing: "border-box",
         "&::before": {
           content: '""',

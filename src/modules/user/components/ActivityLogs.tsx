@@ -94,7 +94,7 @@ const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
         component="button"
         onClick={() => navigate("logs")}
         sx={{
-          background: theme.palette.grey[500],
+          background: theme.palette.secondary.main,
           border: "none",
           padding: "16px",
           color: "white",
