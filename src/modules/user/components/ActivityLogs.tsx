@@ -47,7 +47,6 @@ const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
           actitityType: activityTypes[log.activityType as ActivityType],
         };
       });
-      console.log(formatted, "is formatted");
       setLogs(formatted as unknown as LogType[]);
     }
     fetchLogs();
