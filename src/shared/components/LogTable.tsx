@@ -26,6 +26,7 @@ const LogTable: React.FC<{
       >
         {columns.map((column) => (
           <Typography
+            key={column.label}
             sx={{
               color: theme.palette.common.white,
               fontSize: "16px",
@@ -39,34 +40,36 @@ const LogTable: React.FC<{
         ))}
       </Box>
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
-        }}
-      >
-        {rows.map((row, index) =>
-          row.map((cell) => (
-            <Typography
-              sx={{
-                padding: "10px",
-                borderBottom:
-                  index + 1 === rows.length
-                    ? "none"
-                    : `1px solid ${theme.palette.grey[300]}`,
-
-                fontSize: "16px",
-                fontStyle: "normal",
-                fontWeight: 400,
-                lineHeight: "150%",
-                color: theme.palette.common.black,
-              }}
-              key={`${row.join()}-${cell}`}
-            >
-              {cell}
-            </Typography>
-          )),
-        )}
+      <Box sx={{}}>
+        {rows.map((row, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+            }}
+          >
+            {row.map((cell, cellIndex) => (
+              <Typography
+                sx={{
+                  padding: "10px",
+                  borderBottom:
+                    index + 1 === rows.length
+                      ? "none"
+                      : `1px solid ${theme.palette.grey[300]}`,
+                  fontSize: "16px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "150%",
+                  color: theme.palette.common.black,
+                }}
+                key={`${index}-${cellIndex}`}
+              >
+                {cell}
+              </Typography>
+            ))}
+          </Box>
+        ))}
       </Box>
     </Box>
   );

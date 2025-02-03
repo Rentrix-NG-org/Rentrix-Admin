@@ -14,11 +14,11 @@ function App() {
     },
     palette: {
       mode: "light",
+
       primary: {
         main: "#002b5b",
         light: "#f2f9f9",
         dark: "#297dfd",
-        A400: "",
       },
       secondary: {
         main: "#00a3a3",
@@ -34,6 +34,10 @@ function App() {
       warning: {
         main: "#e5ab4a",
         dark: "#f77a4a",
+      },
+      text: {
+        primary: "#48505e",
+        secondary: "#2e333c",
       },
       grey: {
         A100: "#eaeaea",

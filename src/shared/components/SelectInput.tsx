@@ -11,6 +11,7 @@ const SelectInput: React.FC<{
   onChange?: (value: string) => void;
   containerSx?: SxProps;
   inputSx?: SxProps;
+  placeholderSx?: SxProps;
   required?: boolean;
 }> = ({
   label,
@@ -22,6 +23,7 @@ const SelectInput: React.FC<{
   containerSx,
   inputSx,
   required,
+  placeholderSx,
 }) => {
   const [selected, setSelected] = useState("");
   const [typeableValue, setTypeableValue] = useState("");
@@ -74,12 +76,12 @@ const SelectInput: React.FC<{
         display: "flex",
         width: "100%",
         border: `1px solid ${theme.palette.primary.main}`,
-        background: theme.palette.grey[300],
+        background: theme.palette.grey[100],
         borderRadius: "10px",
         alignItems: "center",
-        // height: 50,
         position: "relative",
         cursor: "pointer",
+        height: 50,
         padding: icon ? "8px 16px" : "8px 12px",
         gap: "12px",
         "&::before": {
@@ -142,6 +144,7 @@ const SelectInput: React.FC<{
           display={typeable ? "flex" : "none"}
           component="input"
           value={typeableValue}
+          placeholder={`Select or type ${label.toLowerCase()}`}
           onChange={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -154,6 +157,7 @@ const SelectInput: React.FC<{
             outline: "none",
             background: "none",
             border: "none",
+            color: theme.palette.grey[600],
           }}
         />
       </Box>
@@ -193,10 +197,10 @@ const SelectInput: React.FC<{
               fontStyle: "normal",
               fontWeight: icon ? 500 : 600,
               lineHeight: "120%",
-              color: icon ? theme.palette.grey[700] : theme.palette.grey[500],
-
+              color: theme.palette.text.secondary,
               textAlign: "left",
               letterSpacing: "-0.32px",
+              ...placeholderSx,
             }}
           >
             {selected || "Select " + label.toLowerCase()}{" "}
@@ -207,7 +211,7 @@ const SelectInput: React.FC<{
               ml: "auto",
               display: icon ? "none" : "block",
               transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
-              color: theme.palette.grey[500],
+              color: theme.palette.text.secondary,
             }}
           />
         </Box>

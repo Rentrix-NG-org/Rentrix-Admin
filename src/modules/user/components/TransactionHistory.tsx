@@ -65,7 +65,7 @@ const TransactionHistory: React.FC<{ transactions: TransactionType[] }> = ({
         component="button"
         onClick={() => navigate("transactions")}
         sx={{
-          background: theme.palette.grey[500],
+          background: theme.palette.secondary.main,
           border: "none",
           padding: "16px",
           color: "white",

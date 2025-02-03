@@ -49,7 +49,7 @@ const PropertyListed: React.FC<{ listings: Partial<ListingType>[] }> = ({
         onClick={() => navigate("listings")}
         component="button"
         sx={{
-          background: theme.palette.grey[500],
+          background: theme.palette.secondary.main,
           border: "none",
           padding: "16px",
           color: "white",

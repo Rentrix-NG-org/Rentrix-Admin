@@ -134,6 +134,7 @@ const AddUser = () => {
             background: theme.palette.grey[100],
           }}
           icon={icons.usercircle}
+          placeholderSx={{ color: theme.palette.grey[600] }}
           label="Gender"
           options={["Male", "Female"]}
           required
@@ -154,6 +155,7 @@ const AddUser = () => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <SelectInput
+              placeholderSx={{ color: theme.palette.grey[600] }}
               onChange={(value: string) => {
                 setForm((curr) => ({
                   ...curr,
@@ -168,6 +170,7 @@ const AddUser = () => {
               options={days["January"] as unknown as string[]}
             />
             <SelectInput
+              placeholderSx={{ color: theme.palette.grey[600] }}
               onChange={(value: string) => {
                 setForm((curr) => ({
                   ...curr,
@@ -185,6 +188,7 @@ const AddUser = () => {
               options={months}
             />
             <SelectInput
+              placeholderSx={{ color: theme.palette.grey[600] }}
               containerSx={{
                 border: `1px solid ${theme.palette.grey[300]}`,
                 background: theme.palette.grey[100],
@@ -238,6 +242,7 @@ const AddUser = () => {
           }}
           label="Role"
           icon={icons.usercircle}
+          placeholderSx={{ color: theme.palette.grey[600] }}
           options={[
             "Landlord",
             "Tenant",

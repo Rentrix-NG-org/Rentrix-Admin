@@ -3,6 +3,7 @@ import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
 import { icons } from "@src/utils/icons";
+import PaginationControl from "@src/modules/user/components/PaginationControl";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
@@ -133,46 +134,11 @@ const Table: React.FC<TableProps> = ({
         )}
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: "20.3px",
-          mt: "43px",
-        }}
-      >
-        <Box
-          onClick={() => handlePage("-")}
-          sx={{ border: "none", background: "none", width: 33.6 }}
-          component="button"
-        >
-          <Box component="img" src={icons.arrowleft} sx={{}} />
-        </Box>
-        <Box
-          sx={{
-            width: 32,
-            height: 32,
-            background: theme.palette.primary.main,
-            display: "flex",
-            justifyContent: "center",
-            borderRadius: "50%",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            sx={{ color: theme.palette.common.white, fontWeight: 600 }}
-          >
-            {page}
-          </Typography>
-        </Box>
-        <Box
-          onClick={() => handlePage("+")}
-          sx={{ border: "none", background: "none", width: 33.6 }}
-          component="button"
-        >
-          <Box component="img" src={icons.arrowright} sx={{}} />
-        </Box>
-      </Box>
+      <PaginationControl
+        onPage={(page) => setPage(page)}
+        data={rows}
+        limit={2}
+      />
     </Box>
   );
 };

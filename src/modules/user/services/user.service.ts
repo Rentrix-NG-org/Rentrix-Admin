@@ -29,6 +29,23 @@ export const UserService = () => {
       };
     },
 
+    getUserRep: async (userId: string) => {
+      if (!userId) {
+        return {
+          success: false,
+          message: "UserId missing",
+          data: null,
+        };
+      }
+      const response = await axios.get(`/admin/users/${userId}/rep`);
+
+      return {
+        success: response.status === 200,
+        message: "Fetched",
+        data: response.data,
+      };
+    },
+
     addUser: async (data: any) => {
       const response = await axios.post(`/admin/user`, data);
       return {
