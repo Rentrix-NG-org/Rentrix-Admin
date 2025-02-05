@@ -212,6 +212,7 @@ const SelectInput: React.FC<{
               display: icon ? "none" : "block",
               transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
               color: theme.palette.text.secondary,
+              ...placeholderSx,
             }}
           />
         </Box>
