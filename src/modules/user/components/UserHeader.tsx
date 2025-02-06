@@ -58,7 +58,10 @@ const UserHeader: React.FC<{
             Add new users
           </Typography>
         </Box>
-        <Search placeholder="Search Users" setSearch={setSearch} />
+        <Search
+          placeholder="Search Users"
+          setSearch={setSearch}
+        />
         <Filter onFilter={setFilter} />
       </Box>
     </Box>

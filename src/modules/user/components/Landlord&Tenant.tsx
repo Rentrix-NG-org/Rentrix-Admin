@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
 import Action from "./Action";
 import { UserService } from "../services/user.service";
+import dayjs from "dayjs";
+import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
@@ -65,7 +67,10 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     label: string;
     type: "select" | "action" | "text";
     options?: string[];
-    component?: React.ReactNode;
+    component?: {
+      component: React.ReactNode;
+      onClick: (id?: string) => void;
+    }[];
   }[] = [
     {
       header: "USER ID",
@@ -98,7 +103,22 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       header: "ACTIONS",
       label: "actions",
       type: "action",
-      component: <Action />,
+      component: [
+        {
+          component: <Box component="img" src={icons.eye} sx={{ width: 18 }} />,
+          onClick: () => {},
+        },
+        {
+          component: (
+            <Box component="img" src={icons.edit} sx={{ width: 18 }} />
+          ),
+          onClick: () => {},
+        },
+        {
+          component: <Box component="img" src={icons.bin} sx={{ width: 18 }} />,
+          onClick: () => {},
+        },
+      ],
     },
   ];
 

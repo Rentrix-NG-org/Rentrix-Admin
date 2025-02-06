@@ -1,11 +1,13 @@
 import { Box, useTheme } from "@mui/material";
 import searchicon from "@src/assets/icons/search.svg";
+import { useState } from "react";
 
 const Search: React.FC<{
   placeholder?: string;
   setSearch: (value: string) => void;
 }> = ({ placeholder = "Search item", setSearch }) => {
   const theme = useTheme();
+  const [focus, setFocus] = useState(false)
   return (
     <Box
       sx={{
@@ -17,6 +19,7 @@ const Search: React.FC<{
         gap: "12px",
         background: theme.palette.grey[200],
         borderRadius: "20px",
+        border: focus ? '1px solid #2EB4B4' : 'none'
       }}
     >
       <Box
@@ -42,6 +45,8 @@ const Search: React.FC<{
             setSearch(e.target.value);
           }}
           placeholder={placeholder}
+          onBlur={() => setFocus(false)}
+          onFocus={() => setFocus(true)}
           sx={{
             fontSize: "14px",
             fontStyle: "normal",
@@ -49,9 +54,10 @@ const Search: React.FC<{
             background: "none",
             border: "none",
             outline: "none",
-            color: theme.palette.grey[500],
+            color: "#222522",
             lineHeight: "140%",
             letterSpacing: "-0.28px",
+            
           }}
         ></Box>
       </Box>

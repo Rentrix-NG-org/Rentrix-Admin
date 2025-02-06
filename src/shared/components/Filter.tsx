@@ -1,12 +1,13 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
-import { Box, Checkbox, Typography, useTheme } from "@mui/material";
+import { Box, Checkbox, SxProps, Theme, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 
 const Filter: React.FC<{
   placeholder?: string;
+  filterStyle?: CSSProperties | SxProps<Theme>;
   onFilter: (value: string[]) => void;
-}> = ({ placeholder = "Filter", onFilter }) => {
+}> = ({ placeholder = "Filter", onFilter, filterStyle }) => {
   const theme = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -16,12 +17,13 @@ const Filter: React.FC<{
         background: theme.palette.grey[100],
         borderRadius: 10,
         cursor: "pointer",
-        width: 99,
+        width: "fit-content",
         height: 40,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
+        ...filterStyle,
       }}
     >
       <Box
@@ -39,7 +41,9 @@ const Filter: React.FC<{
           gap: 1,
         }}
       >
-        <Box component="img" src={icons.settings} sx={{ width: 16 }} />
+        {placeholder === "Filter" && (
+          <Box component="img" src={icons.settings} sx={{ width: 16 }} />
+        )}
         <Typography sx={{ color: theme.palette.common.black, fontWeight: 600 }}>
           {placeholder}
         </Typography>

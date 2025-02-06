@@ -119,7 +119,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             header: "ACTIONS",
             label: "actions",
             type: "action",
-            component: <Action />,
+            component: [],
           },
         ]}
         data={searchFilter}
