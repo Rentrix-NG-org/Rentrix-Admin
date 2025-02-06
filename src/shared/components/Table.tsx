@@ -54,6 +54,7 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
               background: theme.palette.grey.A200,
               borderBottom: `1px solid ${theme.palette.grey.A100}`,
               padding: "13px 31px",
+              minWidth: "200px",
             }}
           >
             {header}
@@ -81,7 +82,16 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
                   options={columns[cellIndex].options as string[]}
                 />
               ) : columns[cellIndex]?.type === "action" ? (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                      justifyContent: "center",
+                    ml: 2.2,
+                    gap: 2,
+                    minWidth: "200px",
+                  }}
+                >
                   {columns[cellIndex]?.component?.map((x) => (
                     <Box
                       component="button"
@@ -104,9 +114,10 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
                     textWrap: "nowrap",
                     padding: "28px 32px",
                     borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                    minWidth: "200px",
                   }}
                 >
-                  {cell}
+                  {cell.length > 25 ? cell.slice(0, 25) + '...' : cell}
                 </Typography>
               )
             )
