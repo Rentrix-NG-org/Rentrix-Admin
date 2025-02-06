@@ -1,5 +1,12 @@
 import { RouteObject } from "react-router";
 import UserManagement from "./pages/main";
+import UserDetails from "./pages/[userId]/UserDetails";
+import UserEdit from "./pages/[userId]/edit/UserEdit";
+import ViewListings from "./pages/[userId]/listings/ViewListings";
+import TransactionHistories from "./pages/[userId]/transactions/Transactions";
+import ActivityLogs from "./pages/[userId]/logs/ActivityLogs";
+import AddUser from "./pages/create/AddUser";
+import RepDetails from "./pages/[userId]/RepDetails";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -9,8 +16,14 @@ export interface UserManagementModule {
 
 export const UserManagementModule: UserManagementModule = {
   routes: [
-    { path: "/user", element: <UserManagement />, title: "User Management" },
-    { path: "/user/something" },
+    { path: "/users", element: <UserManagement />, title: "User Management" },
+    { path: "/users/create", element: <AddUser /> },
+    { path: "/users/:userId", element: <UserDetails /> },
+    { path: "/users/:userId/edit", element: <UserEdit /> },
+    { path: "/users/:userId/listings", element: <ViewListings /> },
+    { path: "/users/:userId/transactions", element: <TransactionHistories /> },
+    { path: "/users/:userId/logs", element: <ActivityLogs /> },
+    { path: "/users/:userId/rentrix-rep", element: <RepDetails /> },
   ],
   name: "User Management",
   enabled: true,

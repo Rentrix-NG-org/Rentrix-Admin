@@ -4,6 +4,7 @@ import { Routes } from "react-router";
 import { Route } from "react-router";
 import AppLayout from "./modules/AppLayout";
 import { ModuleRegistry } from "./core/registry";
+import { Navigate } from "react-router";
 
 function App() {
   const routes = ModuleRegistry.getRoutes();
@@ -13,10 +14,11 @@ function App() {
     },
     palette: {
       mode: "light",
+
       primary: {
         main: "#002b5b",
         light: "#f2f9f9",
-        A400: "",
+        dark: "#297dfd",
       },
       secondary: {
         main: "#00a3a3",
@@ -25,9 +27,17 @@ function App() {
       success: {
         main: "#289f50",
       },
+      background: {
+        default: "#eef5f5",
+      },
+
       warning: {
         main: "#e5ab4a",
         dark: "#f77a4a",
+      },
+      text: {
+        primary: "#48505e",
+        secondary: "#2e333c",
       },
       grey: {
         A100: "#eaeaea",
@@ -38,6 +48,7 @@ function App() {
         "300": "#dadde2",
         "400": "#98a2b3",
         "500": "#9fa6b2",
+        "700": "#727677",
       },
       common: {
         white: "#fff",
@@ -48,7 +59,7 @@ function App() {
   return (
     <ThemeProvider theme={lightTheme}>
       <Routes>
-        <Route path="/" element={<Box>Hi</Box>} />
+        <Route path="/" element={<Navigate to="/users" />} />
         <Route path="/app" element={<Box>App</Box>} />
 
         <Route element={<AppLayout />}>

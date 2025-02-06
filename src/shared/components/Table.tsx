@@ -2,9 +2,12 @@ import { BorderAll, ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
+import { icons } from "@src/utils/icons";
+import PaginationControl from "@src/modules/user/components/PaginationControl";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
+  onRowClick: (row: string[]) => void;
   columns: {
     header: string;
     label: string;
@@ -18,8 +21,15 @@ interface TableProps {
   data: string[][];
 }
 
-const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
+const Table: React.FC<TableProps> = ({
+  onSelect,
+  onRowClick,
+  columns,
+  data,
+}) => {
   const [rows, setRows] = useState<string[][]>(data);
+  const [paginatedRows, setPaginatedRows] = useState<string[][]>([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const result = data.map((d) => {
       return [...d, "Action"] as string[];
@@ -27,6 +37,23 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
     setRows(result);
   }, [data]);
   const theme = useTheme();
+
+  function handlePage(op: string) {
+    const limit = 2;
+    if (op === "+" && paginatedRows.length && page * limit < rows.length) {
+      setPage(page + 1);
+    } else if (op === "-") {
+      setPage(page === 1 ? 1 : page - 1);
+    }
+  }
+
+  useEffect(() => {
+    const limit = 2;
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const paginatedData = rows.slice(start, end);
+    setPaginatedRows(paginatedData);
+  }, [page, rows]);
   return (
     <Box
       data-table-container
@@ -67,7 +94,7 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
           gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
         }}
       >
-        {rows.map(
+        {paginatedRows.map(
           (row, rowIndex) =>
             Array.isArray(row) &&
             row.map((cell, cellIndex) =>
@@ -86,15 +113,15 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                      justifyContent: "center",
-                    ml: 2.2,
+                    px: "31px",
                     gap: 2,
                     minWidth: "200px",
+                    borderBottom: `1px solid ${theme.palette.grey.A100}`,
                   }}
                 >
                   {columns[cellIndex]?.component?.map((x) => (
                     <Box
-                      component="button"
+                      // component="button"
                       onClick={() => x.onClick(String(row[0]))}
                       sx={{
                         background: "none",
@@ -109,20 +136,29 @@ const Table: React.FC<TableProps> = ({ onSelect, columns, data }) => {
                 </Box>
               ) : (
                 <Typography
+                  // component="button"
+                  onClick={() => onRowClick(row)}
                   key={`${rowIndex}-${cellIndex}`}
                   sx={{
                     textWrap: "nowrap",
                     padding: "28px 32px",
+                    border: "none",
                     borderBottom: `1px solid ${theme.palette.grey.A100}`,
                     minWidth: "200px",
                   }}
                 >
-                  {cell.length > 25 ? cell.slice(0, 25) + '...' : cell}
+                  {cell.length > 25 ? cell.slice(0, 25) + "..." : cell}
                 </Typography>
               )
             )
         )}
       </Box>
+
+      <PaginationControl
+        onPage={(page) => setPage(page)}
+        data={rows}
+        limit={2}
+      />
     </Box>
   );
 };
@@ -167,7 +203,8 @@ const Select: FC<{
         display: "flex",
         alignItems: "center",
         position: "relative",
-        padding: "28px 32px",
+        padding: "28px 31px",
+        minWidth: "200px",
         // justifyContent: "center",
       }}
     >
@@ -223,7 +260,6 @@ const Menu: React.FC<{
   const theme = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
   const position = useMenuPosition(menuRef);
-  console.log(position, "posi");
   return (
     <Box
       ref={menuRef}

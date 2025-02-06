@@ -7,12 +7,13 @@ import Action from "./Action";
 import { UserService } from "../services/user.service";
 import dayjs from "dayjs";
 import { icons } from "@src/utils/icons";
+import { useNavigate } from "react-router";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
-  const { getAllUsers } = UserService();
+  const { getAllUsers, updateUser } = UserService();
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -22,17 +23,20 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   const theme = useTheme();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<any[]>([]);
+  const [refresh, setRefresh] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function getUsers() {
-      const response = await getAllUsers();
+      const response = await getAllUsers("landlord=true&tenant=true");
 
       if (response.success) {
+        setRefresh(false);
         setUsers(response.data as any[]);
-        console.log(response.data, "Is dat");
       }
     }
     getUsers();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
@@ -118,6 +122,13 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     },
   ];
 
+  async function updateUserData(id: string, data: any) {
+    const response = await updateUser(id, data);
+    if (response.success) {
+      setRefresh(true);
+    }
+  }
+
   function handleTableSelection(
     row: string[],
     selected: { value: string; index: number },
@@ -138,8 +149,19 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
               <Typography>{row[1]}?</Typography>
             </Box>
           ),
-          onConfirm: () => {},
+          onConfirm: () => {
+            updateUserData(row[0], { status: selected.value.toLowerCase() });
+            setModal(null);
+          },
         });
+        break;
+      case "Landlord":
+      case "Tenant":
+        updateUserData(row[0], { role: selected.value.toLowerCase() });
+        break;
+      case "Active":
+        updateUserData(row[0], { status: selected.value.toLowerCase() });
+        break;
     }
   }
   return (
@@ -164,6 +186,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
       <Table
         onSelect={handleTableSelection}
+        onRowClick={(row) => navigate(`/users/${row[0]}`)}
         columns={columns}
         data={searchFilter}
       />
