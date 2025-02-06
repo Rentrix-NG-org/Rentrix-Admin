@@ -30,7 +30,16 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
       if (response.success) {
         setRefresh(false);
-        setUsers(response.data as any[]);
+        const formatted = response.data.map((user: any) => {
+          return {
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            status: user.status,
+            registrationDate: user.registrationDate,
+          };
+        });
+        setUsers(formatted as any[]);
       }
     }
     getUsers();

@@ -23,8 +23,17 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       const response = await getAllUsers("representative=true&supervisor=true");
 
       if (response.success) {
+        const formatted = response.data.map((user: any) => {
+          return {
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            lastActive: user.lastActive,
+            registrationDate: user.registrationDate,
+          };
+        });
         setRefresh(false);
-        setUsers(response.data as any[]);
+        setUsers(formatted as any[]);
       }
     }
     getUsers();
