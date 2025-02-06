@@ -59,7 +59,13 @@ const UserHeader: React.FC<{
           </Typography>
         </Box>
         <Search placeholder="Search Users" setSearch={setSearch} />
-        <Filter onFilter={setFilter} />
+        <Filter
+          onFilter={setFilter}
+          filters={[
+            { name: "Status", options: ["Active", "Suspended"] },
+            { name: "Role", options: ["Landlord", "Tenant", "Rentrix Rep"] },
+          ]}
+        />
       </Box>
     </Box>
   );

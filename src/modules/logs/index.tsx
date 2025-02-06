@@ -1,5 +1,7 @@
 import { RouteObject } from "react-router";
 import Logs from "./pages/main";
+import AdminActionMenu from "./pages/admin-menu/AdminAction";
+import UserRole from "./pages/admin-menu/assignment/UserRole";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -14,7 +16,16 @@ export const LogsModule: LogsModule = {
       element: <Logs />,
       title: "Logs",
     },
-    { path: "/logs/something" },
+    {
+      path: "/logs/admin-action",
+      element: <AdminActionMenu />,
+      title: "Administrative Action Logs",
+    },
+    {
+      path: "/logs/admin-action/user-role-assignment",
+      element: <UserRole />,
+      title: "User Role Assignment/Changes",
+    },
   ],
   name: "Logs",
   enabled: true,

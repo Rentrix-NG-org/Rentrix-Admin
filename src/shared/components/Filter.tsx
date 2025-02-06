@@ -2,11 +2,13 @@ import { ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
 import { useEffect, useState } from "react";
+import { Filters } from "../types/shared.types";
 
 const Filter: React.FC<{
   placeholder?: string;
+  filters?: Filters[];
   onFilter: (value: string[]) => void;
-}> = ({ placeholder = "Filter", onFilter }) => {
+}> = ({ placeholder = "Filter", filters, onFilter }) => {
   const theme = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -44,22 +46,20 @@ const Filter: React.FC<{
           {placeholder}
         </Typography>
       </Box>
-      {isModalOpen && <Modal onFilter={onFilter} />}
+      {isModalOpen && <Modal onFilter={onFilter} filters={filters!} />}
     </Box>
   );
 };
 
-const Modal: React.FC<{ onFilter: (value: string[]) => void }> = ({
-  onFilter,
-}) => {
+const Modal: React.FC<{
+  onFilter: (value: string[]) => void;
+  filters: Filters[];
+}> = ({ onFilter, filters }) => {
   const theme = useTheme();
   const [filterState, setFilterState] = useState<{
     [key: number]: { isShown: boolean; selected: string };
   } | null>(null);
-  const filters = [
-    { name: "Status", options: ["Active", "Suspended"] },
-    { name: "Role", options: ["Landlord", "Tenant", "Rentrix Rep"] },
-  ];
+
   useEffect(() => {
     if (filterState) {
       const selectedFilters = Object.values(filterState).map((f) => f.selected);

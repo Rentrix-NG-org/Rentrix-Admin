@@ -3,7 +3,10 @@ import { icons } from "@src/utils/icons";
 import React from "react";
 import { useNavigate } from "react-router";
 
-const UserNav: React.FC<{ routes: string[] }> = ({ routes }) => {
+const UserNav: React.FC<{ routes: string[]; showBack?: boolean }> = ({
+  routes,
+  showBack = true,
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -19,7 +22,7 @@ const UserNav: React.FC<{ routes: string[] }> = ({ routes }) => {
           height: 40,
           background: theme.palette.grey[200],
           borderRadius: "50%",
-          display: "flex",
+          display: showBack ? "flex" : "none",
           justifyContent: "center",
           alignItems: "center",
         }}

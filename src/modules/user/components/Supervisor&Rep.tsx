@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 }) => {
   const [users, setUsers] = useState<any[]>([]);
   const { getAllUsers, updateUser } = UserService();
+  const theme = useTheme();
   const navigate = useNavigate();
 
   const [refresh, setRefresh] = useState(false);
@@ -119,7 +120,36 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             header: "ACTIONS",
             label: "actions",
             type: "action",
-            component: <Action />,
+            component: (
+              <Box
+                sx={{
+                  borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  // padding: "28px 32px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    // padding: "16px",
+                    background: theme.palette.grey[200],
+                    borderRadius: "100px",
+                    fontSize: 14,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 400,
+                    color: theme.palette.common.black,
+                    textAlign: "center",
+                    width: 118,
+                    height: 40,
+                  }}
+                >
+                  Remove
+                </Typography>
+              </Box>
+            ),
           },
         ]}
         data={searchFilter}
