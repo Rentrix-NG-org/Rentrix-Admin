@@ -99,6 +99,34 @@ const Table: React.FC<TableProps> = ({
                   key={`${rowIndex}-${cellIndex}`}
                   options={columns[cellIndex].options as string[]}
                 />
+              ) : columns[cellIndex]?.type === "custom-text" ? (
+                <Box
+                  sx={{
+                    padding: "28px 32px",
+                    borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                    minWidth: "200px",
+                  }}
+                >
+                  <Typography
+                    // component="button"
+                    onClick={() => onRowClick(row)}
+                    key={`${rowIndex}-${cellIndex}`}
+                    sx={{
+                      textWrap: "nowrap",
+                      border: `1px solid ${columns[cellIndex].colors?.[cell?.toLowerCase()]}`,
+                      color: columns[cellIndex].colors?.[cell?.toLowerCase()],
+                      width: "fit-content",
+                      fontSize: 12,
+                      fontWeight: 600,
+                      borderRadius: "10px",
+                      padding: "6px 16px",
+                    }}
+                  >
+                    {cell.length > 25
+                      ? cell.slice(0, 25).toUpperCase() + "..."
+                      : cell.toUpperCase()}
+                  </Typography>
+                </Box>
               ) : columns[cellIndex]?.type === "action" ? (
                 <Box
                   sx={{

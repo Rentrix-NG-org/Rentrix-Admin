@@ -1,15 +1,39 @@
 import { Box, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
+import { LogService } from "@src/modules/logs/services/log.service";
+import { Log } from "@src/modules/logs/types/log.types";
 import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const UserRole = () => {
   const theme = useTheme();
+  const { getAllLogs } = LogService();
+  const [logs, setLogs] = useState<string[][]>([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    async function fetchLogs() {
+      const response = await getAllLogs("user-role=true");
+      if (response.success) {
+        const formatted = (response.data as Log[]).map((log) => {
+          return Object.values({
+            adminId: log.user.id,
+            userIdAffected: log.affectedUser.id,
+            action: log.action,
+            timestamp: log.createdAt,
+            device: log.devices[0],
+            status: log.status.charAt(0).toUpperCase() + log.status.slice(1),
+          });
+        });
+        console.log(formatted, "asioed");
+
+        setLogs(formatted);
+      }
+    }
+    fetchLogs();
+  }, []);
   const column: Column[] = [
     {
       header: "ADMIN ID",
@@ -99,16 +123,7 @@ const UserRole = () => {
         onSelect={(v) => {}}
         onRowClick={(v) => {}}
         columns={column}
-        data={[
-          Object.values({
-            adminId: "A1234567",
-            userIdAffected: "U456890",
-            roleAssigned: "Editor",
-            timestamp: "2023-10-01 12:34:56",
-            device: "192.168.1.1",
-            status: "SUCCESSFUL",
-          }),
-        ]}
+        data={logs}
       />
     </Box>
   );
