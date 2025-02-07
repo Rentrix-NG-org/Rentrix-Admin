@@ -6,6 +6,7 @@ export const icons = {
   info: (await import("@src/assets/icons/info.svg")).default,
   settings: (await import("@src/assets/icons/settings.svg")).default,
   cancel: (await import("@src/assets/icons/cancel.svg")).default,
+  ArrowRight: (await import("@src/assets/icons/cancel.svg")).default,
   arrowleft: (await import("@src/assets/icons/arrow-left.svg")).default,
   arrowright: (await import("@src/assets/icons/arrow-right.svg")).default,
   arrowback: (await import("@src/assets/icons/arrow-back.svg")).default,

@@ -4,6 +4,7 @@ import Action from "@src/modules/user/components/Action";
 import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
+import { icons } from "@src/utils/icons";
 
 const UserRole = () => {
   const theme = useTheme();
@@ -54,7 +55,22 @@ const UserRole = () => {
       header: "ACTIONS",
       label: "actions",
       type: "action",
-      component: <Action />,
+      component: [
+        {
+          component: <Box component="img" src={icons.eye} sx={{ width: 18 }} />,
+          onClick: () => {},
+        },
+        {
+          component: (
+            <Box component="img" src={icons.edit} sx={{ width: 18 }} />
+          ),
+          onClick: () => {},
+        },
+        {
+          component: <Box component="img" src={icons.bin} sx={{ width: 18 }} />,
+          onClick: () => {},
+        },
+      ],
     },
   ];
   return (

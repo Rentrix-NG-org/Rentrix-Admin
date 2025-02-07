@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Action from "./Action";
 import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
+import { icons } from "@src/utils/icons";
 
 const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -23,12 +24,13 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       const response = await getAllUsers("representative=true&supervisor=true");
 
       if (response.success) {
+        console.log(response.data, "d");
         const formatted = response.data.map((user: any) => {
           return {
             id: user.id,
             name: user.name,
             role: user.role,
-            lastActive: user.lastActive,
+            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
             registrationDate: user.registrationDate,
           };
         });
@@ -121,44 +123,34 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             type: "text",
           },
           {
-            header: "REG DATE",
-            label: "registrationDate",
+            header: "LOCATION",
+            label: "location",
             type: "text",
           },
           {
             header: "ACTIONS",
             label: "actions",
             type: "action",
-            component: (
-              <Box
-                sx={{
-                  borderBottom: `1px solid ${theme.palette.grey.A100}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  // padding: "28px 32px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    // padding: "16px",
-                    background: theme.palette.grey[200],
-                    borderRadius: "100px",
-                    fontSize: 14,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 400,
-                    color: theme.palette.common.black,
-                    textAlign: "center",
-                    width: 118,
-                    height: 40,
-                  }}
-                >
-                  Remove
-                </Typography>
-              </Box>
-            ),
+            component: [
+              {
+                component: (
+                  <Box component="img" src={icons.eye} sx={{ width: 18 }} />
+                ),
+                onClick: () => {},
+              },
+              {
+                component: (
+                  <Box component="img" src={icons.edit} sx={{ width: 18 }} />
+                ),
+                onClick: () => {},
+              },
+              {
+                component: (
+                  <Box component="img" src={icons.bin} sx={{ width: 18 }} />
+                ),
+                onClick: () => {},
+              },
+            ],
           },
         ]}
         data={searchFilter}

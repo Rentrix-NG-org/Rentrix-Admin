@@ -11,7 +11,7 @@ export interface BaseColumn {
   label: string;
   type: ColumnType;
   options?: string[];
-  component?: React.ReactNode;
+  component?: { component: React.ReactNode; onClick: VoidFunction }[];
 }
 
 interface CustomText extends BaseColumn {

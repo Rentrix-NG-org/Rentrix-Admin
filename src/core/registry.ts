@@ -1,3 +1,4 @@
+// import { LogsModule } from "@src/modules/logs";
 import { LogsModule } from "@src/modules/logs";
 import { PropertyManagementModule } from "@src/modules/property";
 import { UserManagementModule } from "@src/modules/user";
