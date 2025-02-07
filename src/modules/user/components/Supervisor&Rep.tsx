@@ -1,8 +1,7 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
-import Action from "./Action";
 import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
@@ -13,7 +12,6 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 }) => {
   const [users, setUsers] = useState<any[]>([]);
   const { getAllUsers, updateUser } = UserService();
-  const theme = useTheme();
   const navigate = useNavigate();
 
   const [refresh, setRefresh] = useState(false);

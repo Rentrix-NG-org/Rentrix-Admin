@@ -1,8 +1,7 @@
-import { BorderAll, ChevronLeftRounded } from "@mui/icons-material";
+import { ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
-import { icons } from "@src/utils/icons";
 import PaginationControl from "@src/modules/user/components/PaginationControl";
 
 interface TableProps {
@@ -149,8 +148,8 @@ const Table: React.FC<TableProps> = ({
                 >
                   {cell.length > 25 ? cell.slice(0, 25) + "..." : cell}
                 </Typography>
-              )
-            )
+              ),
+            ),
         )}
       </Box>
 
