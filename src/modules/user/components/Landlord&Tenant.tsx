@@ -179,7 +179,12 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         gap: 2,
       }}
     >
-      <TableHeader title="Landlord & Tenants" />
+      <TableHeader
+        title="Landlord & Tenants"
+        onViewAll={() => {
+          navigate("roles/landlords-tenants");
+        }}
+      />
       {modal?.isOpen && (
         <Modal
           onCancel={() => {

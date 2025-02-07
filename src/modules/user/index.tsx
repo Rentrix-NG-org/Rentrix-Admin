@@ -7,6 +7,8 @@ import TransactionHistories from "./pages/[userId]/transactions/Transactions";
 import ActivityLogs from "./pages/[userId]/logs/ActivityLogs";
 import AddUser from "./pages/create/AddUser";
 import RepDetails from "./pages/[userId]/RepDetails";
+import LandlordsTenants from "./pages/landlords-tenants/Landlords-Tenants";
+import SupervisorsReps from "./pages/supervisors-reps/SupervisorsReps";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -17,6 +19,16 @@ export interface UserManagementModule {
 export const UserManagementModule: UserManagementModule = {
   routes: [
     { path: "/users", element: <UserManagement />, title: "User Management" },
+    {
+      path: "/users/roles/landlords-tenants",
+      element: <LandlordsTenants />,
+      title: "Landlords & Tenants",
+    },
+    {
+      path: "/users/roles/supervisors-reps",
+      element: <SupervisorsReps />,
+      title: "Landlords & Tenants",
+    },
     { path: "/users/create", element: <AddUser /> },
     { path: "/users/:userId", element: <UserDetails /> },
     { path: "/users/:userId/edit", element: <UserEdit /> },

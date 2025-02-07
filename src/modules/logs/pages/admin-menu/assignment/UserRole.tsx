@@ -1,13 +1,15 @@
 import { Box, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
-import Action from "@src/modules/user/components/Action";
 import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
+import { useEffect } from "react";
 
 const UserRole = () => {
   const theme = useTheme();
+
+  useEffect(() => {}, []);
   const column: Column[] = [
     {
       header: "ADMIN ID",

@@ -3,20 +3,12 @@ import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
 import PaginationControl from "@src/modules/user/components/PaginationControl";
+import { Column } from "../types/shared.types";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
   onRowClick: (row: string[]) => void;
-  columns: {
-    header: string;
-    label: string;
-    type: "select" | "action" | "text";
-    options?: string[];
-    component?: {
-      component: React.ReactNode;
-      onClick: (id?: string) => void;
-    }[];
-  }[];
+  columns: Column[];
   data: string[][];
 }
 

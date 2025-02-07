@@ -4,10 +4,11 @@ import Search from "@src/shared/components/Search";
 import { useNavigate } from "react-router";
 
 const UserHeader: React.FC<{
+  title: string;
   search: string;
   setSearch: (value: string) => void;
   setFilter: (value: string[]) => void;
-}> = ({ setSearch, setFilter }) => {
+}> = ({ title, setSearch, setFilter }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   return (
@@ -27,7 +28,7 @@ const UserHeader: React.FC<{
             color: theme.palette.common.black,
           }}
         >
-          User Management
+          {title}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }}>

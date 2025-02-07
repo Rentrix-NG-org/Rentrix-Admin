@@ -1,6 +1,9 @@
 import { Box, Typography, useTheme } from "@mui/material";
 
-const TableHeader: React.FC<{ title: string }> = ({ title = "Title" }) => {
+const TableHeader: React.FC<{ title: string; onViewAll: VoidFunction }> = ({
+  title = "Title",
+  onViewAll,
+}) => {
   const theme = useTheme();
   return (
     <Box>
@@ -25,6 +28,7 @@ const TableHeader: React.FC<{ title: string }> = ({ title = "Title" }) => {
         </Typography>
         <Box
           component="button"
+          onClick={onViewAll}
           sx={{
             background: theme.palette.grey[100],
             border: "none",
@@ -35,6 +39,7 @@ const TableHeader: React.FC<{ title: string }> = ({ title = "Title" }) => {
             justifyContent: "center",
             alignItems: "center",
             gap: "8px",
+            cursor: "pointer",
             borderRadius: 100,
           }}
         >

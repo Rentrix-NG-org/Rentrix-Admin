@@ -94,7 +94,12 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
         gap: 2,
       }}
     >
-      <TableHeader title="Supervisors & Representatives" />
+      <TableHeader
+        title="Supervisors & Representatives"
+        onViewAll={() => {
+          navigate("roles/supervisors-reps");
+        }}
+      />
       <Table
         onSelect={handleTableSelection}
         onRowClick={(row) => navigate(`/users/${row[0]}/rentrix-rep`)}

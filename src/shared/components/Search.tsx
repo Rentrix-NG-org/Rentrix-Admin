@@ -7,7 +7,7 @@ const Search: React.FC<{
   setSearch: (value: string) => void;
 }> = ({ placeholder = "Search item", setSearch }) => {
   const theme = useTheme();
-  const [focus, setFocus] = useState(false)
+  const [focus, setFocus] = useState(false);
   return (
     <Box
       sx={{
@@ -19,7 +19,8 @@ const Search: React.FC<{
         gap: "12px",
         background: theme.palette.grey[200],
         borderRadius: "20px",
-        border: focus ? '1px solid #2EB4B4' : 'none'
+        border: "1px solid transparent",
+        borderColor: focus ? theme.palette.secondary.main : "none",
       }}
     >
       <Box
@@ -57,7 +58,6 @@ const Search: React.FC<{
             color: "#222522",
             lineHeight: "140%",
             letterSpacing: "-0.28px",
-            
           }}
         ></Box>
       </Box>
