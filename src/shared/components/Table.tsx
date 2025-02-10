@@ -104,8 +104,11 @@ const Table: React.FC<TableProps> = ({
                     key={`${rowIndex}-${cellIndex}`}
                     sx={{
                       textWrap: "nowrap",
-                      border: `1px solid ${columns[cellIndex].colors?.[cell?.toLowerCase()]}`,
-                      color: columns[cellIndex].colors?.[cell?.toLowerCase()],
+                      border: `1px solid ${columns[cellIndex].colors?.[cell ? cell.toLowerCase() : ""]}`,
+                      color:
+                        columns[cellIndex].colors?.[
+                          cell ? cell.toLowerCase() : ""
+                        ],
                       width: "fit-content",
                       fontSize: 12,
                       fontWeight: 600,
@@ -113,9 +116,11 @@ const Table: React.FC<TableProps> = ({
                       padding: "6px 16px",
                     }}
                   >
-                    {cell.length > 25
+                    {cell && cell.length > 25
                       ? cell.slice(0, 25).toUpperCase() + "..."
-                      : cell.toUpperCase()}
+                      : cell
+                        ? cell.toUpperCase()
+                        : ""}
                   </Typography>
                 </Box>
               ) : columns[cellIndex]?.type === "action" ? (
@@ -157,7 +162,7 @@ const Table: React.FC<TableProps> = ({
                     minWidth: "200px",
                   }}
                 >
-                  {cell.length > 25 ? cell.slice(0, 25) + "..." : cell}
+                  {cell?.length > 25 ? cell?.slice(0, 25) + "..." : cell}
                 </Typography>
               ),
             ),

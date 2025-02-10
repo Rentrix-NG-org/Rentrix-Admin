@@ -1,66 +1,54 @@
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
-import { Log } from "@src/modules/logs/types/log.types";
+import { Admin, Log } from "@src/modules/logs/types/log.types";
 import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const UserRole = () => {
-  const theme = useTheme();
-  const navigate = useNavigate();
+const AdminPanel = () => {
   const { getAllLogs } = LogService();
+  const navigate = useNavigate();
   const [logs, setLogs] = useState<string[][]>([]);
-  const [logIds, setLogIds] = useState<{ logId: string; adminId: string }[]>(
-    [],
-  );
-
+  const [adminIds, setAdminIds] = useState<string[]>([]);
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getAllLogs("user-role=true");
-
+      const response = await getAllLogs("panel-access=true");
       if (response.success) {
-        const formatted = (response.data as Log[]).map((log) => {
+        const formatted = (response.data as Admin[]).map((log) => {
           return Object.values({
             adminId: log.user.id,
-            userIdAffected: log.affectedUser.id,
-            action: log.action,
-            timestamp: log.createdAt,
-            device: log.devices.join(","),
-            status: log.status.charAt(0).toUpperCase() + log.status.slice(1),
+            action: log.accessModules.flat().length
+              ? log.accessModules.join(", ")
+              : "No Access",
+            timestamp: dayjs(Number(log.createdAt)).format(
+              "YYYY-MM-DD HH:mm:ss",
+            ),
+            device: "0.0.0.0",
           });
         });
-
         setLogs(formatted);
-
-        const allIds = (response.data as Log[]).map((log) => {
-          return {
-            logId: log.id,
-            adminId: log.user.id,
-          };
+        const allIds = (response.data as Admin[]).map((admin) => {
+          return admin.user.id;
         });
-        setLogIds(allIds);
+        setAdminIds(allIds);
       }
     }
     fetchLogs();
   }, []);
-  const column: Column[] = [
+  const columns: Column[] = [
     {
       header: "ADMIN ID",
       label: "adminId",
       type: "text",
     },
     {
-      header: "USER ID AFFECTED",
-      label: "userIdAffected",
-      type: "text",
-    },
-    {
-      header: "ROLE ASSIGNED/CHANGED",
-      label: "roleAssigned",
+      header: "UPDATED POLICY DETAILS",
+      label: "updatedPolicy",
       type: "text",
     },
     {
@@ -73,23 +61,7 @@ const UserRole = () => {
       label: "device",
       type: "text",
     },
-    {
-      header: "STATUS",
-      label: "status",
-      type: "custom-text",
-      colors: {
-        successful: theme.palette.success.main,
-        pending: theme.palette.warning.main,
-        failed: theme.palette.error.main,
-      },
-      sx: {
-        fontWeight: 600,
-        fontSize: 12,
-        padding: "6px 16px",
-        borderRadius: "10px",
-        letterSpacing: "0.5px",
-      },
-    },
+
     {
       header: "ACTIONS",
       label: "actions",
@@ -127,24 +99,24 @@ const UserRole = () => {
         routes={[
           "Logs",
           "Administrative Actions Logs",
-          "User Role Assignment/Changes",
+          "Admin Panel Access",
           "View",
         ]}
       />
 
       <Table
         onSelect={() => {}}
-        onRowClick={(v) => {
-          const id = logIds.find((l) => l.adminId === v[0]);
+        onRowClick={(v: string[]) => {
+          const id = adminIds.find((l) => l === v[0]);
 
           if (id) {
-            navigate(id.logId);
+            navigate(id);
           }
         }}
-        columns={column}
+        columns={columns}
         data={logs}
       />
     </Box>
   );
 };
-export default UserRole;
+export default AdminPanel;

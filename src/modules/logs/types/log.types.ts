@@ -9,3 +9,10 @@ export interface Log {
   devices: string[];
   status: string;
 }
+
+export interface Admin {
+  id: string;
+  user: User;
+  accessModules: string[];
+  createdAt: string;
+}

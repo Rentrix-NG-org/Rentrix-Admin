@@ -36,6 +36,23 @@ export const LogService = () => {
       }
     },
 
+    getAdmin: async (userId: string) => {
+      try {
+        const response = await axios.get(`/admin/logs/${userId}/admin`);
+        return {
+          success: response.status === 200,
+          message: "Fetched",
+          data: response.data,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: String(error) || "Failed to fetch admin log",
+          data: null,
+        };
+      }
+    },
+
     deleteLog: async (id: string) => {
       try {
         const response = await axios.delete(`/admin/logs/${id}`);
