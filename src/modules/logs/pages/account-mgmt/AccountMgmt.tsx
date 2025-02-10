@@ -22,7 +22,7 @@ const UserAccountManagement = () => {
       }}
     >
       <LogHeader />
-      <UserNav routes={["Logs", "User Account Management"]} />
+      <UserNav showBack={false} routes={["Logs", "User Account Management"]} />
 
       <Box
         sx={{
