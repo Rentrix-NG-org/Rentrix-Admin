@@ -9,7 +9,7 @@ const AdminActionMenu = () => {
     { name: "User Role Assignment/Changes", route: "user-role-assignment" },
     { name: "Policy/Terms Updates", route: "policy-terms" },
     { name: "Admin Panel Access", route: "panel-access" },
-    { name: "Adding of Admins", route: "adding-admins" },
+    // { name: "Adding of Admins", route: "adding-admins" },
   ];
 
   return (
