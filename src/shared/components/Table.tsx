@@ -29,15 +29,6 @@ const Table: React.FC<TableProps> = ({
   }, [data]);
   const theme = useTheme();
 
-  function handlePage(op: string) {
-    const limit = 2;
-    if (op === "+" && paginatedRows.length && page * limit < rows.length) {
-      setPage(page + 1);
-    } else if (op === "-") {
-      setPage(page === 1 ? 1 : page - 1);
-    }
-  }
-
   useEffect(() => {
     const limit = 2;
     const start = (page - 1) * limit;

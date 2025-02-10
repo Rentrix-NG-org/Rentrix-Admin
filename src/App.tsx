@@ -23,6 +23,7 @@ function App() {
       secondary: {
         main: "#00a3a3",
         light: "#c6cfd8",
+        A100: "#f3fbfb",
       },
       success: {
         main: "#289f50",

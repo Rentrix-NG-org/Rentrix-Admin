@@ -1,3 +1,4 @@
+import { Php } from "@mui/icons-material";
 import { Box, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
@@ -7,16 +8,24 @@ import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const UserRole = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const { getAllLogs } = LogService();
   const [logs, setLogs] = useState<string[][]>([]);
+  const [logIds, setLogIds] = useState<{ logId: string; adminId: string }[]>(
+    [],
+  );
 
   useEffect(() => {
     async function fetchLogs() {
       const response = await getAllLogs("user-role=true");
+
       if (response.success) {
+        console.log(response.data, "dddaa");
+
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
             adminId: log.user.id,
@@ -30,6 +39,14 @@ const UserRole = () => {
         console.log(formatted, "asioed");
 
         setLogs(formatted);
+
+        const allIds = (response.data as Log[]).map((log) => {
+          return {
+            logId: log.id,
+            adminId: log.user.id,
+          };
+        });
+        setLogIds(allIds);
       }
     }
     fetchLogs();
@@ -121,7 +138,14 @@ const UserRole = () => {
 
       <Table
         onSelect={(v) => {}}
-        onRowClick={(v) => {}}
+        onRowClick={(v) => {
+          const id = logIds.find((l) => l.adminId === v[0]);
+
+          if (id) {
+            navigate(id.logId);
+          }
+          console.log(v, "is row");
+        }}
         columns={column}
         data={logs}
       />
