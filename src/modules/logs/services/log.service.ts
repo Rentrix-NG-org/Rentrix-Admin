@@ -22,7 +22,6 @@ export const LogService = () => {
     getLog: async (id: string) => {
       try {
         const response = await axios.get(`/admin/logs/${id}`);
-
         return {
           success: response.status === 200,
           message: "Fetched",

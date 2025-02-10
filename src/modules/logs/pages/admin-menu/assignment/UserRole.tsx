@@ -1,4 +1,3 @@
-import { Php } from "@mui/icons-material";
 import { Box, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
@@ -24,8 +23,6 @@ const UserRole = () => {
       const response = await getAllLogs("user-role=true");
 
       if (response.success) {
-        console.log(response.data, "dddaa");
-
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
             adminId: log.user.id,
@@ -36,7 +33,6 @@ const UserRole = () => {
             status: log.status.charAt(0).toUpperCase() + log.status.slice(1),
           });
         });
-        console.log(formatted, "asioed");
 
         setLogs(formatted);
 
@@ -137,14 +133,13 @@ const UserRole = () => {
       />
 
       <Table
-        onSelect={(v) => {}}
+        onSelect={() => {}}
         onRowClick={(v) => {
           const id = logIds.find((l) => l.adminId === v[0]);
 
           if (id) {
             navigate(id.logId);
           }
-          console.log(v, "is row");
         }}
         columns={column}
         data={logs}

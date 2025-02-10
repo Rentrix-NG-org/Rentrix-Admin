@@ -8,11 +8,16 @@ import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const PolicyUpdates = () => {
   const theme = useTheme();
   const [logs, setLogs] = useState<string[][]>([]);
+  const [logIds, setLogIds] = useState<{ logId: string; adminId: string }[]>(
+    [],
+  );
   const { getAllLogs } = LogService();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchLogs() {
@@ -30,8 +35,15 @@ const PolicyUpdates = () => {
           });
         });
 
-        console.log(formatted, "formatted");
         setLogs(formatted);
+
+        const allIds = (response.data as Log[]).map((log) => {
+          return {
+            logId: log.id,
+            adminId: log.user.id,
+          };
+        });
+        setLogIds(allIds);
       }
     }
     fetchLogs();
@@ -120,7 +132,13 @@ const PolicyUpdates = () => {
 
       <Table
         onSelect={() => {}}
-        onRowClick={() => {}}
+        onRowClick={(v) => {
+          const id = logIds.find((l) => l.adminId === v[0]);
+
+          if (id) {
+            navigate(id.logId);
+          }
+        }}
         columns={columns}
         data={logs}
       />
