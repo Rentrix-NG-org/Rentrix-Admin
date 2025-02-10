@@ -3,6 +3,7 @@ import Logs from "./pages/main";
 import AdminActionMenu from "./pages/admin-menu/AdminAction";
 import UserRole from "./pages/admin-menu/assignment/UserRole";
 import UserRoleInfo from "./pages/admin-menu/assignment/[logId]/LogInfo";
+import PolicyUpdates from "./pages/admin-menu/policy-updates/Policy";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -31,6 +32,11 @@ export const LogsModule: LogsModule = {
       path: "/logs/admin-action/user-role-assignment/:logId",
       element: <UserRoleInfo />,
       title: "User Role Assignment/Changes Info",
+    },
+    {
+      path: "/logs/admin-action/policy-terms",
+      element: <PolicyUpdates />,
+      title: "Policy/Terms Updates",
     },
   ],
   name: "Logs",

@@ -34,7 +34,6 @@ const UserRoleInfo = () => {
           ),
           status: data.status.charAt(0).toUpperCase() + data.status.slice(1),
         });
-        console.log(response.data);
       }
     }
     fetchLog();

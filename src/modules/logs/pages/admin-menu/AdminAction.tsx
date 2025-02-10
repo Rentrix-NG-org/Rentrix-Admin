@@ -7,9 +7,9 @@ const AdminActionMenu = () => {
   const navigate = useNavigate();
   const categories = [
     { name: "User Role Assignment/Changes", route: "user-role-assignment" },
-    { name: "Policy/Terms Updates", route: "/policy-terms-updates" },
-    { name: "Admin Panel Access", route: "/admin-panel-access" },
-    { name: "Adding of Admins", route: "/adding-admins" },
+    { name: "Policy/Terms Updates", route: "policy-terms" },
+    { name: "Admin Panel Access", route: "admin-panel-access" },
+    { name: "Adding of Admins", route: "adding-admins" },
   ];
 
   return (
