@@ -7,6 +7,7 @@ import PolicyUpdates from "./pages/admin-menu/policy-updates/Policy";
 import PolicyUpdatesInfo from "./pages/admin-menu/policy-updates/[logId]/LogInfo";
 import AdminPanel from "./pages/admin-menu/panel-access/AdminPanel";
 import AdminPanelInfo from "./pages/admin-menu/panel-access/[logId]/AdminInfo";
+import UserAccountManagement from "./pages/account-mgmt/AccountMgmt";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -55,6 +56,11 @@ export const LogsModule: LogsModule = {
       path: "/logs/admin-action/panel-access/:userId",
       element: <AdminPanelInfo />,
       title: "Admin Panel Access Info",
+    },
+    {
+      path: "/logs/user-account",
+      element: <UserAccountManagement />,
+      title: "User Account Management Logs",
     },
   ],
   name: "Logs",

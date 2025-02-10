@@ -10,7 +10,7 @@ const Logs = () => {
     { name: "User Authentication Logs", route: "/logs/user-authentication" },
     {
       name: "User Account Management Logs",
-      route: "/logs/user-account-management",
+      route: "/logs/user-account",
     },
     {
       name: "Payment and Transaction Logs",
