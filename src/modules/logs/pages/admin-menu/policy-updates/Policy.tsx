@@ -13,9 +13,9 @@ import { useNavigate } from "react-router";
 const PolicyUpdates = () => {
   const theme = useTheme();
   const [logs, setLogs] = useState<string[][]>([]);
-  const [logIds, setLogIds] = useState<{ logId: string; adminId: string }[]>(
-    [],
-  );
+  const [logIds, setLogIds] = useState<
+    { logId: string; adminId: string; timestamp: string }[]
+  >([]);
   const { getAllLogs } = LogService();
   const navigate = useNavigate();
 
@@ -41,6 +41,9 @@ const PolicyUpdates = () => {
           return {
             logId: log.id,
             adminId: log.user.id,
+            timestamp: dayjs(Number(log.createdAt)).format(
+              "YYYY-MM-DD HH:MM:ss",
+            ),
           };
         });
         setLogIds(allIds);
@@ -133,7 +136,9 @@ const PolicyUpdates = () => {
       <Table
         onSelect={() => {}}
         onRowClick={(v) => {
-          const id = logIds.find((l) => l.adminId === v[0]);
+          const id = logIds.find(
+            (l) => l.adminId === v[0] && l.timestamp === v[2],
+          );
 
           if (id) {
             navigate(id.logId);

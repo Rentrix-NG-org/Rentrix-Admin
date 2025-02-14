@@ -6,6 +6,7 @@ import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -14,9 +15,9 @@ const UserRole = () => {
   const navigate = useNavigate();
   const { getAllLogs } = LogService();
   const [logs, setLogs] = useState<string[][]>([]);
-  const [logIds, setLogIds] = useState<{ logId: string; adminId: string }[]>(
-    [],
-  );
+  const [logIds, setLogIds] = useState<
+    { logId: string; adminId: string; timestamp: string }[]
+  >([]);
 
   useEffect(() => {
     async function fetchLogs() {
@@ -28,7 +29,9 @@ const UserRole = () => {
             adminId: log.user.id,
             userIdAffected: log.affectedUser.id,
             action: log.action,
-            timestamp: log.createdAt,
+            timestamp: dayjs(Number(log.createdAt)).format(
+              "YYYY-MM-DD HH:mm:ss",
+            ),
             device: log.devices.join(","),
             status: log.status.charAt(0).toUpperCase() + log.status.slice(1),
           });
@@ -40,6 +43,9 @@ const UserRole = () => {
           return {
             logId: log.id,
             adminId: log.user.id,
+            timestamp: dayjs(Number(log.createdAt)).format(
+              "YYYY-MM-DD HH:mm:ss",
+            ),
           };
         });
         setLogIds(allIds);
@@ -135,7 +141,10 @@ const UserRole = () => {
       <Table
         onSelect={() => {}}
         onRowClick={(v) => {
-          const id = logIds.find((l) => l.adminId === v[0]);
+          console.log(v);
+          const id = logIds.find(
+            (l) => l.adminId === v[0] && l.timestamp === v[3],
+          );
 
           if (id) {
             navigate(id.logId);
