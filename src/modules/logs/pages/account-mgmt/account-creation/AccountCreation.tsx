@@ -6,6 +6,7 @@ import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -14,9 +15,9 @@ const AccountCreation = () => {
   const { getAllLogs } = LogService();
   const navigate = useNavigate();
   const [logs, setLogs] = useState<string[][]>([]);
-  const [logIds, setLogIds] = useState<{ logId: string; adminId: string }[]>(
-    [],
-  );
+  const [logIds, setLogIds] = useState<
+    { logId: string; adminId: string; timestamp: string }[]
+  >([]);
 
   useEffect(() => {
     async function fetchLogs() {
@@ -26,7 +27,13 @@ const AccountCreation = () => {
           (response.data as Log[]).map((log) => {
             setLogIds((prev) => [
               ...prev,
-              { logId: log.id, adminId: log.user.id },
+              {
+                logId: log.id,
+                adminId: log.user.id,
+                timestamp: dayjs(Number(log.createdAt)).format(
+                  "YYYY-MM-DD HH:mm:ss",
+                ),
+              },
             ]);
           });
         }
@@ -126,7 +133,9 @@ const AccountCreation = () => {
       <Table
         onSelect={() => {}}
         onRowClick={(v) => {
-          const id = logIds.find((id) => id.adminId === v[0]);
+          const id = logIds.find(
+            (id) => id.adminId === v[0] && id.timestamp === v[2],
+          );
 
           if (id) {
             navigate(`${id.logId}`);

@@ -15,9 +15,9 @@ const PasswordChanges = () => {
   const { getAllLogs } = LogService();
   const navigate = useNavigate();
   const [logs, setLogs] = useState<string[][]>([]);
-  const [logIds, setLogIds] = useState<{ logId: string; adminId: string }[]>(
-    [],
-  );
+  const [logIds, setLogIds] = useState<
+    { logId: string; adminId: string; timestamp: string }[]
+  >([]);
 
   useEffect(() => {
     async function fetchLogs() {
@@ -27,7 +27,13 @@ const PasswordChanges = () => {
           (response.data as Log[]).map((log) => {
             setLogIds((prev) => [
               ...prev,
-              { logId: log.id, adminId: log.account.id },
+              {
+                logId: log.id,
+                adminId: log.account.id,
+                timestamp: dayjs(Number(log.createdAt)).format(
+                  "YYYY-MM-DD HH:mm:ss",
+                ),
+              },
             ]);
           });
         }
@@ -69,9 +75,9 @@ const PasswordChanges = () => {
       label: "status",
       type: "custom-text",
       colors: {
-        verified: theme.palette.success.main,
+        successful: theme.palette.success.main,
         pending: theme.palette.warning.main,
-        unverified: theme.palette.error.main,
+        failed: theme.palette.error.main,
       },
       sx: {
         padding: "6px 16px",
@@ -117,7 +123,9 @@ const PasswordChanges = () => {
       <Table
         onSelect={() => {}}
         onRowClick={(v) => {
-          const id = logIds.find((id) => id.adminId === v[0]);
+          const id = logIds.find(
+            (id) => id.adminId === v[0] && id.timestamp === v[1],
+          );
 
           if (id) {
             navigate(`${id.logId}`);

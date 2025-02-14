@@ -13,6 +13,7 @@ import AccountCreationInfo from "./pages/account-mgmt/account-creation/[logId]/L
 import ProfileUpdates from "./pages/account-mgmt/profile-updates/ProfileUpdates";
 import ProfileUpdatesInfo from "./pages/account-mgmt/profile-updates/[logId]/LogInfo";
 import PasswordChanges from "./pages/account-mgmt/password-changes/PasswordChanges";
+import PasswordChangesInfo from "./pages/account-mgmt/password-changes/[logId]/LogInfo";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -91,6 +92,11 @@ export const LogsModule: LogsModule = {
       path: "/logs/user-account/password-changes",
       element: <PasswordChanges />,
       title: "Profile Updates Info",
+    },
+    {
+      path: "/logs/user-account/password-changes/:logId",
+      element: <PasswordChangesInfo />,
+      title: "Password Changes Info",
     },
   ],
   name: "Logs",
