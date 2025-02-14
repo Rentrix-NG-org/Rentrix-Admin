@@ -7,9 +7,9 @@ const UserAccountManagement = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const categories = [
-    { name: "Account Creation", route: "/" },
-    { name: "Profile Updates", route: "/" },
-    { name: "Password Changes", route: "/" },
+    { name: "Account Creation", route: "account-creation" },
+    { name: "Profile Updates", route: "profile-updates" },
+    { name: "Password Changes", route: "password-changes" },
     { name: "Account Deactivation/Deletion", route: "/" },
   ];
   return (

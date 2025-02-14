@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-const PolicyUpdatesInfo = () => {
+const ProfileUpdatesInfo = () => {
   const theme = useTheme();
   const { getLog, deleteLog } = LogService();
   const param = useParams();
@@ -24,9 +24,10 @@ const PolicyUpdatesInfo = () => {
 
   useEffect(() => {
     async function fetchLog() {
-      const response = await getLog(param?.logId || "0");
+      const response = await getLog(param?.logId || "");
       if (response.success) {
         const data = response.data as Log;
+        console.log(data, "is data");
         setLog({
           ...data,
           createdAt: dayjs(Number(data.createdAt)).format(
@@ -40,8 +41,10 @@ const PolicyUpdatesInfo = () => {
   }, []);
 
   const fields: { title: string; value: string }[] = [
-    { title: "Admin ID", value: log?.user?.id || "" },
-    { title: "Updated Policy Details", value: log?.action || "" },
+    { title: "User ID", value: log?.user?.id || "" },
+    { title: "Updated Fields", value: log?.action || "" },
+    { title: "Before Value", value: log?.valueBefore || "" },
+    { title: "After Value", value: log?.valueAfter || "" },
     { title: "Timestamp", value: log?.createdAt || "" },
     { title: "Device & IP Address", value: log?.devices?.join(", ") || "" },
   ];
@@ -62,13 +65,15 @@ const PolicyUpdatesInfo = () => {
         }}
       >
         <UserNav
+          showBack={false}
           routes={[
             "Logs",
-            "Administrative Actions Logs",
-            "Policy/Terms Updates",
+            "User Account Management",
+            "Profile Updates",
             "View",
           ]}
         />
+
         <Box
           component="button"
           onClick={() => {
@@ -124,44 +129,6 @@ const PolicyUpdatesInfo = () => {
         {fields.map(({ title, value }) => (
           <Field title={title} value={value} />
         ))}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          <Typography
-            sx={{
-              fontSize: "18px",
-              fontStyle: "normal",
-              color: theme.palette.common.black,
-              fontWeight: 600,
-              lineHeight: "140%",
-              letterSpacing: "-0.36px",
-            }}
-          >
-            Status
-          </Typography>
-          <Typography
-            sx={{
-              color:
-                log?.status?.toLowerCase() === "successful"
-                  ? theme.palette.success.main
-                  : log?.status?.toLowerCase() === "pending"
-                    ? theme.palette.warning.main
-                    : theme.palette.error.main,
-              border: `1px solid ${
-                log?.status?.toLowerCase() === "successful"
-                  ? theme.palette.success.main
-                  : log?.status?.toLowerCase() === "pending"
-                    ? theme.palette.warning.main
-                    : theme.palette.error.main
-              }`,
-              width: "fit-content",
-              padding: "6px 16px",
-              borderRadius: "10px",
-              fontWeight: 600,
-              fontSize: 14,
-            }}
-          >
-            {log?.status?.toUpperCase()}
-          </Typography>
-        </Box>
       </Box>
     </Box>
   );
@@ -208,4 +175,4 @@ const Field: React.FC<{ title: string; value: string }> = ({
     </Box>
   );
 };
-export default PolicyUpdatesInfo;
+export default ProfileUpdatesInfo;

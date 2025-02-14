@@ -27,7 +27,6 @@ const AdminPanelInfo = () => {
     async function fetchAdmin() {
       const response = await getAdmin(param?.userId || "0");
       if (response.success) {
-        console.log(response.data, "is info");
         setAdmin(response.data);
       }
     }

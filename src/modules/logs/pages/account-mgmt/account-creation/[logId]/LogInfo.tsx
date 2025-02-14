@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-const PolicyUpdatesInfo = () => {
+const AccountCreationInfo = () => {
   const theme = useTheme();
   const { getLog, deleteLog } = LogService();
   const param = useParams();
@@ -24,7 +24,7 @@ const PolicyUpdatesInfo = () => {
 
   useEffect(() => {
     async function fetchLog() {
-      const response = await getLog(param?.logId || "0");
+      const response = await getLog(param?.logId || "");
       if (response.success) {
         const data = response.data as Log;
         setLog({
@@ -41,7 +41,7 @@ const PolicyUpdatesInfo = () => {
 
   const fields: { title: string; value: string }[] = [
     { title: "Admin ID", value: log?.user?.id || "" },
-    { title: "Updated Policy Details", value: log?.action || "" },
+    { title: "Registration Details", value: log?.action || "" },
     { title: "Timestamp", value: log?.createdAt || "" },
     { title: "Device & IP Address", value: log?.devices?.join(", ") || "" },
   ];
@@ -62,13 +62,15 @@ const PolicyUpdatesInfo = () => {
         }}
       >
         <UserNav
+          showBack={false}
           routes={[
             "Logs",
-            "Administrative Actions Logs",
-            "Policy/Terms Updates",
+            "User Account Management",
+            "Account Creation",
             "View",
           ]}
         />
+
         <Box
           component="button"
           onClick={() => {
@@ -140,13 +142,13 @@ const PolicyUpdatesInfo = () => {
           <Typography
             sx={{
               color:
-                log?.status?.toLowerCase() === "successful"
+                log?.status?.toLowerCase() === "verified"
                   ? theme.palette.success.main
                   : log?.status?.toLowerCase() === "pending"
                     ? theme.palette.warning.main
                     : theme.palette.error.main,
               border: `1px solid ${
-                log?.status?.toLowerCase() === "successful"
+                log?.status?.toLowerCase() === "verified"
                   ? theme.palette.success.main
                   : log?.status?.toLowerCase() === "pending"
                     ? theme.palette.warning.main
@@ -208,4 +210,4 @@ const Field: React.FC<{ title: string; value: string }> = ({
     </Box>
   );
 };
-export default PolicyUpdatesInfo;
+export default AccountCreationInfo;

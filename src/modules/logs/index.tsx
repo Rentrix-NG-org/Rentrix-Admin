@@ -8,6 +8,11 @@ import PolicyUpdatesInfo from "./pages/admin-menu/policy-updates/[logId]/LogInfo
 import AdminPanel from "./pages/admin-menu/panel-access/AdminPanel";
 import AdminPanelInfo from "./pages/admin-menu/panel-access/[logId]/AdminInfo";
 import UserAccountManagement from "./pages/account-mgmt/AccountMgmt";
+import AccountCreation from "./pages/account-mgmt/account-creation/AccountCreation";
+import AccountCreationInfo from "./pages/account-mgmt/account-creation/[logId]/LogInfo";
+import ProfileUpdates from "./pages/account-mgmt/profile-updates/ProfileUpdates";
+import ProfileUpdatesInfo from "./pages/account-mgmt/profile-updates/[logId]/LogInfo";
+import PasswordChanges from "./pages/account-mgmt/password-changes/PasswordChanges";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -61,6 +66,31 @@ export const LogsModule: LogsModule = {
       path: "/logs/user-account",
       element: <UserAccountManagement />,
       title: "User Account Management Logs",
+    },
+    {
+      path: "/logs/user-account/account-creation",
+      element: <AccountCreation />,
+      title: "User Account Creation Logs",
+    },
+    {
+      path: "/logs/user-account/account-creation/:logId",
+      element: <AccountCreationInfo />,
+      title: "User Account Creation Info",
+    },
+    {
+      path: "/logs/user-account/profile-updates",
+      element: <ProfileUpdates />,
+      title: "Profile Updates",
+    },
+    {
+      path: "/logs/user-account/profile-updates/:logId",
+      element: <ProfileUpdatesInfo />,
+      title: "Profile Updates Info",
+    },
+    {
+      path: "/logs/user-account/password-changes",
+      element: <PasswordChanges />,
+      title: "Profile Updates Info",
     },
   ],
   name: "Logs",
