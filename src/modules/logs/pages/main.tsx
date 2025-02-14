@@ -7,7 +7,7 @@ const Logs = () => {
   const navigate = useNavigate();
   const categories = [
     { name: "Administrative Actions Logs", route: "admin-action" },
-    { name: "User Authentication Logs", route: "/logs/user-authentication" },
+    { name: "User Authentication Logs", route: "/logs/user-auth" },
     {
       name: "User Account Management Logs",
       route: "/logs/user-account",

@@ -3,14 +3,12 @@ import LogHeader from "../../components/LogHeader";
 import UserNav from "@src/modules/user/components/UserNav";
 import { useNavigate } from "react-router";
 
-const UserAccountManagement = () => {
+const UserAuthentication = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const categories = [
-    { name: "Account Creation", route: "account-creation" },
-    { name: "Profile Updates", route: "profile-updates" },
-    { name: "Password Changes", route: "password-changes" },
-    { name: "Account Deactivation/Deletion", route: "account-deletion" },
+    { name: "Login/Logout Events", route: "login-logout" },
+    { name: "Failed Login Attempts", route: "failed-login" },
   ];
   return (
     <Box
@@ -22,7 +20,7 @@ const UserAccountManagement = () => {
       }}
     >
       <LogHeader />
-      <UserNav showBack={false} routes={["Logs", "User Account Management"]} />
+      <UserNav showBack={false} routes={["Logs", "User Authentication Logs"]} />
 
       <Box
         sx={{
@@ -67,4 +65,4 @@ const UserAccountManagement = () => {
     </Box>
   );
 };
-export default UserAccountManagement;
+export default UserAuthentication;

@@ -14,6 +14,9 @@ import ProfileUpdates from "./pages/account-mgmt/profile-updates/ProfileUpdates"
 import ProfileUpdatesInfo from "./pages/account-mgmt/profile-updates/[logId]/LogInfo";
 import PasswordChanges from "./pages/account-mgmt/password-changes/PasswordChanges";
 import PasswordChangesInfo from "./pages/account-mgmt/password-changes/[logId]/LogInfo";
+import UserAuthentication from "./pages/user-auth/UserAuth";
+import AccountDeletion from "./pages/account-mgmt/account-deletion/AccountDeletion";
+import AccountDeletionInfo from "./pages/account-mgmt/account-deletion/[logId]/LogInfo";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -97,6 +100,21 @@ export const LogsModule: LogsModule = {
       path: "/logs/user-account/password-changes/:logId",
       element: <PasswordChangesInfo />,
       title: "Password Changes Info",
+    },
+    {
+      path: "/logs/user-account/account-deletion",
+      element: <AccountDeletion />,
+      title: "Account Deletion",
+    },
+    {
+      path: "/logs/user-account/account-deletion/:logId",
+      element: <AccountDeletionInfo />,
+      title: "Account Deletion Info",
+    },
+    {
+      path: "/logs/user-auth",
+      element: <UserAuthentication />,
+      title: "User Authentication Logs",
     },
   ],
   name: "Logs",
