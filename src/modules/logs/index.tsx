@@ -17,6 +17,10 @@ import PasswordChangesInfo from "./pages/account-mgmt/password-changes/[logId]/L
 import UserAuthentication from "./pages/user-auth/UserAuth";
 import AccountDeletion from "./pages/account-mgmt/account-deletion/AccountDeletion";
 import AccountDeletionInfo from "./pages/account-mgmt/account-deletion/[logId]/LogInfo";
+import LoginLogOut from "./pages/user-auth/login-logout/LoginLogout";
+import LoginLogoutInfo from "./pages/user-auth/login-logout/[logId]/LogInfo";
+import FailedLogin from "./pages/user-auth/failed-login/FailedLogin";
+import FailedLoginInfo from "./pages/user-auth/failed-login/[logId]/LogInfo";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -115,6 +119,26 @@ export const LogsModule: LogsModule = {
       path: "/logs/user-auth",
       element: <UserAuthentication />,
       title: "User Authentication Logs",
+    },
+    {
+      path: "/logs/user-auth/login-logout",
+      element: <LoginLogOut />,
+      title: "User Authentication Logs",
+    },
+    {
+      path: "/logs/user-auth/login-logout/:logId",
+      element: <LoginLogoutInfo />,
+      title: "Login/Logout Info",
+    },
+    {
+      path: "/logs/user-auth/failed-login",
+      element: <FailedLogin />,
+      title: "Failed Login Info",
+    },
+    {
+      path: "/logs/user-auth/failed-login/:logId",
+      element: <FailedLoginInfo />,
+      title: "Failed Login Info",
     },
   ],
   name: "Logs",
