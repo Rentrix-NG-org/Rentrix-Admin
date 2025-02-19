@@ -8,6 +8,8 @@ import { colors } from "@src/shared/constants/constants";
 import Input from "./Input";
 import CustomButton from "./Button";
 import { EditListingDetails } from "../../property.service";
+import { useState } from "react";
+import CustomSwitch from "./CustomSwitch";
 
 const MainAddListing = ({
   onPageChange,
@@ -21,11 +23,11 @@ const MainAddListing = ({
   const navigate = useNavigate();
   const { propertyId } = useParams();
   // const { user, loading, setLoading, setStatusCode, setMessage } = useAuth();
-  // const [haveRentrixRep, setHaveRentrixRep] = useState("No");
+  const [haveRentrixRep, setHaveRentrixRep] = useState("No");
   // const [rentrixRepId, setRentrixRepId] = useState("");
-  // const [haveCaretaker, sethaveCaretaker] = useState("No");
+  const [haveCaretaker, sethaveCaretaker] = useState("No");
   // const [caretakerId, setCaretakerId] = useState("");
-  // const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   // const [propertyStatus, setPropertyStatus] = useState("Rented");
   // const [tenantOnRentrix, setTenantOnRentrix] = useState(false);
   // const [tenantId, setTenantId] = useState("");
