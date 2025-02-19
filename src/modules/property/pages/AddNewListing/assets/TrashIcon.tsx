@@ -1,5 +1,3 @@
-import React from 'react'
-
 const TrashIcon = () => {
   return (
     <svg
@@ -29,6 +27,6 @@ const TrashIcon = () => {
       />
     </svg>
   );
-}
+};
 
-export default TrashIcon
+export default TrashIcon;

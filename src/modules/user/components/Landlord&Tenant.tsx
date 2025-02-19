@@ -6,6 +6,7 @@ import Modal from "@src/shared/components/Modal";
 import { UserService } from "../services/user.service";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
+import { Column } from "@src/shared/types/shared.types";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -69,16 +70,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     });
     setSearchFilter(filtered);
   }, [filter, users]);
-  const columns: {
-    header: string;
-    label: string;
-    type: "select" | "action" | "text";
-    options?: string[];
-    component?: {
-      component: React.ReactNode;
-      onClick: (id?: string) => void;
-    }[];
-  }[] = [
+  const columns: Column[] = [
     {
       header: "USER ID",
       label: "userId",

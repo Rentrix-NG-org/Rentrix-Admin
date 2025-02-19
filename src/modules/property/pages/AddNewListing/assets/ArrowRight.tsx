@@ -1,5 +1,4 @@
 import { colors } from '@src/shared/constants/constants';
-import React from 'react'
 
 const ArrowRight = ({width='24px', height='24px', fill = colors.light}) => {
   return (

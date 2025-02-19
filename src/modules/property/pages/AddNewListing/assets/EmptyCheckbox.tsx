@@ -1,6 +1,4 @@
-import React from 'react'
-
-const EmptyCheckbox = ({width='24px', height='24px'}) => {
+const EmptyCheckbox = ({ width = "24px", height = "24px" }) => {
   return (
     <svg
       width={width}
@@ -17,6 +15,6 @@ const EmptyCheckbox = ({width='24px', height='24px'}) => {
       />
     </svg>
   );
-}
+};
 
-export default EmptyCheckbox
+export default EmptyCheckbox;

@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "@src/shared/components/Search";
 import Filter from "@src/shared/components/Filter";
 import Table from "@src/shared/components/Table";
@@ -151,7 +151,7 @@ const SupervisorsReps = () => {
       </Box>
 
       <Table
-        onSelect={(v) => {}}
+        onSelect={() => {}}
         onRowClick={(v) => {
           navigate(`/users/${v[0]}/rentrix-rep`);
         }}

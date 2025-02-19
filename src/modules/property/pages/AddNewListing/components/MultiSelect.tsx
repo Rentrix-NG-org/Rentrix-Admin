@@ -1,6 +1,5 @@
 import { Box, SxProps, Theme } from "@mui/material";
 import { colors, radius } from "@src/shared/constants/constants";
-import React from "react";
 
 interface SelectProps {
   options: any[];

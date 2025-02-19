@@ -1,21 +1,21 @@
-import { Box, Button, Grid } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import Hero from './components/Hero';
-import Details from './components/Details';
-import Features from './components/Features';
-import Breadcrumbs from '@src/shared/components/BreadCrumbs';
-import { useLocation, useNavigate, useParams } from 'react-router';
-import { GetListingsDetails } from '../property.service';
-import { IListing } from '../../types';
+import { Box, Button, Grid } from "@mui/material";
+import { useEffect, useState } from "react";
+import Hero from "./components/Hero";
+import Details from "./components/Details";
+import Features from "./components/Features";
+import Breadcrumbs from "@src/shared/components/BreadCrumbs";
+import { useLocation, useNavigate, useParams } from "react-router";
+import { GetListingsDetails } from "../property.service";
+import { IListing } from "../../types";
 
 const PropertyDetails = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const { propertyId } = useParams()
-  const [listing, setListing] = useState<IListing>()
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { propertyId } = useParams();
+  const [listing, setListing] = useState<IListing>();
   useEffect(() => {
     async function getListingDetails() {
-      const response = await GetListingsDetails(propertyId || '');
+      const response = await GetListingsDetails(propertyId || "");
 
       if (response?.status === 200) {
         setListing(response.data);
@@ -91,6 +91,6 @@ const PropertyDetails = () => {
       </Grid>
     </Box>
   );
-}
+};
 
-export default PropertyDetails
+export default PropertyDetails;

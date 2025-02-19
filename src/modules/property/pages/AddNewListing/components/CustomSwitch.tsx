@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 interface SwitchProps {
   value: boolean;
@@ -77,7 +77,7 @@ const styles = {
     padding: "2px",
     justifyContent: "flex-start",
     // borderWidth: 1,
-    borderColor: '#DADDE2',
+    borderColor: "#DADDE2",
     backgroundColor: "#DADDE2",
     flexDirection: "row",
     display: "flex",

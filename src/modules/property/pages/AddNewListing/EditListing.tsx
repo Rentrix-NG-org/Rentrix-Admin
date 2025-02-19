@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router";
 import MainAddListing from "./components/MainAddListing";
 import NameAndAddress from "./components/NameAndAddress";
@@ -10,7 +10,6 @@ import PropertyFees from "./components/PropertyFees";
 import { INewListing } from "./type";
 import Breadcrumbs from "@src/shared/components/BreadCrumbs";
 import ArrowRight from "./assets/ArrowRight";
-import { IListing } from "../../types";
 import { GetListingsDetails } from "../property.service";
 
 const EditListing = () => {

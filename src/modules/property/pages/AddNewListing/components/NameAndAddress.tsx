@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { INewListing } from "../type";
 import { colors } from "@src/shared/constants/constants";
 import Input from "./Input";
@@ -16,10 +16,10 @@ const NameAndAddress = ({
   newListing: INewListing;
   setNewListing: (prev: any) => void;
 }) => {
-  const [propertyName, setPropertyName] = useState("");
-  const [propertyDescription, setPropertyDescription] = useState("");
-  const [propertyLocation, setPropertyLocation] = useState("");
-  const [liveHere, setLiveHere] = useState(false);
+  // const [propertyName, setPropertyName] = useState("");
+  // const [propertyDescription, setPropertyDescription] = useState("");
+  // const [propertyLocation, setPropertyLocation] = useState("");
+  // const [liveHere, setLiveHere] = useState(false);
   const [enterAddress, setEnterAddress] = useState(true);
 
   return (
@@ -77,9 +77,7 @@ const NameAndAddress = ({
               select
               options={["New York", "Lagos"]}
               value={"Lagos"}
-              onSelect={(e) => {
-                // setSelectedState(e)
-              }}
+              onSelect={() => {}}
             />
             <Input
               placeholder="City"
@@ -121,7 +119,10 @@ const NameAndAddress = ({
               onChange={(e) =>
                 setNewListing((prev: INewListing) => ({
                   ...prev,
-                  location: { ...prev.location, propertyNumber: e.target.value },
+                  location: {
+                    ...prev.location,
+                    propertyNumber: e.target.value,
+                  },
                 }))
               }
             />
@@ -161,7 +162,9 @@ const NameAndAddress = ({
             onChange={(e) =>
               setNewListing((prev: INewListing) => ({
                 ...prev,
-                builtMonth: e?.target?.value.toLowerCase(),
+                builtMonth: (
+                  e?.target as HTMLInputElement
+                )?.value.toLowerCase(),
               }))
             }
           />
@@ -171,7 +174,7 @@ const NameAndAddress = ({
             onChange={(e) =>
               setNewListing((prev: INewListing) => ({
                 ...prev,
-                builtYear: Number(e?.target?.value),
+                builtYear: Number((e?.target as HTMLInputElement)?.value),
               }))
             }
           />
@@ -182,7 +185,7 @@ const NameAndAddress = ({
           </Typography>
           <CustomSwitch
             value={newListing.currentlyLivedIn}
-            onChange={(e) => {
+            onChange={() => {
               // setLiveHere(e)
               setNewListing((prev: INewListing) => ({
                 ...prev,

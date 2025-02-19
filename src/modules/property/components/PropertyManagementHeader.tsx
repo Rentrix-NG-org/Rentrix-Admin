@@ -1,10 +1,8 @@
-import { Box, Typography, useTheme } from '@mui/material';
-import Filter from '@src/shared/components/Filter';
-import Search from '@src/shared/components/Search';
-import React from 'react'
+import { Box } from "@mui/material";
+import Filter from "@src/shared/components/Filter";
+import Search from "@src/shared/components/Search";
 
 const PropertyManagementHeader = ({
-  search,
   setSearch,
   setFilter,
 }: {
@@ -12,7 +10,6 @@ const PropertyManagementHeader = ({
   setSearch: (value: string) => void;
   setFilter: (value: string[]) => void;
 }) => {
-  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -39,13 +36,10 @@ const PropertyManagementHeader = ({
           onFilter={setFilter}
           filterStyle={{ width: "150px" }}
         />
-        <Search
-          placeholder="Search Properties"
-          setSearch={setSearch}
-        />
+        <Search placeholder="Search Properties" setSearch={setSearch} />
       </Box>
     </Box>
   );
 };
 
-export default PropertyManagementHeader
+export default PropertyManagementHeader;

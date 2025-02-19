@@ -17,7 +17,7 @@ import wifi from "../assets/wifi.svg";
 import map from "../assets/map.png";
 import location from "../assets/location.svg";
 import right from "../assets/chevron-right.svg";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ConstructAddress, formatNumber } from "./Details";
 
 const Features = ({
@@ -141,10 +141,10 @@ const Features = ({
         listing?.floorLevel === 1
           ? "st"
           : listing?.floorLevel === 2
-          ? "nd"
-          : listing?.floorLevel === 3
-          ? "rd"
-          : "th"
+            ? "nd"
+            : listing?.floorLevel === 3
+              ? "rd"
+              : "th"
       }`,
     },
     { title: "Built", value: `${listing?.builtYear}` },
@@ -174,19 +174,19 @@ const Features = ({
   ];
 
   const interior = [
-    ...listing?.interiorFeatures.map((l) => ({
+    ...(listing?.interiorFeatures || []).map((l) => ({
       name: InteriorFeaturesLabel[l],
     })),
   ];
 
   const exterior = [
-    ...listing?.exteriorFeatures.map((l) => ({
+    ...(listing?.exteriorFeatures || []).map((l) => ({
       name: ExteriorFeaturesLabel[l],
     })),
   ];
 
   const kitchenFittings = [
-    ...listing?.kitchenFittings.map((kf) => ({
+    ...(listing?.kitchenFittings || []).map((kf) => ({
       name: KitchenFittingsLabel[kf],
     })),
   ];
@@ -309,9 +309,7 @@ const Features = ({
               maxWidth: "400px",
             }}
           >
-            {interior?.map((interior) => (
-              <Pill name={interior?.name} />
-            ))}
+            {interior?.map((interior) => <Pill name={interior?.name} />)}
           </Box>
         </Box>
 
@@ -344,9 +342,7 @@ const Features = ({
               maxWidth: "400px",
             }}
           >
-            {exterior?.map((exterior) => (
-              <Pill name={exterior?.name} />
-            ))}
+            {exterior?.map((exterior) => <Pill name={exterior?.name} />)}
           </Box>
         </Box>
 
@@ -379,9 +375,7 @@ const Features = ({
               maxWidth: "400px",
             }}
           >
-            {kitchenFittings?.map((fitting) => (
-              <Pill name={fitting?.name} />
-            ))}
+            {kitchenFittings?.map((fitting) => <Pill name={fitting?.name} />)}
           </Box>
         </Box>
 

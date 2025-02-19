@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CheckCirclePending = () => {
   return (
     <svg
@@ -21,6 +19,6 @@ const CheckCirclePending = () => {
       />
     </svg>
   );
-}
+};
 
-export default CheckCirclePending
+export default CheckCirclePending;

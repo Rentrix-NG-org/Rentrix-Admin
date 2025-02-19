@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import naira from "../assets/naira.svg";
 import bookmark from "../assets/bookmark.svg";
 import menu from "../assets/menu.svg";
