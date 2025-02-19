@@ -1,4 +1,7 @@
+import avatar from "@src/assets/images/avatar.jpg";
+import apartment from "@src/assets/images/apartment.png";
+
 export const images = {
-  avatar: (await import("@src/assets/images/avatar.jpg")).default,
-  apartment: (await import("@src/assets/images/apartment.png")).default,
+  avatar,
+  apartment,
 };
