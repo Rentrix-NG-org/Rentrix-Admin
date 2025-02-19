@@ -18,6 +18,12 @@ const UserManagement = () => {
     >
       <UserHeader
         title="User Management"
+        filters={[
+          {
+            name: "Role",
+            options: ["Landlord", "Tenant"],
+          },
+        ]}
         search=""
         setSearch={setSearch}
         setFilter={setFilter}

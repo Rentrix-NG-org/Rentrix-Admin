@@ -21,7 +21,6 @@ const SupervisorsReps = () => {
     async function fetchUsers() {
       const response = await getAllUsers("representative=true&supervisor=true");
       if (response.success) {
-        console.log(response.data, "data");
         const formatted = (response.data as any[]).map((user) => {
           return Object.values({
             userId: user.id,
@@ -101,7 +100,6 @@ const SupervisorsReps = () => {
   ];
 
   async function handleFilter(filter: string[]) {
-    console.log(filter);
     if (!filter.every((v) => Boolean(v))) {
       setFilter(users);
     } else {
@@ -129,7 +127,7 @@ const SupervisorsReps = () => {
           filters={[{ name: "Role", options: ["Supervisor", "Rentrix Rep"] }]}
           onFilter={(v) => {
             if (v[0] === "Rentrix Rep") {
-              handleFilter(["Representative"]);
+              handleFilter(["representative"]);
             } else {
               handleFilter(v);
             }

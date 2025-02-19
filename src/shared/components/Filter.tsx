@@ -16,7 +16,7 @@ const Filter: React.FC<{
   filterStyle?: CSSProperties | SxProps<Theme>;
   filters?: Filters[];
   onFilter: (value: string[]) => void;
-}> = ({ placeholder = "Filter", filters, onFilter, filterStyle }) => {
+}> = ({ placeholder = "Filter", filters = [], onFilter, filterStyle }) => {
   const theme = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -172,7 +172,7 @@ const Modal: React.FC<{
                                 isShown: curr[index]?.isShown || false,
                                 selected: "",
                               },
-                            }
+                            },
                       );
                     } else {
                       setFilterState((curr) =>
@@ -184,7 +184,7 @@ const Modal: React.FC<{
                                 isShown: curr[index]?.isShown || false,
                                 selected: option,
                               },
-                            }
+                            },
                       );
                     }
                   }}
