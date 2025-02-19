@@ -3,9 +3,7 @@ import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
 import Modal from "@src/shared/components/Modal";
-import Action from "./Action";
 import { UserService } from "../services/user.service";
-import dayjs from "dayjs";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
 
@@ -32,7 +30,16 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
       if (response.success) {
         setRefresh(false);
-        setUsers(response.data as any[]);
+        const formatted = response.data.map((user: any) => {
+          return {
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            status: user.status,
+            registrationDate: user.registrationDate,
+          };
+        });
+        setUsers(formatted as any[]);
       }
     }
     getUsers();
@@ -172,7 +179,12 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         gap: 2,
       }}
     >
-      <TableHeader title="Landlord & Tenants" />
+      <TableHeader
+        title="Landlord & Tenants"
+        onViewAll={() => {
+          navigate("roles/landlords-tenants");
+        }}
+      />
       {modal?.isOpen && (
         <Modal
           onCancel={() => {

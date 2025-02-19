@@ -1,4 +1,5 @@
 // import { LogsModule } from "@src/modules/logs";
+import { LogsModule } from "@src/modules/logs";
 import { PropertyManagementModule } from "@src/modules/property";
 import { UserManagementModule } from "@src/modules/user";
 import { RouteObject } from "react-router";
@@ -37,4 +38,4 @@ export class ModuleRegistry {
 
 ModuleRegistry.register(UserManagementModule);
 ModuleRegistry.register(PropertyManagementModule);
-// ModuleRegistry.register(LogsModule);
+ModuleRegistry.register(LogsModule);

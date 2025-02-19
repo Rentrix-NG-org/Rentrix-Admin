@@ -1,5 +1,3 @@
-import { ArrowRight } from "@mui/icons-material";
-
 export const icons = {
   edit: (await import("@src/assets/icons/edit.svg")).default,
   bin: (await import("@src/assets/icons/bin.svg")).default,

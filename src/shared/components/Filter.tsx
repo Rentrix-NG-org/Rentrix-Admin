@@ -1,13 +1,22 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
-import { Box, Checkbox, SxProps, Theme, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  SxProps,
+  Theme,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { icons } from "@src/utils/icons";
 import { CSSProperties, useEffect, useState } from "react";
+import { Filters } from "../types/shared.types";
 
 const Filter: React.FC<{
   placeholder?: string;
   filterStyle?: CSSProperties | SxProps<Theme>;
+  filters?: Filters[];
   onFilter: (value: string[]) => void;
-}> = ({ placeholder = "Filter", onFilter, filterStyle }) => {
+}> = ({ placeholder = "Filter", filters, onFilter, filterStyle }) => {
   const theme = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -48,22 +57,20 @@ const Filter: React.FC<{
           {placeholder}
         </Typography>
       </Box>
-      {isModalOpen && <Modal onFilter={onFilter} />}
+      {isModalOpen && <Modal onFilter={onFilter} filters={filters!} />}
     </Box>
   );
 };
 
-const Modal: React.FC<{ onFilter: (value: string[]) => void }> = ({
-  onFilter,
-}) => {
+const Modal: React.FC<{
+  onFilter: (value: string[]) => void;
+  filters: Filters[];
+}> = ({ onFilter, filters }) => {
   const theme = useTheme();
   const [filterState, setFilterState] = useState<{
     [key: number]: { isShown: boolean; selected: string };
   } | null>(null);
-  const filters = [
-    { name: "Status", options: ["Active", "Suspended"] },
-    { name: "Role", options: ["Landlord", "Tenant", "Rentrix Rep"] },
-  ];
+
   useEffect(() => {
     if (filterState) {
       const selectedFilters = Object.values(filterState).map((f) => f.selected);
@@ -165,7 +172,7 @@ const Modal: React.FC<{ onFilter: (value: string[]) => void }> = ({
                                 isShown: curr[index]?.isShown || false,
                                 selected: "",
                               },
-                            },
+                            }
                       );
                     } else {
                       setFilterState((curr) =>
@@ -177,7 +184,7 @@ const Modal: React.FC<{ onFilter: (value: string[]) => void }> = ({
                                 isShown: curr[index]?.isShown || false,
                                 selected: option,
                               },
-                            },
+                            }
                       );
                     }
                   }}

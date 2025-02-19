@@ -2,9 +2,9 @@ import { Box } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
-import Action from "./Action";
 import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
+import { icons } from "@src/utils/icons";
 
 const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -22,8 +22,18 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       const response = await getAllUsers("representative=true&supervisor=true");
 
       if (response.success) {
+        console.log(response.data, "d");
+        const formatted = response.data.map((user: any) => {
+          return {
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
+            registrationDate: user.registrationDate,
+          };
+        });
         setRefresh(false);
-        setUsers(response.data as any[]);
+        setUsers(formatted as any[]);
       }
     }
     getUsers();
@@ -84,7 +94,12 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
         gap: 2,
       }}
     >
-      <TableHeader title="Supervisors & Representatives" />
+      <TableHeader
+        title="Supervisors & Representatives"
+        onViewAll={() => {
+          navigate("roles/supervisors-reps");
+        }}
+      />
       <Table
         onSelect={handleTableSelection}
         onRowClick={(row) => navigate(`/users/${row[0]}/rentrix-rep`)}
@@ -111,15 +126,34 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             type: "text",
           },
           {
-            header: "REG DATE",
-            label: "registrationDate",
+            header: "LOCATION",
+            label: "location",
             type: "text",
           },
           {
             header: "ACTIONS",
             label: "actions",
             type: "action",
-            component: [],
+            component: [
+              {
+                component: (
+                  <Box component="img" src={icons.eye} sx={{ width: 18 }} />
+                ),
+                onClick: () => {},
+              },
+              {
+                component: (
+                  <Box component="img" src={icons.edit} sx={{ width: 18 }} />
+                ),
+                onClick: () => {},
+              },
+              {
+                component: (
+                  <Box component="img" src={icons.bin} sx={{ width: 18 }} />
+                ),
+                onClick: () => {},
+              },
+            ],
           },
         ]}
         data={searchFilter}

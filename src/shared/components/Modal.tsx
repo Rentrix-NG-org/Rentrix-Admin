@@ -1,11 +1,12 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, SxProps, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
 
 const Modal: React.FC<{
   onCancel: VoidFunction;
   onConfirm: VoidFunction;
   children: React.ReactNode;
-}> = ({ onCancel, onConfirm, children }) => {
+  childrenSx?: SxProps;
+}> = ({ onCancel, onConfirm, children, childrenSx }) => {
   const theme = useTheme();
   return (
     <Box sx={{ position: "fixed", inset: 0, zIndex: 99999 }}>
@@ -58,6 +59,7 @@ const Modal: React.FC<{
             alignItems: "center",
             justifyContent: "center",
             mt: 4,
+            ...childrenSx,
           }}
         >
           {children}

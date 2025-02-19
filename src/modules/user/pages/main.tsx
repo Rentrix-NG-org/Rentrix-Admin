@@ -16,7 +16,12 @@ const UserManagement = () => {
         gap: "46px",
       }}
     >
-      <UserHeader search="" setSearch={setSearch} setFilter={setFilter} />
+      <UserHeader
+        title="User Management"
+        search=""
+        setSearch={setSearch}
+        setFilter={setFilter}
+      />
       <LandlordAndTenant search={search} filter={filter} />
       <SupervisorAndRep search={search} filter={filter} />
     </Box>

@@ -165,6 +165,7 @@ const AddUser = () => {
               containerSx={{
                 border: `1px solid ${theme.palette.grey[300]}`,
                 background: theme.palette.grey[100],
+                height: "auto",
               }}
               label="Day"
               options={days["January"] as unknown as string[]}
@@ -183,6 +184,7 @@ const AddUser = () => {
               containerSx={{
                 border: `1px solid ${theme.palette.grey[300]}`,
                 background: theme.palette.grey[100],
+                height: "auto",
               }}
               label="Month"
               options={months}
@@ -192,6 +194,7 @@ const AddUser = () => {
               containerSx={{
                 border: `1px solid ${theme.palette.grey[300]}`,
                 background: theme.palette.grey[100],
+                height: "auto",
               }}
               label="Year"
               options={Array.from(

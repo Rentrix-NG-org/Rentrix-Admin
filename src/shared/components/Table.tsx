@@ -1,23 +1,14 @@
-import { BorderAll, ChevronLeftRounded } from "@mui/icons-material";
+import { ChevronLeftRounded } from "@mui/icons-material";
 import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
 import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
-import { icons } from "@src/utils/icons";
 import PaginationControl from "@src/modules/user/components/PaginationControl";
+import { Column } from "../types/shared.types";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
   onRowClick: (row: string[]) => void;
-  columns: {
-    header: string;
-    label: string;
-    type: "select" | "action" | "text";
-    options?: string[];
-    component?: {
-      component: React.ReactNode;
-      onClick: (id?: string) => void;
-    }[];
-  }[];
+  columns: Column[];
   data: string[][];
 }
 
@@ -37,15 +28,6 @@ const Table: React.FC<TableProps> = ({
     setRows(result);
   }, [data]);
   const theme = useTheme();
-
-  function handlePage(op: string) {
-    const limit = 2;
-    if (op === "+" && paginatedRows.length && page * limit < rows.length) {
-      setPage(page + 1);
-    } else if (op === "-") {
-      setPage(page === 1 ? 1 : page - 1);
-    }
-  }
 
   useEffect(() => {
     const limit = 2;
@@ -108,6 +90,39 @@ const Table: React.FC<TableProps> = ({
                   key={`${rowIndex}-${cellIndex}`}
                   options={columns[cellIndex].options as string[]}
                 />
+              ) : columns[cellIndex]?.type === "custom-text" ? (
+                <Box
+                  sx={{
+                    padding: "28px 32px",
+                    borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                    minWidth: "200px",
+                  }}
+                >
+                  <Typography
+                    // component="button"
+                    onClick={() => onRowClick(row)}
+                    key={`${rowIndex}-${cellIndex}`}
+                    sx={{
+                      textWrap: "nowrap",
+                      border: `1px solid ${columns[cellIndex].colors?.[cell ? cell.toLowerCase() : ""]}`,
+                      color:
+                        columns[cellIndex].colors?.[
+                          cell ? cell.toLowerCase() : ""
+                        ],
+                      width: "fit-content",
+                      fontSize: 12,
+                      fontWeight: 600,
+                      borderRadius: "10px",
+                      padding: "6px 16px",
+                    }}
+                  >
+                    {cell && cell.length > 25
+                      ? cell.slice(0, 25).toUpperCase() + "..."
+                      : cell
+                        ? cell.toUpperCase()
+                        : ""}
+                  </Typography>
+                </Box>
               ) : columns[cellIndex]?.type === "action" ? (
                 <Box
                   sx={{
@@ -147,10 +162,10 @@ const Table: React.FC<TableProps> = ({
                     minWidth: "200px",
                   }}
                 >
-                  {cell.length > 25 ? cell.slice(0, 25) + "..." : cell}
+                  {cell?.length > 25 ? cell?.slice(0, 25) + "..." : cell}
                 </Typography>
-              )
-            )
+              ),
+            ),
         )}
       </Box>
 
