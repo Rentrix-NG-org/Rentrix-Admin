@@ -254,7 +254,7 @@ const MainAddListing = ({
                       borderRadius: "100px",
                       border: `1px solid ${colors.primary}`,
                       fontSize: 14,
-                      color: colors.textBody
+                      color: colors.textBody,
                     }}
                   >
                     Assign
