@@ -1,14 +1,16 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Filter from "@src/shared/components/Filter";
 import Search from "@src/shared/components/Search";
+import { Filters } from "@src/shared/types/shared.types";
 import { useNavigate } from "react-router";
 
 const UserHeader: React.FC<{
   title: string;
   search: string;
+  filters: Filters[];
   setSearch: (value: string) => void;
   setFilter: (value: string[]) => void;
-}> = ({ title, setSearch, setFilter }) => {
+}> = ({ title, filters, setSearch, setFilter }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   return (
@@ -60,7 +62,7 @@ const UserHeader: React.FC<{
           </Typography>
         </Box>
         <Search placeholder="Search Users" setSearch={setSearch} />
-        <Filter onFilter={setFilter} />
+        <Filter filters={filters} onFilter={setFilter} />
       </Box>
     </Box>
   );
