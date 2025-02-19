@@ -200,6 +200,112 @@ const MainAddListing = ({
             }}
           />
         </Box>
+        <Box>
+          <Box display="flex" flexDirection="column" gap="12px" mb="24px">
+            <Typography fontSize={18} fontWeight={600} color={colors.textTitle}>
+              Do you have a preferred Rentrix Rep?
+            </Typography>
+            <Input
+              select
+              options={["Yes", "No"]}
+              value={haveRentrixRep}
+              onSelect={setHaveRentrixRep}
+            />
+            {haveRentrixRep === "Yes" ? (
+              <Input
+                placeholder="Rentrix Rep ID"
+                endIcon={<CheckCirclePending />}
+                value={newListing.representativeId}
+                onChange={(e) => {
+                  setNewListing((prev: INewListing) => ({
+                    ...prev,
+                    representativeId: e.target.value,
+                  }));
+                }}
+              />
+            ) : (
+              <Box p="12px" borderRadius="8px" bgcolor="#C2CCD8">
+                <Typography
+                  fontSize={16}
+                  fontWeight={400}
+                  color={colors.textBody}
+                  mb="7px"
+                >
+                  Assign Rentrix Rep.
+                </Typography>
+                <Box display="flex" alignItems="center" gap="12px">
+                  <Input
+                    placeholder="Rentrix Rep ID"
+                    inputContainerStyles={{ bgcolor: colors.light }}
+                    inputStyles={{ background: colors.light }}
+                    value={newListing.representativeId}
+                    onChange={(e) => {
+                      setNewListing((prev: INewListing) => ({
+                        ...prev,
+                        representativeId: e.target.value,
+                      }));
+                    }}
+                  />
+                  <CustomButton
+                    variant="outlined"
+                    buttonStyles={{
+                      width: "120px",
+                      height: "32px",
+                      borderRadius: "100px",
+                      border: `1px solid ${colors.primary}`,
+                      fontSize: 14,
+                      color: colors.textBody,
+                    }}
+                  >
+                    Assign
+                  </CustomButton>
+                </Box>
+              </Box>
+            )}
+          </Box>
+          <Box display="flex" flexDirection="column" gap="12px" mb="24px">
+            <Typography fontSize={18} fontWeight={600} color={colors.textTitle}>
+              Do you want to add a caretaker to this property?
+            </Typography>
+            <Input
+              select
+              options={["Yes", "No"]}
+              value={haveCaretaker}
+              onSelect={sethaveCaretaker}
+            />
+            <Input
+              placeholder="Caretaker ID"
+              endIcon={<CheckCirclePending />}
+              value={newListing.caretakerId}
+              onChange={(e) => {
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  caretakerId: e.target.value,
+                }));
+              }}
+            />
+          </Box>
+          <Box display="flex" flexDirection="column" gap="12px" mb="24px">
+            <Typography
+              fontSize={18}
+              fontWeight={600}
+              color={colors.textTitle}
+              // mb="12px"
+            >
+              Do you consent to your caretaker being a super admin?
+            </Typography>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography fontSize={16} color={colors.textTitle}>
+                My caretaker is a super admin
+              </Typography>
+              <CustomSwitch value={isSuperAdmin} onChange={setIsSuperAdmin} />
+            </Box>
+          </Box>
+        </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="12px">
         <CustomButton
