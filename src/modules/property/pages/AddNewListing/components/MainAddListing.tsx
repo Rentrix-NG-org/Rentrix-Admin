@@ -200,29 +200,6 @@ const MainAddListing = ({
             }}
           />
         </Box>
-        {/* <Box display="flex" flexDirection="column" gap="12px" mb="24px">
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography fontSize={16} color={colors.textTitle}>
-              Tenant is a user on Rentrix
-            </Typography>
-            <CustomSwitch
-              value={tenantOnRentrix}
-              onChange={setTenantOnRentrix}
-            />
-          </Box>
-        </Box>
-        <Box display="flex" flexDirection="column" gap="12px" mb="48px">
-          <Input
-            placeholder="Tenant ID"
-            endIcon={<CheckCirclePending />}
-            value={tenantId}
-            onChange={(e) => setTenantId(e.target.value)}
-          />
-        </Box> */}
       </Box>
       <Box display="flex" alignItems="center" gap="12px">
         <CustomButton
