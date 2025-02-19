@@ -1,6 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import LogTable from "@src/shared/components/LogTable";
-import { LogService } from "@src/shared/services/log.service";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";

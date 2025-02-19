@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import { INewListing } from "../type";
-import { useState } from "react";
 import { colors } from "@src/shared/constants/constants";
 import TrashIcon from "../assets/TrashIcon";
 import CustomButton from "./Button";
@@ -14,8 +13,7 @@ const PropertyMedia = ({
   onPageChange: (x: string) => void;
   newListing: INewListing;
   setNewListing: (x: any) => void;
-  }) => {
-  
+}) => {
   const convertImageToWebP = (file: any) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -41,7 +39,7 @@ const PropertyMedia = ({
               }
             },
             "image/webp",
-            0.8
+            0.8,
           );
         };
         img.onerror = (error) => reject(error);
@@ -49,7 +47,7 @@ const PropertyMedia = ({
       reader.onerror = (error) => reject(error);
     });
   };
-  
+
   const handleImageUrl = async (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -70,7 +68,7 @@ const PropertyMedia = ({
 
     const res = await axios.post(
       "https://api.cloudinary.com/v1_1/ddfnerd87/image/upload",
-      formData
+      formData,
     );
 
     const uploadedImage = res.data;
@@ -101,7 +99,7 @@ const PropertyMedia = ({
   };
 
   const handleDeleteImage = (id: number) => {
-    const currentImage = newListing.media.filter((media, i) => id !== i);
+    const currentImage = newListing.media.filter((_, i) => id !== i);
     setNewListing((prev: INewListing) => ({
       ...prev,
       media: currentImage,

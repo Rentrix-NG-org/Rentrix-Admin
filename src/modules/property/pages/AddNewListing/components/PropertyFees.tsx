@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { INewListing } from "../type";
 import { colors } from "@src/shared/constants/constants";
 import CustomSwitch from "./CustomSwitch";
@@ -18,15 +18,17 @@ const PropertyFees = ({
   newListing: INewListing;
   setNewListing: (x: any) => void;
 }) => {
-  const [toggleLegalFee, setToggleLegalFee] = useState(newListing.fee.legalFee.length > 0);
+  const [toggleLegalFee, setToggleLegalFee] = useState(
+    newListing.fee.legalFee.length > 0,
+  );
   const [toggleServiceFee, setToggleServiceFee] = useState(
-    newListing.fee.serviceFee.length > 0
+    newListing.fee.serviceFee.length > 0,
   );
   const [toggleCautionFee, setToggleCautionFee] = useState(
-    newListing.fee.cautionFee.length > 0
+    newListing.fee.cautionFee.length > 0,
   );
   const [toggleEstateFee, setToggleEstateFee] = useState(
-    newListing.fee.estateFee.length > 0
+    newListing.fee.estateFee.length > 0,
   );
   // const [otherFeeComp, setOtherFeeComp] = useState<{ name: ""; fee: 0 }[]>([]);
   // const [fee, setFee] = useState("");
@@ -51,7 +53,7 @@ const PropertyFees = ({
             ...fee,
             ...(typeof field === "string" ? { [field]: value } : field),
           }
-        : fee
+        : fee,
     );
     setNewListing((prev: any) => ({
       ...prev,
@@ -60,7 +62,7 @@ const PropertyFees = ({
   };
 
   const handleDeleteItem = (id: number) => {
-    const filteredFee = newListing.fee.otherFees.filter((fee, i) => i !== id);
+    const filteredFee = newListing.fee.otherFees.filter((_, i) => i !== id);
     setNewListing((prev: any) => ({
       ...prev,
       otherFees: filteredFee,
@@ -451,9 +453,7 @@ const PropertyFees = ({
                 <Input
                   type="number"
                   value={String(fee.fee)}
-                  onChange={(e) =>
-                    handleInputChange(id, "fee", e.target.value)
-                  }
+                  onChange={(e) => handleInputChange(id, "fee", e.target.value)}
                   placeholder={"0"}
                   startIcon={<NairaIcon width="20px" height="20px" />}
                 />

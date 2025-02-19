@@ -23,7 +23,7 @@ const types: Record<ActivityType, string> = {
 };
 
 const RepDetails = () => {
-  const { getUserRep, getAllLogs } = UserService();
+  const { getUserRep } = UserService();
   const activityTypes = useMemo(() => types, []);
 
   const params = useParams();

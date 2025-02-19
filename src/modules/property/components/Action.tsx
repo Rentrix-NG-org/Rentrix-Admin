@@ -1,11 +1,10 @@
-import { Box, useTheme } from '@mui/material';
-import { icons } from '@src/utils/icons';
-import React from 'react'
-import { useNavigate } from 'react-router';
+import { Box, useTheme } from "@mui/material";
+import { icons } from "@src/utils/icons";
+import { useNavigate } from "react-router";
 
-const Action = ({ propertyId }: {propertyId: string}) => {
-    const theme = useTheme();
-    const navigate = useNavigate()
+const Action = ({ propertyId }: { propertyId: string }) => {
+  const theme = useTheme();
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -34,6 +33,6 @@ const Action = ({ propertyId }: {propertyId: string}) => {
       </Box>
     </Box>
   );
-}
+};
 
-export default Action
+export default Action;

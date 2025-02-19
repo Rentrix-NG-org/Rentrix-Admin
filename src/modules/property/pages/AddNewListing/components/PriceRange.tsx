@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Input from "./Input";
@@ -30,7 +30,7 @@ const PriceRange = ({
 
   useEffect(() => {
     handleSliderChange([Number(minVal), Number(maxVal)]);
-  }, [minVal, maxVal])
+  }, [minVal, maxVal]);
 
   return (
     <Box>

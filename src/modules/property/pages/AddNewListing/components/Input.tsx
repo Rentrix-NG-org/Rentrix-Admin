@@ -25,7 +25,7 @@ interface InputProps {
   inputContainerStyles?: CSSProperties | SxProps<Theme>;
   selected?: string[] | string;
   setSelected?: (option: any) => void;
-  autoFocus?: boolean
+  autoFocus?: boolean;
 }
 
 const Input = ({
@@ -47,7 +47,7 @@ const Input = ({
   inputContainerStyles,
   selected,
   setSelected,
-  autoFocus
+  autoFocus,
 }: InputProps) => {
   const [focus, setFocus] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -120,7 +120,7 @@ const Input = ({
             border: "none",
             fontSize: text.small,
             color: colors.textTitle,
-            outline: 'none',
+            outline: "none",
             ...inputStyles,
           }}
         />
@@ -167,10 +167,10 @@ const Input = ({
               if (!multichoice) setOpen(false);
               else {
                 if (setSelected)
-                  setSelected((prev: string) =>
+                  setSelected((prev: any) =>
                     prev.includes(option)
                       ? prev.filter((x) => x !== option)
-                      : [...prev, option]
+                      : [...prev, option],
                   );
               }
             }}

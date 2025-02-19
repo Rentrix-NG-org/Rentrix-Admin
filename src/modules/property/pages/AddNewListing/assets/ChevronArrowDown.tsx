@@ -1,6 +1,4 @@
-import React from 'react'
-
-const ChevronArrowDown = ({width='24px', height='24px'}) => {
+const ChevronArrowDown = ({ width = "24px", height = "24px" }) => {
   return (
     <svg
       width={width}
@@ -15,6 +13,6 @@ const ChevronArrowDown = ({width='24px', height='24px'}) => {
       />
     </svg>
   );
-}
+};
 
-export default ChevronArrowDown
+export default ChevronArrowDown;

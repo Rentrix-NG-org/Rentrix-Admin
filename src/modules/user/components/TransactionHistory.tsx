@@ -1,6 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
-import { images } from "@src/utils/images";
 import React from "react";
 import { TransactionType } from "../types/user.types";
 import dayjs from "dayjs";

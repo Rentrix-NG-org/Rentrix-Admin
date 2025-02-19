@@ -2,7 +2,7 @@ import { Box, SxProps, Typography, useTheme } from "@mui/material";
 import { icons } from "@src/utils/icons";
 import { useState } from "react";
 
-const Action: React.FC<{ row: any[]; sx?: SxProps }> = ({ row, sx }) => {
+const Action: React.FC<{ row: any[]; sx?: SxProps }> = () => {
   const theme = useTheme();
   const [tooltips, setTooltips] = useState<
     { name: string; isShown: boolean }[]

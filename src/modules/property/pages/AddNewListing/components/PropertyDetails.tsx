@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { INewListing } from "../type";
 import Input from "./Input";
 import MultiSelect from "./MultiSelect";
@@ -18,20 +18,20 @@ const PropertyDetails = ({
 }) => {
   const [selectedPropertyType, setSelectedPropertyType] =
     useState("Residential");
-  const [selectedType, setSelectedType] = useState<string[]>([]);
-  const [rentalPeriod, setRentalPeriod] = useState("Yearly");
-  const [furnishType, setFurnishType] = useState("Furnished");
-  const [bedroom, setBedroom] = useState("");
-  const [bathroom, setBathroom] = useState("");
-  const [toilet, setToilet] = useState("");
+  // const [selectedType, setSelectedType] = useState<string[]>([]);
+  // const [rentalPeriod, setRentalPeriod] = useState("Yearly");
+  // const [furnishType, setFurnishType] = useState("Furnished");
+  // const [bedroom, setBedroom] = useState("");
+  // const [bathroom, setBathroom] = useState("");
+  // const [toilet, setToilet] = useState("");
   const [valueRange, setValueRange] = useState([0, 100]);
-  const [propertyType, setPropertyType] = useState("");
-  const [apartmentService, setApartmentService] = useState("Serviced");
-  const [propertyAge, setPropertyAge] = useState("Renovated");
-  const [lotSize, setLotSize] = useState("");
-  const [floorArea, setFloorArea] = useState("");
+  // const [propertyType, setPropertyType] = useState("");
+  // const [apartmentService, setApartmentService] = useState("Serviced");
+  // const [propertyAge, setPropertyAge] = useState("Renovated");
+  // const [lotSize, setLotSize] = useState("");
+  // const [floorArea, setFloorArea] = useState("");
   const [yearBuilt, setYearBuilt] = useState("");
-  const [floorLevel, setFloorLevel] = useState("");
+  // const [floorLevel, setFloorLevel] = useState("");
   const [selectedInteriorFeatures, setSelectedInteriorFeatures] = useState<
     string[]
   >([]);
@@ -41,10 +41,10 @@ const PropertyDetails = ({
   const [selectedKitchenFitting, setSelectedKitchenFitting] = useState<
     string[]
   >([]);
-  const [selectedExteriorFlooring, setSelectedExteriorFlooring] =
-    useState<string>("");
-  const [selectedInteriorFlooring, setSelectedInteriorFlooring] =
-    useState<string>("");
+  // const [selectedExteriorFlooring, setSelectedExteriorFlooring] =
+  //   useState<string>("");
+  // const [selectedInteriorFlooring, setSelectedInteriorFlooring] =
+  //   useState<string>("");
 
   useEffect(() => {
     setSelectedKitchenFitting(newListing.kitchenFittings);
@@ -374,10 +374,10 @@ const PropertyDetails = ({
               setNewListing((prev: INewListing) => ({
                 ...prev,
                 interiorFeatures: prev.interiorFeatures.includes(
-                  e.toLowerCase().split(" ").join("-")
+                  e.toLowerCase().split(" ").join("-"),
                 )
                   ? prev.interiorFeatures.filter(
-                      (x) => x !== e.toLowerCase().split(" ").join("-")
+                      (x) => x !== e.toLowerCase().split(" ").join("-"),
                     )
                   : [
                       ...prev.interiorFeatures,
@@ -405,10 +405,10 @@ const PropertyDetails = ({
               setNewListing((prev: INewListing) => ({
                 ...prev,
                 exteriorFeatures: prev.exteriorFeatures.includes(
-                  e.toLowerCase().split(" ").join("-")
+                  e.toLowerCase().split(" ").join("-"),
                 )
                   ? prev.exteriorFeatures.filter(
-                      (x) => x !== e.toLowerCase().split(" ").join("-")
+                      (x) => x !== e.toLowerCase().split(" ").join("-"),
                     )
                   : [
                       ...prev.exteriorFeatures,
@@ -422,7 +422,8 @@ const PropertyDetails = ({
               "Security House",
               "Generator",
               "Solar Panel",
-              "Security","Balcony"
+              "Security",
+              "Balcony",
             ]}
           />
           {selectedPropertyType === "residential" && (
@@ -437,10 +438,10 @@ const PropertyDetails = ({
                 setNewListing((prev: INewListing) => ({
                   ...prev,
                   kitchenFittings: prev.kitchenFittings.includes(
-                    e.toLowerCase().split(" ").join("-")
+                    e.toLowerCase().split(" ").join("-"),
                   )
                     ? prev.kitchenFittings.filter(
-                        (x) => x !== e.toLowerCase().split(" ").join("-")
+                        (x) => x !== e.toLowerCase().split(" ").join("-"),
                       )
                     : [
                         ...prev.kitchenFittings,

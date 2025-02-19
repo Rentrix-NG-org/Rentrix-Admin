@@ -1,13 +1,12 @@
-import { Box, Typography } from '@mui/material';
-import React from 'react'
-import { INewListing } from '../type';
-import { colors } from '@src/shared/constants/constants';
-import CustomButton from './Button';
+import { Box, Typography } from "@mui/material";
+import { INewListing } from "../type";
+import { colors } from "@src/shared/constants/constants";
+import CustomButton from "./Button";
 
 const PropertyDocument = ({
   onPageChange,
-  newListing,
-  setNewListing,
+  // newListing,
+  // setNewListing,
 }: {
   onPageChange: (x: string) => void;
   newListing: INewListing;
@@ -55,4 +54,4 @@ const PropertyDocument = ({
   );
 };
 
-export default PropertyDocument
+export default PropertyDocument;

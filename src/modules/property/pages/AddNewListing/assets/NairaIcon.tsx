@@ -1,4 +1,3 @@
-import React from 'react'
 
 const NairaIcon = ({ width = "18px", height = "18px", fill = "#2E333C" }) => {
   return (

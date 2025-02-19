@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Checked = () => {
   return (
     <svg
@@ -17,6 +15,6 @@ const Checked = () => {
       />
     </svg>
   );
-}
+};
 
-export default Checked
+export default Checked;

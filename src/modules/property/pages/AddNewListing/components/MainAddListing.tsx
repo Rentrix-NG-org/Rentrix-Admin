@@ -1,5 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Typography } from "@mui/material";
 import { INewListing } from "../type";
 import { useNavigate, useParams } from "react-router";
 import ChevronArrowDown from "../assets/ChevronArrowDown";
@@ -7,7 +6,6 @@ import CheckCirclePending from "../assets/CheckCirclePending";
 import CircleSuccess from "../assets/CircleSuccess";
 import { colors } from "@src/shared/constants/constants";
 import Input from "./Input";
-import CustomSwitch from "./CustomSwitch";
 import CustomButton from "./Button";
 import { EditListingDetails } from "../../property.service";
 
@@ -23,14 +21,14 @@ const MainAddListing = ({
   const navigate = useNavigate();
   const { propertyId } = useParams();
   // const { user, loading, setLoading, setStatusCode, setMessage } = useAuth();
-  const [haveRentrixRep, setHaveRentrixRep] = useState("No");
-  const [rentrixRepId, setRentrixRepId] = useState("");
-  const [haveCaretaker, sethaveCaretaker] = useState("No");
-  const [caretakerId, setCaretakerId] = useState("");
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-  const [propertyStatus, setPropertyStatus] = useState("Rented");
-  const [tenantOnRentrix, setTenantOnRentrix] = useState(false);
-  const [tenantId, setTenantId] = useState("");
+  // const [haveRentrixRep, setHaveRentrixRep] = useState("No");
+  // const [rentrixRepId, setRentrixRepId] = useState("");
+  // const [haveCaretaker, sethaveCaretaker] = useState("No");
+  // const [caretakerId, setCaretakerId] = useState("");
+  // const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  // const [propertyStatus, setPropertyStatus] = useState("Rented");
+  // const [tenantOnRentrix, setTenantOnRentrix] = useState(false);
+  // const [tenantId, setTenantId] = useState("");
 
   const handleSaveListing = async () => {
     const response = await EditListingDetails(propertyId || "", newListing);
@@ -40,9 +38,9 @@ const MainAddListing = ({
     }
   };
 
-  const reset = () => {
-    setNewListing(newListing);
-  };
+  // const reset = () => {
+  //   setNewListing(newListing);
+  // };
 
   const isNameAndAddress =
     newListing.title &&

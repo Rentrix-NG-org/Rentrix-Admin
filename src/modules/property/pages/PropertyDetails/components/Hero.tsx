@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { IListing, PropertyType } from "@src/modules/property/types";
 import { colors } from "@src/shared/constants/constants";
 import { images } from "@src/utils/images";
-import React from "react";
 import Slider from "react-slick";
 import ArrowRight from "../../AddNewListing/assets/ArrowRight";
 import "slick-carousel/slick/slick.css";

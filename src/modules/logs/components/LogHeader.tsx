@@ -14,9 +14,9 @@ const LogHeader = () => {
     >
       <Filter
         filters={[{ name: "One", options: ["Two", "Three"] }]}
-        onFilter={(v) => {}}
+        onFilter={() => {}}
       />
-      <Search placeholder="Search logs" setSearch={(v) => {}} />
+      <Search placeholder="Search logs" setSearch={() => {}} />
     </Box>
   );
 };

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CircleSuccess = () => {
   return (
     <svg
@@ -17,6 +15,6 @@ const CircleSuccess = () => {
       />
     </svg>
   );
-}
+};
 
-export default CircleSuccess
+export default CircleSuccess;
