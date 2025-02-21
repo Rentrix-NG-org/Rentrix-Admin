@@ -195,6 +195,7 @@ const Select: FC<{
     suspended: { value: "#cb1a14", border: "transparent", accent: "#f7dddc" },
     active: { value: "#099137", border: "transparent", accent: "#daefe1" },
     Supervisor: { value: "#430c7b", border: "transparent", accent: "#e3dbeb" },
+    supervisor: { value: "#430c7b", border: "transparent", accent: "#e3dbeb" },
     LISTED: { value: "#099137", border: "#099137", accent: "transparent" },
     "UNDER REVIEW": {
       value: "#DD900D",

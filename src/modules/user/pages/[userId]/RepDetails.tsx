@@ -28,16 +28,14 @@ const RepDetails = () => {
 
   const params = useParams();
   const [rep, setRep] = useState({
-    user: {
-      firstName: "",
-      lastName: "",
-      photoUrl: "",
-      roles: [""],
-      phoneNumber: "",
-      dateOfBirth: "",
-      account: { email: "", status: "" },
-      logs: [],
-    },
+    firstName: "",
+    lastName: "",
+    photoUrl: "",
+    roles: [""],
+    phoneNumber: "",
+    dateOfBirth: "",
+    account: { email: "", status: "" },
+    logs: [],
     locations: [],
   });
   const [logs, setLogs] = useState([
@@ -60,6 +58,7 @@ const RepDetails = () => {
     async function fetchUser() {
       const response = await getUserRep(params?.userId || "");
       if (response.success) {
+        console.log(response.data);
         setRep(response.data);
       }
     }
@@ -67,8 +66,8 @@ const RepDetails = () => {
   }, [params]);
 
   useEffect(() => {
-    if (rep.user.logs.length > 0) {
-      const formattedLogs = rep.user.logs.map((log: any) => {
+    if (rep.logs.length > 0) {
+      const formattedLogs = rep.logs.map((log: any) => {
         return {
           date: dayjs.unix(Number(log.createdAt)).format("DD MMM YYYY"),
           time: dayjs.unix(Number(log.createdAt)).format("HH:mm"),
@@ -93,14 +92,14 @@ const RepDetails = () => {
     >
       <UserNav routes={["User Management", "User Details"]} />
       <RepCard
-        firstName={rep.user.firstName}
-        lastName={rep.user.lastName}
-        photoUrl={rep.user.photoUrl}
-        email={rep.user.account.email}
-        phoneNumber={rep.user.phoneNumber}
-        dateOfBirth={rep.user.dateOfBirth}
+        firstName={rep.firstName}
+        lastName={rep.lastName}
+        photoUrl={rep.photoUrl}
+        email={rep.account.email}
+        phoneNumber={rep.phoneNumber}
+        dateOfBirth={rep.dateOfBirth}
         location={rep.locations.length ? rep.locations[0] : "No Location"}
-        status={rep.user.account.status}
+        status={rep.account.status}
       />
       <LogTable columns={columns} data={logs} />
     </Box>
