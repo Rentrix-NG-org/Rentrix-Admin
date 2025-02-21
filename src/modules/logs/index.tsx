@@ -21,6 +21,9 @@ import LoginLogOut from "./pages/user-auth/login-logout/LoginLogout";
 import LoginLogoutInfo from "./pages/user-auth/login-logout/[logId]/LogInfo";
 import FailedLogin from "./pages/user-auth/failed-login/FailedLogin";
 import FailedLoginInfo from "./pages/user-auth/failed-login/[logId]/LogInfo";
+import PaymentTransactions from "./pages/payment/Payment";
+import PaymentInitiation from "./pages/payment/initiation/PaymentInitiation";
+import PaymentInitiationInfo from "./pages/payment/initiation/[logId]/LogInfo";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -139,6 +142,21 @@ export const LogsModule: LogsModule = {
       path: "/logs/user-auth/failed-login/:logId",
       element: <FailedLoginInfo />,
       title: "Failed Login Info",
+    },
+    {
+      path: "/logs/payment",
+      element: <PaymentTransactions />,
+      title: "Payment Transactions Logs",
+    },
+    {
+      path: "/logs/payment/initiation",
+      element: <PaymentInitiation />,
+      title: "Payment Initiation Logs",
+    },
+    {
+      path: "/logs/payment/initiation/:logId",
+      element: <PaymentInitiationInfo />,
+      title: "Payment Initiation Info",
     },
   ],
   name: "Logs",
