@@ -11,7 +11,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   filter,
 }) => {
   const [users, setUsers] = useState<any[]>([]);
-  const { getAllUsers, updateUser } = UserService();
+  const { getAllUsers, updateUser, changeRoles } = UserService();
   const navigate = useNavigate();
 
   const [refresh, setRefresh] = useState(false);
@@ -22,7 +22,6 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       const response = await getAllUsers("representative=true&supervisor=true");
 
       if (response.success) {
-        console.log(response.data, "d");
         const formatted = response.data.map((user: any) => {
           return {
             id: user.id,
@@ -63,6 +62,13 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     setSearchFilter(filtered);
   }, [filter, users]);
 
+  async function handleChangeRoles(id: string, data: any) {
+    const response = await changeRoles(id, data);
+    if (response.success) {
+      setRefresh(true);
+    }
+  }
+
   async function updateUserData(id: string, data: any) {
     const response = await updateUser(id, data);
     if (response.success) {
@@ -76,10 +82,12 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   ) {
     switch (selected.value) {
       case "Supervisor":
-        updateUserData(row[0], { role: selected.value.toLowerCase() });
+        handleChangeRoles(row[0], { role: selected.value.toLowerCase() });
+        // updateUserData(row[0], { role: selected.value.toLowerCase() });
         break;
       case "Representative":
-        updateUserData(row[0], { role: "representative" });
+        handleChangeRoles(row[0], { role: "representative" });
+        // updateUserData(row[0], { role: "representative" });
         break;
       case "Active":
         updateUserData(row[0], { status: selected.value.toLowerCase() });

@@ -14,7 +14,7 @@ const Logs = () => {
     },
     {
       name: "Payment and Transaction Logs",
-      route: "/logs/payment-transaction",
+      route: "/logs/payment",
     },
     {
       name: "Communication and Interaction Logs",

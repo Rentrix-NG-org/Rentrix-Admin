@@ -63,6 +63,15 @@ export const UserService = () => {
       };
     },
 
+    changeRoles: async (id: string, role: "representative" | "supervisor") => {
+      const response = await axios.patch(`/admin/users/${id}/role`, role);
+      return {
+        success: response.status === 200,
+        message: "Role updated",
+        data: response.data,
+      };
+    },
+
     getUserListings: async (userId: string) => {
       if (!userId) {
         return {

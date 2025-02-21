@@ -12,10 +12,12 @@ import UserNav from "../../components/UserNav";
 const SupervisorsReps = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
+  const [refresh, setRefresh] = useState(false);
+
   const [users, setUsers] = useState<string[][]>([]);
   const navigate = useNavigate();
   const theme = useTheme();
-  const { getAllUsers } = UserService();
+  const { getAllUsers, changeRoles } = UserService();
 
   useEffect(() => {
     async function fetchUsers() {
@@ -30,12 +32,14 @@ const SupervisorsReps = () => {
             location: user.locations?.[0]?.state || "No state",
           });
         });
+        setRefresh(false);
+
         setFilter(formatted);
         setUsers(formatted);
       }
     }
     fetchUsers();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const searchedUsers = users.filter((user) => {
@@ -109,6 +113,30 @@ const SupervisorsReps = () => {
       setFilter(roleUsers);
     }
   }
+
+  function handleTableSelection(
+    row: string[],
+    selected: { value: string; index: number },
+  ) {
+    switch (selected.value) {
+      case "Supervisor":
+        handleChangeRoles(row[0], { role: selected.value.toLowerCase() });
+        break;
+      case "Representative":
+        handleChangeRoles(row[0], { role: "representative" });
+        break;
+      // case "Active":
+      //   updateUserData(row[0], { status: selected.value.toLowerCase() });
+      //   break;
+    }
+  }
+
+  async function handleChangeRoles(id: string, data: any) {
+    const response = await changeRoles(id, data);
+    if (response.success) {
+      setRefresh(true);
+    }
+  }
   return (
     <Box
       sx={{
@@ -149,7 +177,7 @@ const SupervisorsReps = () => {
       </Box>
 
       <Table
-        onSelect={() => {}}
+        onSelect={handleTableSelection}
         onRowClick={(v) => {
           navigate(`/users/${v[0]}/rentrix-rep`);
         }}

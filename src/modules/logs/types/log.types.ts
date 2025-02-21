@@ -6,10 +6,16 @@ export interface Account {
   createdAt: string;
 }
 
+export interface Transaction {
+  id: string;
+}
+
 export interface Log {
   id: string;
   user: User;
   account: Account;
+  amount: number;
+  transaction: Transaction;
   affectedUser: User;
   createdAt: string;
   valueBefore: string;
