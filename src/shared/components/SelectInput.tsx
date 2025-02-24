@@ -44,12 +44,14 @@ const SelectInput: React.FC<{
     if (
       value &&
       options
-        .map((o) => String(o).toLowerCase())
-        .includes(String(value).toLowerCase())
+        .map((o) => String(o).toLowerCase().replace(/-/g, " "))
+        .includes(String(value).toLowerCase().replace(/-/g, " "))
     ) {
       setSelected(
         options.find(
-          (o) => String(o).toLowerCase() === String(value).toLowerCase(),
+          (o) =>
+            String(o).toLowerCase().replace(/-/g, " ") ===
+            String(value).toLowerCase().replace(/-/g, " "),
         ) || "",
       );
     }

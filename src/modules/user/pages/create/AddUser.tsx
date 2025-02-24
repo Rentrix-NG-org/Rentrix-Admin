@@ -32,16 +32,20 @@ const AddUser = () => {
   >("not-set");
 
   useEffect(() => {
-    console.log(form, "is form");
-  }, [form]);
-
-  useEffect(() => {
     if (formStatus === "success" || formStatus === "failure") {
       setTimeout(() => {
         setFormStatus("not-set");
       }, 1000);
     }
   }, [formStatus]);
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("usertype")) {
+      setForm((curr) => ({ ...curr, role: query.get("usertype") }));
+    }
+    console.log(query);
+  }, []);
 
   async function handleSave() {
     if (
@@ -71,7 +75,10 @@ const AddUser = () => {
       ).valueOf(),
       phoneNumber: form.phoneNumber,
       email: form.email,
-      role: form.role.toLowerCase(),
+      role:
+        form.role === "rentrix-rep"
+          ? "representative"
+          : form.role.toLowerCase(),
       location: form.location,
     };
 
@@ -236,6 +243,7 @@ const AddUser = () => {
           required
         />
         <SelectInput
+          value={form.role}
           onChange={(value) => {
             setForm((curr) => ({ ...curr, role: value }));
           }}
@@ -246,14 +254,7 @@ const AddUser = () => {
           label="Role"
           icon={icons.usercircle}
           placeholderSx={{ color: theme.palette.grey[600] }}
-          options={[
-            "Landlord",
-            "Tenant",
-            "Rentrix Rep",
-            "Supervisor",
-            "Admin",
-            "Super Admin",
-          ]}
+          options={["Rentrix Rep", "Supervisor", "Admin"]}
           required
         />
         <SelectInput
