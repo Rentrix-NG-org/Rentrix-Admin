@@ -2,7 +2,10 @@ import { Box, Typography, useTheme } from "@mui/material";
 import Filter from "@src/shared/components/Filter";
 import Search from "@src/shared/components/Search";
 import { Filters } from "@src/shared/types/shared.types";
+import { useState } from "react";
 import { useNavigate } from "react-router";
+import Menu from "./Menu";
+import { ChevronLeftRounded } from "@mui/icons-material";
 
 const UserHeader: React.FC<{
   title: string;
@@ -11,6 +14,7 @@ const UserHeader: React.FC<{
   setSearch: (value: string) => void;
   setFilter: (value: string[]) => void;
 }> = ({ title, filters, setSearch, setFilter }) => {
+  const [showMenu, setShowMenu] = useState(false);
   const theme = useTheme();
   const navigate = useNavigate();
   return (
@@ -36,10 +40,10 @@ const UserHeader: React.FC<{
       <Box sx={{ display: "flex", alignItems: "center", gap: "30px" }}>
         <Box
           component="button"
-          onClick={() => navigate("create")}
+          onClick={() => setShowMenu(!showMenu)}
           sx={{
             display: "flex",
-            width: "178px",
+            width: "250px",
             height: "40px",
             cursor: "pointer",
             padding: "16px",
@@ -49,6 +53,7 @@ const UserHeader: React.FC<{
             justifyContent: "center",
             alignItems: "center",
             gap: "8px",
+            position: "relative",
           }}
         >
           <Typography
@@ -60,6 +65,31 @@ const UserHeader: React.FC<{
           >
             Add new users
           </Typography>
+          <ChevronLeftRounded
+            sx={{
+              transform: showMenu ? "rotate(90deg)" : "rotate(-90deg)",
+              color: theme.palette.common.white,
+            }}
+          />
+          {showMenu && (
+            <Menu
+              title="Role"
+              options={["Admin", "Rentrix Rep"]}
+              onClose={() => {
+                setShowMenu(false);
+              }}
+              onSelect={(v) => {
+                if (v === "Rentrix Rep") {
+                  navigate("create?usertype=rentrix-rep");
+                } else {
+                  navigate(`create?usertype=${v.toLowerCase()}`);
+                }
+              }}
+              sx={{
+                top: 50,
+              }}
+            />
+          )}
         </Box>
         <Search placeholder="Search Users" setSearch={setSearch} />
         <Filter filters={filters} onFilter={setFilter} />
@@ -67,4 +97,5 @@ const UserHeader: React.FC<{
     </Box>
   );
 };
+
 export default UserHeader;
