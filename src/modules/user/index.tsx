@@ -9,6 +9,8 @@ import AddUser from "./pages/create/AddUser";
 import RepDetails from "./pages/[userId]/RepDetails";
 import LandlordsTenants from "./pages/landlords-tenants/Landlords-Tenants";
 import SupervisorsReps from "./pages/supervisors-reps/SupervisorsReps";
+import AdminDetails from "./pages/[userId]/AdminDetails";
+import GrantAccess from "./pages/[userId]/grant-access/GrantAccess";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -36,6 +38,8 @@ export const UserManagementModule: UserManagementModule = {
     { path: "/users/:userId/transactions", element: <TransactionHistories /> },
     { path: "/users/:userId/logs", element: <ActivityLogs /> },
     { path: "/users/:userId/rentrix-rep", element: <RepDetails /> },
+    { path: "/users/:userId/admin", element: <AdminDetails /> },
+    { path: "/users/:userId/admin/grant-access", element: <GrantAccess /> },
   ],
   name: "User Management",
   enabled: true,

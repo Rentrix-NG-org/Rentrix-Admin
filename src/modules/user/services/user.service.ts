@@ -46,6 +46,23 @@ export const UserService = () => {
       };
     },
 
+    getUserAdmin: async (adminId: string | undefined) => {
+      if (!adminId) {
+        return {
+          success: false,
+          message: "AdminId missing",
+          data: null,
+        };
+      }
+      const response = await axios.get(`/admin/details/${adminId}`);
+
+      return {
+        success: response.status === 200,
+        message: "Fetched",
+        data: response.data,
+      };
+    },
+
     addUser: async (data: any) => {
       const response = await axios.post(`/admin/user`, data);
       return {
@@ -118,6 +135,53 @@ export const UserService = () => {
       return {
         success: response.status === 200,
         message: "Fetched",
+        data: response.data,
+      };
+    },
+
+    getAllPermissions: async (userId: string) => {
+      const response = await axios.get(`/admin/${userId}/permissions`);
+
+      return {
+        success: response.status === 200,
+        message: "Fetched",
+        data: response.data,
+      };
+    },
+
+    grantAccess: async (userId: string, permissions: string[]) => {
+      if (!userId) {
+        return {
+          success: false,
+          message: "UserId missing",
+          data: null,
+        };
+      }
+      const response = await axios.patch(
+        `/admin/${userId}/grantAccess`,
+        permissions,
+      );
+
+      return {
+        success: response.status === 200,
+        message: "Access granted",
+        data: response.data,
+      };
+    },
+
+    denyAccess: async (userId: string) => {
+      if (!userId) {
+        return {
+          success: false,
+          message: "UserId missing",
+          data: null,
+        };
+      }
+      const response = await axios.patch(`/admin/users/${userId}/denyAccess`);
+
+      return {
+        success: response.status === 200,
+        message: "Access denied",
         data: response.data,
       };
     },
