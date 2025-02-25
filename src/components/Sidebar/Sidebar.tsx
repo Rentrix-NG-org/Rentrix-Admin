@@ -22,7 +22,7 @@ const Sidebar = () => {
 
   const sidebarRoutes = routes.filter((route) => {
     const split = route.path?.split("/");
-    return split && split.length === 2;
+    return split[1] === 'profile' ? null : split && split.length === 2;
   });
 
   return (

@@ -290,7 +290,7 @@ const UserEdit = () => {
   );
 };
 
-const ImageEdit: React.FC<{
+export const ImageEdit: React.FC<{
   onImage: (value: string, file: File) => void;
   value: string;
 }> = ({ onImage, value }) => {

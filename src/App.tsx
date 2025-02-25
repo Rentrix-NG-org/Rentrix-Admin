@@ -5,8 +5,21 @@ import { Route } from "react-router";
 import AppLayout from "./modules/AppLayout";
 import { ModuleRegistry } from "./core/registry";
 import { Navigate } from "react-router";
+import Login from "./modules/auth/login";
+import { useEffect, useState } from "react";
+import ForgotPassword from "./modules/auth/ForgotPassword";
+import AdminProfile from "./modules/profile/AdminProfile";
+import ChangePassword from "./modules/auth/ChangePassword";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = localStorage.getItem("isAuthenticated");
+    if (checkAuth) setIsAuthenticated(JSON.parse(checkAuth));
+    else setIsAuthenticated(false);
+  }, []);
+
   const routes = ModuleRegistry.getRoutes();
   const lightTheme = createTheme({
     typography: {
@@ -60,8 +73,11 @@ function App() {
   return (
     <ThemeProvider theme={lightTheme}>
       <Routes>
-        <Route path="/" element={<Navigate to="/users" />} />
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/app" element={<Box>App</Box>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/change-password" element={<ChangePassword />} />
 
         <Route element={<AppLayout />}>
           {routes.map(({ path, element }) => (
