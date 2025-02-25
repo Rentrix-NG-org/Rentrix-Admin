@@ -6,6 +6,7 @@ import { UserService } from "../../services/user.service";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router";
 
 type ActivityType =
   | "login-event"
@@ -22,19 +23,19 @@ const types: Record<ActivityType, string> = {
   "document-viewed": "Document Viewed",
 };
 
-const RepDetails = () => {
-  const { getUserRep } = UserService();
+const AdminDetails = () => {
+  const { getUserAdmin } = UserService();
   const activityTypes = useMemo(() => types, []);
 
   const params = useParams();
-  const [rep, setRep] = useState({
+  const [admin, setAdmin] = useState({
     firstName: "",
     lastName: "",
     photoUrl: "",
     roles: [""],
     phoneNumber: "",
     dateOfBirth: "",
-    account: { email: "", status: "" },
+    account: { email: "", status: "", logs: [] },
     logs: [],
     locations: [],
   });
@@ -56,18 +57,18 @@ const RepDetails = () => {
 
   useEffect(() => {
     async function fetchUser() {
-      const response = await getUserRep(params?.userId || "");
+      const response = await getUserAdmin(params?.userId || "");
       if (response.success) {
         console.log(response.data);
-        setRep(response.data);
+        setAdmin(response.data);
       }
     }
     fetchUser();
   }, [params]);
 
   useEffect(() => {
-    if (rep.logs.length > 0) {
-      const formattedLogs = rep.logs.map((log: any) => {
+    if (admin.account.logs.length > 0) {
+      const formattedLogs = admin.account.logs.map((log: any) => {
         return {
           date: dayjs.unix(Number(log.createdAt)).format("DD MMM YYYY"),
           time: dayjs.unix(Number(log.createdAt)).format("HH:mm"),
@@ -75,9 +76,10 @@ const RepDetails = () => {
           details: log.description,
         };
       });
+      console.log(formattedLogs, "Is logs");
       setLogs(formattedLogs);
     }
-  }, [rep, activityTypes]);
+  }, [admin, activityTypes]);
 
   return (
     <Box
@@ -90,23 +92,96 @@ const RepDetails = () => {
       }}
     >
       <UserNav routes={["User Management", "User Details"]} />
-      <RepCard
-        firstName={rep.firstName}
-        lastName={rep.lastName}
-        photoUrl={rep.photoUrl}
-        email={rep.account.email}
-        phoneNumber={rep.phoneNumber}
-        dateOfBirth={rep.dateOfBirth}
-        location={rep.locations.length ? rep.locations[0] : "No Location"}
-        status={rep.account.status}
-      />
+
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+        }}
+      >
+        <AdminCard
+          firstName={admin.firstName}
+          lastName={admin.lastName}
+          photoUrl={admin.photoUrl}
+          email={admin.account.email}
+          phoneNumber={admin.phoneNumber}
+          dateOfBirth={admin.dateOfBirth}
+          location={admin.locations.length ? admin.locations[0] : "No Location"}
+          status={admin.account.status}
+        />
+
+        <Options />
+      </Box>
       <LogTable columns={columns} data={logs} />
     </Box>
   );
 };
-export default RepDetails;
+export default AdminDetails;
 
-const RepCard: React.FC<{
+const Options = () => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const buttons: {
+    title: string;
+    route?: string;
+    icon?: string;
+  }[] = [
+    { title: "Change Role", route: "change-role", icon: icons.useradd },
+    {
+      title: "Change Location",
+      route: "change-location",
+      icon: icons.location,
+    },
+    { title: "Grant Access", route: "grant-access", icon: icons.lock },
+  ];
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        width: 300,
+        mr: 20,
+      }}
+    >
+      {buttons.map(({ title, route, icon }) => (
+        <Box
+          sx={{
+            height: "60px",
+            width: "100%",
+            border: "none",
+            borderRadius: "100px",
+            padding: "16px",
+            display: "flex",
+            alignItems: "center",
+            backgroundColor: theme.palette.grey[200],
+            justifyContent: "center",
+            cursor: "pointer",
+            gap: "8px",
+          }}
+          onClick={() => {
+            navigate(route);
+          }}
+          component="button"
+        >
+          <Box component="img" src={icon} sx={{ width: 18, height: 18 }} />
+
+          <Typography
+            sx={{
+              fontWeight: 600,
+              color: theme.palette.grey[800],
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
+const AdminCard: React.FC<{
   firstName: string;
   lastName: string;
   photoUrl: string;
@@ -133,7 +208,7 @@ const RepCard: React.FC<{
     active: { value: "#099137", accent: "#daefe1" },
     Active: { value: "#099137", accent: "#daefe1" },
     supervisor: { value: "#430c7b", accent: "#e3dbeb" },
-    "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
+    Admin: { value: "#63c5c5", accent: "#e5f6f6" },
     Default: { value: "#002b5b", accent: "#cce3fc" },
   };
 
@@ -210,7 +285,7 @@ const RepCard: React.FC<{
           </Typography>
           <Typography
             sx={{
-              color: colors["Rentrix Rep"].value,
+              color: colors["Admin"].value,
               textAlign: "center",
               fontSize: "14px",
               fontStyle: "normal",
@@ -219,7 +294,7 @@ const RepCard: React.FC<{
               letterSpacing: "-0.05px",
             }}
           >
-            Rentrix Rep
+            Admin
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 0.2 }}>

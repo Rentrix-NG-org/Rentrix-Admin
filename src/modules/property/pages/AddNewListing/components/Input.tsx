@@ -21,6 +21,7 @@ interface InputProps {
   multichoice?: boolean;
   select?: boolean;
   options?: any;
+  optionsStyles?: SxProps<Theme>;
   onSelect?: (option: any) => void;
   inputContainerStyles?: CSSProperties | SxProps<Theme>;
   selected?: string[] | string;
@@ -43,6 +44,7 @@ const Input = ({
   multichoice = false,
   select,
   options,
+  optionsStyles,
   onSelect,
   inputContainerStyles,
   selected,
@@ -178,6 +180,7 @@ const Input = ({
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              ...optionsStyles,
             }}
           >
             {option}

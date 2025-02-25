@@ -21,6 +21,8 @@ import usercircle from "@src/assets/icons/user-circle.svg";
 import call from "@src/assets/icons/call.svg";
 import mail from "@src/assets/icons/mail.svg";
 import location from "@src/assets/icons/location.svg";
+import lock from "@src/assets/icons/lock.svg";
+import useradd from "@src/assets/icons/user-add.svg";
 
 export const icons = {
   edit,
@@ -47,4 +49,6 @@ export const icons = {
   call,
   mail,
   location,
+  lock,
+  useradd,
 };
