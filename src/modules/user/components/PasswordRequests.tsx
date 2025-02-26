@@ -1,4 +1,4 @@
-import { Box, setRef } from "@mui/material";
+import { Box } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";

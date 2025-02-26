@@ -205,7 +205,7 @@ export const UserService = () => {
 
     handlePasswordRequest: async (request: {
       userId: string;
-      approved: booleaan;
+      approved: boolean;
     }) => {
       const response = await axios.patch(`/admin/password-request`, request);
 
