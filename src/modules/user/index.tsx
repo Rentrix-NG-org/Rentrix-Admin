@@ -11,6 +11,7 @@ import LandlordsTenants from "./pages/landlords-tenants/Landlords-Tenants";
 import SupervisorsReps from "./pages/supervisors-reps/SupervisorsReps";
 import AdminDetails from "./pages/[userId]/AdminDetails";
 import GrantAccess from "./pages/[userId]/grant-access/GrantAccess";
+import AddRentrixRep from "./pages/add-rep/AddRep";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -32,6 +33,7 @@ export const UserManagementModule: UserManagementModule = {
       title: "Landlords & Tenants",
     },
     { path: "/users/create", element: <AddUser /> },
+    { path: "/users/add-rep", element: <AddRentrixRep /> },
     { path: "/users/:userId", element: <UserDetails /> },
     { path: "/users/:userId/edit", element: <UserEdit /> },
     { path: "/users/:userId/listings", element: <ViewListings /> },
