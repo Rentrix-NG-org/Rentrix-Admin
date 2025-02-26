@@ -185,5 +185,18 @@ export const UserService = () => {
         data: response.data,
       };
     },
+
+    handlePasswordRequest: async (request: {
+      userId: string;
+      approved: booleaan;
+    }) => {
+      const response = await axios.patch(`/admin/password-request`, request);
+
+      return {
+        success: response.status === 200,
+        message: "Password reset requested",
+        data: response.data,
+      };
+    },
   };
 };
