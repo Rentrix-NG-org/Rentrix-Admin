@@ -198,6 +198,8 @@ const Select: FC<{
     Admin: { value: "#cd9e14", border: "transparent", accent: "#fef5dc" },
     admin: { value: "#cd9e14", border: "transparent", accent: "#fef5dc" },
     supervisor: { value: "#430c7b", border: "transparent", accent: "#e3dbeb" },
+    pending: { value: "#ad6f07", border: "transparent", accent: "#fbe2b7" },
+    denied: { value: "#cb1a14", border: "transparent", accent: "#f7dddc" },
     LISTED: { value: "#099137", border: "#099137", accent: "transparent" },
     "UNDER REVIEW": {
       value: "#DD900D",

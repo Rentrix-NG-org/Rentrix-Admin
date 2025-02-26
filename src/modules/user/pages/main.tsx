@@ -4,6 +4,7 @@ import LandlordAndTenant from "../components/Landlord&Tenant";
 import SupervisorAndRep from "../components/Supervisor&Rep";
 import { useState } from "react";
 import Admins from "../components/Admins";
+import PasswordRequests from "../components/PasswordRequests";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
@@ -32,6 +33,7 @@ const UserManagement = () => {
       <LandlordAndTenant search={search} filter={filter} />
       <SupervisorAndRep search={search} filter={filter} />
       <Admins search={search} filter={filter} />
+      <PasswordRequests search={search} filter={filter} />
     </Box>
   );
 };
