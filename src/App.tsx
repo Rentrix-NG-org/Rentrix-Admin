@@ -5,7 +5,7 @@ import { Route } from "react-router";
 import AppLayout from "./modules/AppLayout";
 import { ModuleRegistry } from "./core/registry";
 import { Navigate } from "react-router";
-import Login from "./modules/auth/login";
+import Login from "./modules/auth/Login";
 import { useEffect, useState } from "react";
 import ForgotPassword from "./modules/auth/ForgotPassword";
 import AdminProfile from "./modules/profile/AdminProfile";

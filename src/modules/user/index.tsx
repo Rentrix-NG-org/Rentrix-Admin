@@ -12,6 +12,7 @@ import SupervisorsReps from "./pages/supervisors-reps/SupervisorsReps";
 import AdminDetails from "./pages/[userId]/AdminDetails";
 import GrantAccess from "./pages/[userId]/grant-access/GrantAccess";
 import AdminProfile from "../profile/AdminProfile";
+import ChangePassword from "../auth/ChangePassword";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -41,7 +42,8 @@ export const UserManagementModule: UserManagementModule = {
     { path: "/users/:userId/rentrix-rep", element: <RepDetails /> },
     { path: "/users/:userId/admin", element: <AdminDetails /> },
     { path: "/users/:userId/admin/grant-access", element: <GrantAccess /> },
-    { path: "/profile", element: <AdminProfile /> },
+    { path: "/admin/profile", element: <AdminProfile /> },
+    { path: "/admin/profile/change-password", element: <ChangePassword /> },
   ],
   name: "User Management",
   enabled: true,

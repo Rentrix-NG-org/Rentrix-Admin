@@ -4,7 +4,8 @@ import { useNavigate } from "react-router";
 import UserNav from "../user/components/UserNav";
 import { ImageEdit } from "../user/pages/[userId]/edit/UserEdit";
 import { images } from "@src/utils/images";
-import moment from 'moment'
+import moment from "moment";
+import CustomButton from "../property/pages/AddNewListing/components/Button";
 
 export interface User {
   id: string;
@@ -29,8 +30,8 @@ export interface User {
 const AdminProfile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-    const [image, setImage] = useState<File | null>(null);
-    const theme = useTheme()
+  const [image, setImage] = useState<File | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const getUser = localStorage.getItem("user");
@@ -38,10 +39,10 @@ const AdminProfile = () => {
     else setUser(null);
   }, []);
   return (
-    <Box mt="60px" px='20px'>
+    <Box mt="60px" px="20px">
       <UserNav routes={["Profile", "My Details"]} />
-      <Box>
-        <Box px="50px">
+      <Box width="fit-content" mt='25px'>
+        <Box display="flex" justifyContent="center">
           <ImageEdit
             value={images.avatar}
             onImage={(v, file) => {
@@ -51,7 +52,7 @@ const AdminProfile = () => {
         </Box>
         <Box
           width="fit-content"
-          mt="32px"
+          my="32px"
           display="flex"
           flexDirection="column"
           gap="8px"
@@ -65,72 +66,97 @@ const AdminProfile = () => {
             {user?.users[0]?.firstName} {user?.users[0]?.lastName}
           </Typography>
           <Typography
-            fontSize="14px"
+            fontSize="16px"
             fontWeight={600}
             color={"#202224"}
             textAlign="center"
           >
             Role:{" "}
-            <Typography
-              display="inline"
-              color={theme.palette.secondary.main}
-              textTransform="capitalize"
+            <span
+              style={{
+                display: "inline",
+                color: theme.palette.secondary.main,
+                textTransform: "capitalize",
+              }}
             >
               {user?.users[0]?.type}
-            </Typography>
+            </span>
           </Typography>
           <Typography
-            fontSize="14px"
+            fontSize="16px"
             fontWeight={600}
             color={"#202224"}
             textAlign="center"
           >
-            Email:{" "}
-            <Typography display="inline">{user?.email}</Typography>
+            Email: <span style={{ display: "inline" }}>{user?.email}</span>
           </Typography>
           <Typography
-            fontSize="14px"
+            fontSize="16px"
             fontWeight={600}
             color={"#202224"}
             textAlign="center"
           >
             Phone number:{" "}
-            <Typography display="inline">
+            <span style={{ display: "inline" }}>
               {user?.users[0]?.phoneNumber}
-            </Typography>
+            </span>
           </Typography>
           <Typography
-            fontSize="14px"
+            fontSize="16px"
             fontWeight={600}
             color={"#202224"}
             textAlign="center"
           >
             Date of birth:{" "}
-            <Typography display="inline">
+            <span style={{ display: "inline" }}>
               {moment(user?.users[0]?.dateOfBirth).format("DD MMM YYYY")}
-            </Typography>
+            </span>
           </Typography>
           <Typography
-            fontSize="14px"
+            fontSize="16px"
             fontWeight={600}
             color={"#202224"}
             textAlign="center"
           >
-            Location: <Typography display="inline">Lagos</Typography>
+            Location: <span style={{ display: "inline" }}>Lagos</span>
           </Typography>
           <Typography
-            fontSize="14px"
+            fontSize="16px"
             fontWeight={600}
             color={"#202224"}
             textAlign="center"
           >
             Status:{" "}
-            <Typography display="inline" color="#099137">
+            <span
+              style={{
+                display: "inline",
+                color: "#099137",
+                textTransform: "capitalize",
+              }}
+            >
               {user?.status}
-            </Typography>
+            </span>
           </Typography>
         </Box>
       </Box>
+      <CustomButton
+        onClick={() => navigate("/admin/profile/change-password")}
+        variant="contained"
+        buttonStyles={{
+          height: { xs: "48px", sm: "48px" },
+          width: "287px",
+          fontSize: "16px",
+          color: theme.palette.common.white,
+          background: theme.palette.secondary.main,
+          "&:hover": {
+            background: theme.palette.secondary.light,
+            borderColor: "transparent",
+            color: theme.palette.common.white,
+          },
+        }}
+      >
+        Change Password
+      </CustomButton>
     </Box>
   );
 };

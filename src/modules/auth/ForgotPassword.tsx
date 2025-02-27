@@ -5,13 +5,44 @@ import CustomButton from "../property/pages/AddNewListing/components/Button";
 import EmailIcon from "@src/assets/icons/EmailIcon";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
+import axiosInstance from "@src/core/axios";
+import axios from "axios";
 
 const ForgotPassword = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [statusCode, setStatusCode] = useState(null);
   const [isSent, setIsSent] = useState(false);
+
+  const forgotPass = async (data: any) => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.patch("/admin/forgotPassword", data);
+      setMessage(res.data.message);
+      setLoading(false);
+      setIsSent(true);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorCode = error.response?.status || null; // Get the error status code
+        const errorMessage = error.response?.data?.message || error.message; // Get the error message
+        setMessage(errorMessage);
+        setStatusCode(errorCode);
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleSubmit = (e) => {
+    const data = {
+      email,
+    };
+    e.preventDefault();
+    forgotPass(data);
+  };
+
   return (
     <Box
       width="100vw"
@@ -22,7 +53,7 @@ const ForgotPassword = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <Box width="100%" maxWidth={isSent ? '733px' : "656px"}>
+      <Box width="100%" maxWidth={isSent ? "733px" : "656px"}>
         {isSent ? (
           <Box
             p="32px"
@@ -45,8 +76,8 @@ const ForgotPassword = () => {
                 mb="32px"
                 fontSize={19}
                 fontWeight={600}
-                              color="#32363C"
-                              textAlign='center'
+                color="#32363C"
+                textAlign="center"
               >
                 Please wait while your request is being processed. <br /> An
                 admin will call you to confirm your request. <br /> If you did
@@ -76,10 +107,7 @@ const ForgotPassword = () => {
         ) : (
           <form
             action="submit"
-            onSubmit={(e) => {
-              e.preventDefault();
-              setIsSent(true);
-            }}
+            onSubmit={handleSubmit}
           >
             <Typography
               fontSize="40px"

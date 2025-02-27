@@ -6,7 +6,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../property/pages/AddNewListing/components/Input";
 import EmailIcon from "@src/assets/icons/EmailIcon";
 import LockIcon from "@src/assets/icons/LockIcon";
@@ -27,10 +27,16 @@ const login = () => {
   const [message, setMessage] = useState("");
   const [statusCode, setStatusCode] = useState(null);
 
+    useEffect(() => {
+          setTimeout(() => {
+            setMessage("");
+          }, 6000);
+        });
+
   const login = async (data: any) => {
     setLoading(true);
     try {
-      const res = await axiosInstance.post("/auth/login", data);
+      const res = await axiosInstance.post("/admin/login", data);
       setUser(res.data.data);
       setIsAuthenticated(true);
       setBearerToken(res.data.data.token);
