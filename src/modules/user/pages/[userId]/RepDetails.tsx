@@ -1,12 +1,10 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import LogTable from "@src/shared/components/LogTable";
-import { icons } from "@src/utils/icons";
 import UserNav from "../../components/UserNav";
 import { UserService } from "../../services/user.service";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router";
 import RepCard from "../../components/RepCard";
 
 type ActivityType =
