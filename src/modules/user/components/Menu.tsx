@@ -1,6 +1,6 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
-import { Box, Checkbox, SxProps, Typography, useTheme } from "@mui/material";
-import { useRef, useState } from "react";
+import { Box, SxProps, Typography, useTheme } from "@mui/material";
+import { useRef } from "react";
 
 const Menu: React.FC<{
   title: string;
@@ -9,10 +9,8 @@ const Menu: React.FC<{
   onClose: VoidFunction;
   onSelect: (title: string) => void;
 }> = ({ title, options = [], onSelect, sx, onClose }) => {
-  const [selected, setSelected] = useState("");
   const theme = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
-  // const position = useMenuPosition(menuRef);
   return (
     <Box
       ref={menuRef}
