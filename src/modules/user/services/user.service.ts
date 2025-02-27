@@ -119,6 +119,25 @@ export const UserService = () => {
       };
     },
 
+    updateLocations: async (userId: string, location: string) => {
+      if (!userId) {
+        return {
+          success: false,
+          message: "UserId missing",
+          data: null,
+        };
+      }
+      const response = await axios.patch(`/admin/user/${userId}/location`, {
+        location,
+      });
+
+      return {
+        success: response.status === 200,
+        message: "Location updated",
+        data: response.data,
+      };
+    },
+
     getUserListings: async (userId: string) => {
       if (!userId) {
         return {
