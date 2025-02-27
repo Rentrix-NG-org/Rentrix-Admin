@@ -4,8 +4,8 @@ import { useNavigate } from "react-router";
 import UserNav from "../user/components/UserNav";
 import { ImageEdit } from "../user/pages/[userId]/edit/UserEdit";
 import { images } from "@src/utils/images";
-import moment from "moment";
 import CustomButton from "../property/pages/AddNewListing/components/Button";
+import moment from "moment";
 
 export interface User {
   id: string;
@@ -24,6 +24,7 @@ export interface User {
     updatedAt: string;
     createdAt: string;
     dateOfBirth: string;
+    location: string;
   }[];
 }
 
@@ -32,6 +33,8 @@ const AdminProfile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const theme = useTheme();
+  const date = new Date(user?.users[0]?.dateOfBirth);
+  const formattedDob = moment(date).format("DD MMM YYYY");
 
   useEffect(() => {
     const getUser = localStorage.getItem("user");
@@ -41,7 +44,7 @@ const AdminProfile = () => {
   return (
     <Box mt="60px" px="20px">
       <UserNav routes={["Profile", "My Details"]} />
-      <Box width="fit-content" mt='25px'>
+      <Box width="fit-content" mt="25px">
         <Box display="flex" justifyContent="center">
           <ImageEdit
             value={images.avatar}
@@ -98,7 +101,9 @@ const AdminProfile = () => {
           >
             Phone number:{" "}
             <span style={{ display: "inline" }}>
-              {user?.users[0]?.phoneNumber}
+              {user?.users[0]?.phoneNumber
+                ? user?.users[0]?.phoneNumber
+                : "No phone number"}
             </span>
           </Typography>
           <Typography
@@ -108,9 +113,7 @@ const AdminProfile = () => {
             textAlign="center"
           >
             Date of birth:{" "}
-            <span style={{ display: "inline" }}>
-              {moment(user?.users[0]?.dateOfBirth).format("DD MMM YYYY")}
-            </span>
+            <span style={{ display: "inline" }}>{formattedDob}</span>
           </Typography>
           <Typography
             fontSize="16px"
@@ -118,7 +121,12 @@ const AdminProfile = () => {
             color={"#202224"}
             textAlign="center"
           >
-            Location: <span style={{ display: "inline" }}>Lagos</span>
+            Location:{" "}
+            <span style={{ display: "inline" }}>
+              {user?.users[0]?.location
+                ? user?.users[0]?.location
+                : "No location"}
+            </span>
           </Typography>
           <Typography
             fontSize="16px"

@@ -89,6 +89,23 @@ export const UserService = () => {
       };
     },
 
+    upgradeToRep: async (email: string) => {
+      if (!email) {
+        return {
+          success: false,
+          message: "Email missing",
+          data: null,
+        };
+      }
+      const response = await axios.patch(`/admin/rep-upgrade`, { email });
+
+      return {
+        success: response.status === 200,
+        message: "Upgraded to representative",
+        data: response.data,
+      };
+    },
+
     getUserListings: async (userId: string) => {
       if (!userId) {
         return {
@@ -182,6 +199,19 @@ export const UserService = () => {
       return {
         success: response.status === 200,
         message: "Access denied",
+        data: response.data,
+      };
+    },
+
+    handlePasswordRequest: async (request: {
+      userId: string;
+      approved: boolean;
+    }) => {
+      const response = await axios.patch(`/admin/password-request`, request);
+
+      return {
+        success: response.status === 200,
+        message: "Password reset requested",
         data: response.data,
       };
     },

@@ -80,7 +80,7 @@ const UserHeader: React.FC<{
               }}
               onSelect={(v) => {
                 if (v === "Rentrix Rep") {
-                  navigate("create?usertype=rentrix-rep");
+                  navigate("add-rep");
                 } else {
                   navigate(`create?usertype=${v.toLowerCase()}`);
                 }

@@ -189,11 +189,4 @@ const GrantAccess = () => {
   );
 };
 
-const SelectInput: React.FC<{
-  label: string;
-  onChange: (v: string) => void;
-  options: string[];
-}> = ({ onChange, label, options }) => {
-  return <Box></Box>;
-};
 export default GrantAccess;

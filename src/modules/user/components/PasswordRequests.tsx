@@ -6,12 +6,12 @@ import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
 
-const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
+const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
-  const [users, setUsers] = useState<any[]>([]);
-  const { getAllUsers, updateUser, changeRoles } = UserService();
+  const [users, setUsers] = useState<unknown[]>([]);
+  const { getAllUsers, handlePasswordRequest } = UserService();
   const navigate = useNavigate();
 
   const [refresh, setRefresh] = useState(false);
@@ -19,7 +19,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 
   useEffect(() => {
     async function getUsers() {
-      const response = await getAllUsers("representative=true&supervisor=true");
+      const response = await getAllUsers("password-request=true");
 
       if (response.success) {
         const formatted = response.data.map((user: any) => {
@@ -27,12 +27,13 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             id: user.id,
             name: user.name,
             role: user.role,
+            status: user.status,
             location: user.locations?.map((l) => l.state)?.join(", ") || "None",
             registrationDate: user.registrationDate,
           };
         });
         setRefresh(false);
-        setUsers(formatted as any[]);
+        setUsers(formatted as unknown[]);
       }
     }
     getUsers();
@@ -62,16 +63,16 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     setSearchFilter(filtered);
   }, [filter, users]);
 
-  async function handleChangeRoles(id: string, data: any) {
-    const response = await changeRoles(id, data);
+  async function handleUpdatePasswordRequest(
+    userId: string,
+    approved: boolean,
+  ) {
+    const response = await handlePasswordRequest({ userId, approved });
     if (response.success) {
-      setRefresh(true);
-    }
-  }
-
-  async function updateUserData(id: string, data: any) {
-    const response = await updateUser(id, data);
-    if (response.success) {
+      const filtered = users.filter((u: any) => u.id !== userId);
+      const formatted = filtered.map((u) => Object.values(u)) as string[][];
+      setUsers(filtered);
+      setSearchFilter(formatted);
       setRefresh(true);
     }
   }
@@ -81,17 +82,11 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     selected: { value: string; index: number },
   ) {
     switch (selected.value) {
-      case "Supervisor":
-        handleChangeRoles(row[0], { role: selected.value.toLowerCase() });
-        // updateUserData(row[0], { role: selected.value.toLowerCase() });
+      case "Authenticate":
+        handleUpdatePasswordRequest(row[0], true);
         break;
-      case "Representative":
-        handleChangeRoles(row[0], { role: "representative" });
-        // updateUserData(row[0], { role: "representative" });
-        break;
-      case "Active":
-        updateUserData(row[0], { status: selected.value.toLowerCase() });
-        break;
+      default:
+        handleUpdatePasswordRequest(row[0], false);
     }
   }
   return (
@@ -103,14 +98,14 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       }}
     >
       <TableHeader
-        title="Supervisors & Representatives"
+        title="Password Requests"
         onViewAll={() => {
           navigate("roles/supervisors-reps");
         }}
       />
       <Table
         onSelect={handleTableSelection}
-        onRowClick={(row) => navigate(`/users/${row[0]}/rentrix-rep`)}
+        onRowClick={(row) => navigate(`/users/${row[0]}/admin`)}
         columns={[
           {
             header: "USER ID",
@@ -126,7 +121,13 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             header: "ROLE",
             label: "role",
             type: "select",
-            options: ["Supervisor", "Representative"],
+            options: [],
+          },
+          {
+            header: "STATUS",
+            label: "status",
+            type: "select",
+            options: ["Authenticate", "Deny"],
           },
           {
             header: "LAST ACTIVE",
@@ -169,4 +170,4 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     </Box>
   );
 };
-export default SupervisorAndRep;
+export default PasswordRequests;

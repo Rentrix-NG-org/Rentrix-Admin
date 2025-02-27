@@ -23,6 +23,7 @@ interface CustomText extends BaseColumn {
 interface SelectColumn extends BaseColumn {
   type: "select";
   options: string[];
+  sx?: SxProps;
 }
 
 interface ActionColumn extends BaseColumn {
