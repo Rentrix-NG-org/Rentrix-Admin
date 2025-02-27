@@ -98,7 +98,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
       }}
     >
       <TableHeader
-        title="Password Requests"
+        title="Password Reset Requests"
         onViewAll={() => {
           navigate("roles/supervisors-reps");
         }}

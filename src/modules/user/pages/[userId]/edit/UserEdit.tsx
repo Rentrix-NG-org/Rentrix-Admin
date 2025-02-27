@@ -10,6 +10,7 @@ import { UserService } from "@src/modules/user/services/user.service";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import { MediaService } from "@src/shared/services/media.service";
+import Input from "@src/modules/property/pages/AddNewListing/components/Input";
 
 const UserEdit = () => {
   const theme = useTheme();
@@ -27,10 +28,11 @@ const UserEdit = () => {
     lastName: "",
     gender: "",
     dateOfBirth: { day: 0, month: "", year: 0 },
+    roles: [],
+    role: "",
     phoneNumber: "",
     email: "",
   });
-
   useEffect(() => {
     async function fetchUser() {
       const response = await getUser(params?.userId || "");
@@ -48,6 +50,8 @@ const UserEdit = () => {
           lastName: data.lastName || "",
           phoneNumber: data.phoneNumber || "",
           photoUrl: data.photoUrl || "",
+          role: data.type,
+          roles: data.roles,
           email: data.account.email || "",
           gender: data.account.gender || "unknown",
           dateOfBirth: {
@@ -246,6 +250,32 @@ const UserEdit = () => {
             }}
           />
         </Box>
+
+        {["representative", "supervisor", "admin"].includes(form.role) && (
+          <Input
+            value={
+              form.role === "representative"
+                ? "Rentrix Rep"
+                : `${form.role.charAt(0).toUpperCase()}${form.role.slice(1).toLowerCase()}`
+            }
+            label="Role"
+            select
+            selected={
+              form.role === "representative" ? "rentrix-rep" : form.role
+            }
+            multichoice
+            options={["Rentrix Rep", "Admin", "Supervisor"]}
+            onSelect={(value: string) => {
+              setForm((curr) => ({
+                ...curr,
+                role:
+                  value === "Rentrix Rep"
+                    ? "representative"
+                    : value.toLowerCase(),
+              }));
+            }}
+          />
+        )}
         <Box
           component="button"
           onClick={formStatus === "not-set" ? handleSave : () => {}}

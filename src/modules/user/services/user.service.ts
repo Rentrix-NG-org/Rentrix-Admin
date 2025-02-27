@@ -89,7 +89,7 @@ export const UserService = () => {
       };
     },
 
-    upgradeToRep: async (email: string) => {
+    upgradeToRep: async (email: string, location: string) => {
       if (!email) {
         return {
           success: false,
@@ -97,11 +97,24 @@ export const UserService = () => {
           data: null,
         };
       }
-      const response = await axios.patch(`/admin/rep-upgrade`, { email });
+      const response = await axios.patch(`/admin/rep-upgrade`, {
+        email,
+        location,
+      });
 
       return {
         success: response.status === 200,
         message: "Upgraded to representative",
+        data: response.data,
+      };
+    },
+
+    getLocations: async () => {
+      const response = await axios.get("/admin/locations");
+
+      return {
+        success: response.status === 200,
+        message: "Locations fetched",
         data: response.data,
       };
     },
