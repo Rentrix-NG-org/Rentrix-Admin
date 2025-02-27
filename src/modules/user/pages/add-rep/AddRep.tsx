@@ -8,16 +8,17 @@ import { useNavigate } from "react-router";
 
 const AddRentrixRep = () => {
   const theme = useTheme();
-  const { upgradeToRep } = UserService();
+  const { getUser } = UserService();
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const navigate = useNavigate();
 
   async function handleUpgrade() {
-    const response = await upgradeToRep(email);
+    const response = await getUser(email);
 
     if (response.success) {
-      navigate("/users");
+      console.log(response.data);
+      navigate(`${(response.data as { id: string }).id}/details`);
     }
   }
   return (

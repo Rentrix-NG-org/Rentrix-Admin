@@ -12,6 +12,7 @@ import SupervisorsReps from "./pages/supervisors-reps/SupervisorsReps";
 import AdminDetails from "./pages/[userId]/AdminDetails";
 import GrantAccess from "./pages/[userId]/grant-access/GrantAccess";
 import AddRentrixRep from "./pages/add-rep/AddRep";
+import EditDetails from "./pages/add-rep/EditDetails";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -35,6 +36,7 @@ export const UserManagementModule: UserManagementModule = {
     { path: "/users/create", element: <AddUser /> },
     { path: "/users/add-rep", element: <AddRentrixRep /> },
     { path: "/users/:userId", element: <UserDetails /> },
+    { path: "/users/add-rep/:userId/details", element: <EditDetails /> },
     { path: "/users/:userId/edit", element: <UserEdit /> },
     { path: "/users/:userId/listings", element: <ViewListings /> },
     { path: "/users/:userId/transactions", element: <TransactionHistories /> },
