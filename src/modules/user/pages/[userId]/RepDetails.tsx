@@ -71,8 +71,8 @@ const RepDetails = () => {
     if (rep.logs.length > 0) {
       const formattedLogs = rep.logs.map((log: any) => {
         return {
-          date: dayjs.unix(Number(log.createdAt)).format("DD MMM YYYY"),
-          time: dayjs.unix(Number(log.createdAt)).format("HH:mm"),
+          date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
+          time: dayjs(Number(log.createdAt)).format("HH:mm"),
           activityType: activityTypes[log.activityType as ActivityType],
           details: log.description,
         };
