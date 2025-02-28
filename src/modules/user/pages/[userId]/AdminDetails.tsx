@@ -70,8 +70,8 @@ const AdminDetails = () => {
     if (admin.account.logs.length > 0) {
       const formattedLogs = admin.account.logs.map((log: any) => {
         return {
-          date: dayjs.unix(Number(log.createdAt)).format("DD MMM YYYY"),
-          time: dayjs.unix(Number(log.createdAt)).format("HH:mm"),
+          date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
+          time: dayjs(Number(log.createdAt)).format("HH:mm"),
           activityType: activityTypes[log.activityType as ActivityType],
           details: log.description,
         };
@@ -379,7 +379,7 @@ const AdminCard: React.FC<{
               letterSpacing: "-0.05px",
             }}
           >
-            {dayjs.unix(Number(dateOfBirth)).format("DD MMM, YYYY")}
+            {dayjs(Number(dateOfBirth)).format("DD MMM, YYYY")}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 0.2 }}>
