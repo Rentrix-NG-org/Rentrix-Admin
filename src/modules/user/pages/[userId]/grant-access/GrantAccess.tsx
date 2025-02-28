@@ -12,6 +12,11 @@ const GrantAccess = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { grantAccess, getAllPermissions } = UserService();
+  const [selected, setSelected] = useState({
+    user: "",
+    property: "",
+    logs: "",
+  });
   const [permissions, setPermissions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -110,7 +115,7 @@ const GrantAccess = () => {
         }}
       >
         <Input
-          value=""
+          value={selected.user}
           selected={permissions.map((p) => p?.split(" ").join("-"))}
           optionsStyles={{
             flexDirection: "row-reverse",
@@ -118,6 +123,8 @@ const GrantAccess = () => {
             gap: 2,
           }}
           onSelect={(v) => {
+            setSelected((c) => ({ ...c, user: v }));
+
             handleSelect(v);
           }}
           label="User Management"
@@ -126,7 +133,7 @@ const GrantAccess = () => {
           options={["Landlord & Tenant", "Supervisors & Rentrix Rep"]}
         />
         <Input
-          value=""
+          value={selected.property}
           selected={permissions.map((p) => p?.split(" ").join("-"))}
           optionsStyles={{
             flexDirection: "row-reverse",
@@ -134,6 +141,7 @@ const GrantAccess = () => {
             gap: 2,
           }}
           onSelect={(v) => {
+            setSelected((c) => ({ ...c, property: v }));
             handleSelect(v);
           }}
           label="Property Management"
@@ -143,7 +151,8 @@ const GrantAccess = () => {
         />
 
         <Input
-          value=""
+          value={selected.logs}
+          multiple
           selected={permissions.map((p) => p?.split(" ").join("-"))}
           optionsStyles={{
             flexDirection: "row-reverse",
@@ -151,6 +160,8 @@ const GrantAccess = () => {
             gap: 2,
           }}
           onSelect={(v) => {
+            setSelected((c) => ({ ...c, logs: v }));
+
             handleSelect(v);
           }}
           label="Logs"
