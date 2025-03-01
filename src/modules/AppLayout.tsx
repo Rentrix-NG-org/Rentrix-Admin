@@ -1,9 +1,26 @@
 import { Box } from "@mui/material";
 import Sidebar from "../components/Sidebar/Sidebar";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import Topbar from "@src/components/Topbar/Topbar";
+import { useEffect, useState } from "react";
 
 const AppLayout = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkAuth = localStorage.getItem("isAuthenticated");
+    if (checkAuth) setIsAuthenticated(JSON.parse(checkAuth));
+    else {
+      setIsAuthenticated(false)
+       if (!isAuthenticated) {
+         navigate('/');
+       }
+    };
+  }, []);
+
+ 
+
   return (
     <Box
       sx={{
