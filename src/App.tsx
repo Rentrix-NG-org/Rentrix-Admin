@@ -15,6 +15,7 @@ function App() {
 
   useEffect(() => {
     const checkAuth = localStorage.getItem("isAuthenticated");
+    console.log(isAuthenticated);
     if (checkAuth) setIsAuthenticated(JSON.parse(checkAuth));
     else setIsAuthenticated(false);
   }, []);

@@ -1,5 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import UserNav from "../user/components/UserNav";
 import { ImageEdit } from "../user/pages/[userId]/edit/UserEdit";
@@ -31,7 +31,7 @@ export interface User {
 const AdminProfile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-  const [image, setImage] = useState<File | null>(null);
+  const [_, setImage] = useState<File | null>(null);
   const theme = useTheme();
   const date = new Date(user?.users[0]?.dateOfBirth);
   const formattedDob = moment(date).format("DD MMM YYYY");
@@ -48,7 +48,7 @@ const AdminProfile = () => {
         <Box display="flex" justifyContent="center">
           <ImageEdit
             value={images.avatar}
-            onImage={(v, file) => {
+            onImage={(__, file) => {
               setImage(file);
             }}
           />

@@ -5,7 +5,7 @@ import {
   SnackbarContent,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UserNav from "../user/components/UserNav";
 import Input from "../property/pages/AddNewListing/components/Input";
 import LockIcon from "@src/assets/icons/LockIcon";
@@ -28,19 +28,19 @@ const ChangePassword = () => {
     if (getUser) setUser(JSON.parse(getUser));
     else setUser(null);
   }, []);
-    
-      useEffect(() => {
-        setTimeout(() => {
-          setMessage("");
-        }, 6000);
-      });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage("");
+    }, 6000);
+  });
 
   const changePass = async (data: any) => {
     setLoading(true);
     try {
-      const res = await axiosInstance.patch(
+      await axiosInstance.patch(
         `/admin/${user?.users[0]?.id}/changePassword`,
-        data
+        data,
       );
 
       setLoading(false);

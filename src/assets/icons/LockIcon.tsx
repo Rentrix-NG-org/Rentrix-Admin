@@ -1,5 +1,3 @@
-import React from 'react'
-
 const LockIcon = ({ width = "24", height = "24" }) => {
   return (
     <svg
@@ -23,4 +21,4 @@ const LockIcon = ({ width = "24", height = "24" }) => {
   );
 };
 
-export default LockIcon
+export default LockIcon;

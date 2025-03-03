@@ -6,7 +6,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../property/pages/AddNewListing/components/Input";
 import EmailIcon from "@src/assets/icons/EmailIcon";
 import LockIcon from "@src/assets/icons/LockIcon";
@@ -21,17 +21,17 @@ const login = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [bearerToken, setBearerToken] = useState("");
+  const [_, setUser] = useState({});
+  const [__, setIsAuthenticated] = useState(false);
+  const [___, setBearerToken] = useState("");
   const [message, setMessage] = useState("");
   const [statusCode, setStatusCode] = useState(null);
 
-    useEffect(() => {
-          setTimeout(() => {
-            setMessage("");
-          }, 6000);
-        });
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage("");
+    }, 6000);
+  });
 
   const login = async (data: any) => {
     setLoading(true);
@@ -48,7 +48,7 @@ const login = () => {
       setLoading(false);
       setMessage(res.data.message);
       setStatusCode(res.data.statusCode);
-      navigate("/users", {replace: true});
+      navigate("/users", { replace: true });
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error)) {

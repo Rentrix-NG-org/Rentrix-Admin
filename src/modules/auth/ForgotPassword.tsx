@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import Input from "../property/pages/AddNewListing/components/Input";
 import CustomButton from "../property/pages/AddNewListing/components/Button";
 import EmailIcon from "@src/assets/icons/EmailIcon";
@@ -13,8 +13,8 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [statusCode, setStatusCode] = useState(null);
+  const [_, setMessage] = useState("");
+  const [__, setStatusCode] = useState(null);
   const [isSent, setIsSent] = useState(false);
 
   const forgotPass = async (data: any) => {
@@ -105,10 +105,7 @@ const ForgotPassword = () => {
             </Box>
           </Box>
         ) : (
-          <form
-            action="submit"
-            onSubmit={handleSubmit}
-          >
+          <form action="submit" onSubmit={handleSubmit}>
             <Typography
               fontSize="40px"
               fontWeight={600}
