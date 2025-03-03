@@ -23,7 +23,7 @@ const login = () => {
   const [password, setPassword] = useState("");
   const [_, setUser] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [bearerToken, setBearerToken] = useState("");
+  const [__, setBearerToken] = useState("");
   const [message, setMessage] = useState("");
   const [statusCode, setStatusCode] = useState(null);
   useEffect(() => {
