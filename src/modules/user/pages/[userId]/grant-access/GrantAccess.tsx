@@ -42,8 +42,6 @@ const GrantAccess = () => {
   }
 
   async function handleSubmit() {
-    console.log(permissions);
-    // return;
     const response = await grantAccess(params?.userId, permissions);
     if (response.success) {
       navigate(-1);
