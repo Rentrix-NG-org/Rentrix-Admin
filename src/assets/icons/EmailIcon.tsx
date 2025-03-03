@@ -1,5 +1,3 @@
-import React from 'react'
-
 const EmailIcon = ({ width = "24", height = "24" }) => {
   return (
     <svg
@@ -19,4 +17,4 @@ const EmailIcon = ({ width = "24", height = "24" }) => {
   );
 };
 
-export default EmailIcon
+export default EmailIcon;

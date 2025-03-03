@@ -1,12 +1,11 @@
 import { Box, useTheme } from "@mui/material";
-import avatar from "@src/assets/images/avatar.jpg";
 import bell from "@src/assets/icons/bell.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { images } from "@src/utils/images";
 const Topbar = () => {
   const theme = useTheme();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [user, setUser] = useState<{ users: any[] | null }>(null);
 
   useEffect(() => {
@@ -41,12 +40,21 @@ const Topbar = () => {
       <Box></Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Box onClick={() => logout()} component="img" sx={{ width: 24 }} src={bell} />
           <Box
-            onClick={() => navigate('/admin/profile')}
+            onClick={() => logout()}
+            component="img"
+            sx={{ width: 24 }}
+            src={bell}
+          />
+          <Box
+            onClick={() => navigate("/admin/profile")}
             component="img"
             sx={{ width: 32, borderRadius: 10 }}
-            src={user?.users[0]?.photoUrl ? user?.users[0]?.photoUrl : images.avatar}
+            src={
+              user?.users[0]?.photoUrl
+                ? user?.users[0]?.photoUrl
+                : images.avatar
+            }
           />
         </Box>
       </Box>
