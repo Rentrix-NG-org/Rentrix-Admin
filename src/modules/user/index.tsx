@@ -14,6 +14,7 @@ import GrantAccess from "./pages/[userId]/grant-access/GrantAccess";
 import AddRentrixRep from "./pages/add-rep/AddRep";
 import EditDetails from "./pages/add-rep/EditDetails";
 import ChangeLocation from "./pages/[userId]/change-location/ChangeLocation";
+import { UserProvider } from "./providers/user.provider";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -23,7 +24,15 @@ export interface UserManagementModule {
 
 export const UserManagementModule: UserManagementModule = {
   routes: [
-    { path: "/users", element: <UserManagement />, title: "User Management" },
+    {
+      path: "/users",
+      element: (
+        <UserProvider>
+          <UserManagement />
+        </UserProvider>
+      ),
+      title: "User Management",
+    },
     {
       path: "/users/roles/landlords-tenants",
       element: <LandlordsTenants />,

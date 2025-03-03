@@ -5,6 +5,7 @@ import { Route } from "react-router";
 import AppLayout from "./modules/AppLayout";
 import { ModuleRegistry } from "./core/registry";
 import { Navigate } from "react-router";
+import { UserContext } from "./modules/user/providers/user.context";
 
 function App() {
   const routes = ModuleRegistry.getRoutes();

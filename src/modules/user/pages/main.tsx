@@ -5,10 +5,13 @@ import SupervisorAndRep from "../components/Supervisor&Rep";
 import { useState } from "react";
 import Admins from "../components/Admins";
 import PasswordRequests from "../components/PasswordRequests";
+import { useUserContext } from "../providers/user.context";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
+  const { permissions } = useUserContext();
+  console.log(permissions, "perm");
   return (
     <Box
       sx={{
@@ -30,10 +33,20 @@ const UserManagement = () => {
         setSearch={setSearch}
         setFilter={setFilter}
       />
-      <LandlordAndTenant search={search} filter={filter} />
-      <SupervisorAndRep search={search} filter={filter} />
-      <Admins search={search} filter={filter} />
-      <PasswordRequests search={search} filter={filter} />
+
+      {permissions.some((p) => ["landlord", "tenant"].includes(p)) && (
+        <LandlordAndTenant search={search} filter={filter} />
+      )}
+
+      {permissions.some((p) =>
+        ["supervisor", "representative"].includes(p),
+      ) && <SupervisorAndRep search={search} filter={filter} />}
+      {permissions.some((p) => ["admin"].includes(p)) && (
+        <Admins search={search} filter={filter} />
+      )}
+      {permissions.some((p) => ["admin"].includes(p)) && (
+        <PasswordRequests search={search} filter={filter} />
+      )}
     </Box>
   );
 };
