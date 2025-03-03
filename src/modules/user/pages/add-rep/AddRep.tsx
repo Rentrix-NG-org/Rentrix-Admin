@@ -5,10 +5,13 @@ import { MailOutline } from "@mui/icons-material";
 import { useState } from "react";
 import { UserService } from "../../services/user.service";
 import { useNavigate } from "react-router";
+import { useUserContext } from "../../providers/user.context";
+import Unauthorized from "../../components/Unauthorized";
 
 const AddRentrixRep = () => {
   const theme = useTheme();
   const { getUser } = UserService();
+  const { permissions } = useUserContext();
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const navigate = useNavigate();
@@ -17,9 +20,12 @@ const AddRentrixRep = () => {
     const response = await getUser(email);
 
     if (response.success) {
-      console.log(response.data);
       navigate(`${(response.data as { id: string }).id}/details`);
     }
+  }
+
+  if (!permissions.includes("user-creation")) {
+    return <Unauthorized />;
   }
   return (
     <Box

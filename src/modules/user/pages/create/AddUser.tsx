@@ -8,10 +8,13 @@ import { useEffect, useState } from "react";
 import { UserService } from "../../services/user.service";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router";
+import { useUserContext } from "../../providers/user.context";
+import Unauthorized from "../../components/Unauthorized";
 
 const AddUser = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { permissions } = useUserContext();
   const { addUser } = UserService();
   const [form, setForm] = useState({
     firstName: "",
@@ -94,6 +97,10 @@ const AddUser = () => {
       console.error("Failed to add user:", error);
       setFormStatus("failure");
     }
+  }
+
+  if (permissions.length && !permissions?.includes("user-creation")) {
+    return <Unauthorized />;
   }
   return (
     <Box
