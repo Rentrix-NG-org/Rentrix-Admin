@@ -5,12 +5,15 @@ import { useEffect, useState } from "react";
 import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
+import { useUserContext } from "../providers/user.context";
 
 const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
   const [users, setUsers] = useState<any[]>([]);
+  const { permissions } = useUserContext();
+
   const { getAllUsers, updateUser, changeRoles } = UserService();
   const navigate = useNavigate();
 
@@ -19,7 +22,18 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 
   useEffect(() => {
     async function getUsers() {
-      const response = await getAllUsers("representative=true&supervisor=true");
+      let query = "";
+      if (permissions.includes("representative")) {
+        query += "representative=true";
+      }
+      if (permissions.includes("supervisor")) {
+        if (query) {
+          query += "&supervisor=true";
+        } else {
+          query = "supervisor=true";
+        }
+      }
+      const response = await getAllUsers(query);
 
       if (response.success) {
         const formatted = response.data.map((user: any) => {

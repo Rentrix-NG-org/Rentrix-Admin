@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { UserService } from "../services/user.service";
 import { UserContext } from "./user.context";
+import { useLocation } from "react-router";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -8,6 +9,7 @@ interface UserProviderProps {
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [permissions, setPermissions] = useState<string[]>([]);
+  const location = useLocation();
   const { getOwnedPermissions } = UserService();
   useEffect(() => {
     async function fetchPermissions() {
@@ -21,7 +23,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       }
     }
     fetchPermissions();
-  }, []);
+  }, [location.pathname]);
 
   return (
     <UserContext.Provider value={{ permissions }}>
