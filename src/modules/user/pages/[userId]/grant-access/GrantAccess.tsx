@@ -16,7 +16,9 @@ const GrantAccess = () => {
     property: "",
     logs: "",
   });
-  const [permissions, setPermissions] = useState<string[]>([]);
+  const [permissions, setPermissions] = useState<
+    { name: string; checked: boolean }[]
+  >([]);
 
   useEffect(() => {
     async function fetchPermissions() {
@@ -24,7 +26,7 @@ const GrantAccess = () => {
       if (response.success) {
         setPermissions(
           response.data.map((r) => {
-            return r.name;
+            return { name: r.name, checked: true };
           }),
         );
       }
@@ -32,12 +34,20 @@ const GrantAccess = () => {
     fetchPermissions();
   }, []);
 
+  console.log(permissions, "is perm");
+
   function handleSelect(v: string) {
     const result = v.toLowerCase().split(" ").join("-");
-    if (!permissions.includes(result)) {
-      setPermissions((curr) => [...curr, result]);
+    const permissionExists = permissions.some((p) => p.name === result);
+
+    if (!permissionExists) {
+      setPermissions((curr) => [...curr, { name: result, checked: true }]);
     } else {
-      setPermissions((curr) => curr.filter((c) => c !== result));
+      setPermissions((curr) =>
+        curr.map((c) =>
+          c.name === result ? { ...c, checked: !c.checked } : c,
+        ),
+      );
     }
   }
 
@@ -69,8 +79,12 @@ const GrantAccess = () => {
       >
         <Input
           value={selected.user}
-          selected={permissions.map((p) =>
-            p === "representative" ? "rentrix-rep" : p?.split(" ").join("-"),
+          selected={permissions.map(
+            (p) =>
+              p.checked &&
+              (p.name === "representative"
+                ? "rentrix-rep"
+                : p.name?.split(" ").join("-")),
           )}
           optionsStyles={{
             flexDirection: "row-reverse",
@@ -79,7 +93,6 @@ const GrantAccess = () => {
           }}
           onSelect={(v) => {
             setSelected((c) => ({ ...c, user: v }));
-            console.log(v, "is selected", permissions);
             handleSelect(v === "Rentrix Rep" ? "representative" : v);
           }}
           label="User Management"
@@ -95,7 +108,7 @@ const GrantAccess = () => {
         />
         <Input
           value={selected.property}
-          selected={permissions.map((p) => p?.split(" ").join("-"))}
+          selected={permissions.map((p) => p.name?.split(" ").join("-"))}
           optionsStyles={{
             flexDirection: "row-reverse",
             justifyContent: "flex-end",
@@ -114,7 +127,7 @@ const GrantAccess = () => {
         <Input
           value={selected.logs}
           multiple
-          selected={permissions.map((p) => p?.split(" ").join("-"))}
+          selected={permissions.map((p) => p?.name?.split(" ").join("-"))}
           optionsStyles={{
             flexDirection: "row-reverse",
             justifyContent: "flex-end",

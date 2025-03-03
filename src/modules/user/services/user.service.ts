@@ -208,7 +208,10 @@ export const UserService = () => {
       };
     },
 
-    grantAccess: async (userId: string, permissions: string[]) => {
+    grantAccess: async (
+      userId: string,
+      permissions: { name: string; checked: boolean }[],
+    ) => {
       if (!userId) {
         return {
           success: false,
