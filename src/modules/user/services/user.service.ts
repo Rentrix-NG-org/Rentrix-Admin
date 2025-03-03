@@ -198,6 +198,16 @@ export const UserService = () => {
       };
     },
 
+    getOwnedPermissions: async () => {
+      const response = await axios.get(`/admin/own-permissions`);
+
+      return {
+        success: response.status === 200,
+        message: "Fetched",
+        data: response.data,
+      };
+    },
+
     grantAccess: async (userId: string, permissions: string[]) => {
       if (!userId) {
         return {

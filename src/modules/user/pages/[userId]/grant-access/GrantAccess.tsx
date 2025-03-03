@@ -2,7 +2,6 @@ import { Box, useTheme } from "@mui/material";
 import Input from "@src/modules/property/pages/AddNewListing/components/Input";
 import UserNav from "@src/modules/user/components/UserNav";
 import { UserService } from "@src/modules/user/services/user.service";
-import { PermissionEnum } from "@src/modules/user/types/user.enums";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
@@ -23,32 +22,10 @@ const GrantAccess = () => {
     async function fetchPermissions() {
       const response = await getAllPermissions(params?.userId || "");
       if (response.success) {
-        const converter = {
-          [PermissionEnum.PROPERTY_ID]: "property-id",
-          [PermissionEnum.RENTRIX_REP]: "supervisor-&-rentrix-rep",
-          [PermissionEnum.AI_ML_LOGS]: "ai-and-machine-learning-logs",
-          [PermissionEnum.ADMIN_ACTION_LOGS]: "administrative-action-logs",
-          [PermissionEnum.USER_ACCOUNT_LOGS]: "user-account-management-logs",
-          [PermissionEnum.COMMUNICATION_LOGS]:
-            "communication-and-interaction-logs",
-          [PermissionEnum.ESCROW_DISPUTE_LOGS]:
-            "escrow-and-dispute-resolution-logs",
-          [PermissionEnum.SYS_MAINTENANCE_LOGS]: "system-maintenance-logs",
-          [PermissionEnum.PAYMENT_TRANSACTION_LOGS]:
-            "payment-and-transaction-logs",
-        };
         setPermissions(
-          response.data
-            .map((r) => {
-              if (r.name === "landlord") {
-                return ["landlord-&-tenant"];
-              }
-              if (r.name === "supervisor") {
-                return "supervisors-&-rentrix-rep";
-              }
-              return converter[r.name] || r.name;
-            })
-            .flat(),
+          response.data.map((r) => {
+            return r.name;
+          }),
         );
       }
     }
@@ -65,31 +42,9 @@ const GrantAccess = () => {
   }
 
   async function handleSubmit() {
-    const converter = {
-      "property-id": PermissionEnum.PROPERTY_ID,
-      "supervisors-&-rentrix-rep": PermissionEnum.RENTRIX_REP,
-      "ai-and-machine-learning-logs": PermissionEnum.AI_ML_LOGS,
-      "administrative-action-logs": PermissionEnum.ADMIN_ACTION_LOGS,
-      "user-account-management-logs": PermissionEnum.USER_ACCOUNT_LOGS,
-      "communication-and-interaction-logs": PermissionEnum.COMMUNICATION_LOGS,
-      "escrow-and-dispute-resolution-logs": PermissionEnum.ESCROW_DISPUTE_LOGS,
-      "system-maintenance-logs": PermissionEnum.SYS_MAINTENANCE_LOGS,
-      "payment-and-transaction-logs": PermissionEnum.PAYMENT_TRANSACTION_LOGS,
-    };
-    const formatted = permissions
-      .map((p) => {
-        if (p === "landlord-&-tenant") {
-          return ["landlord", "tenant"];
-        } else if (p === "supervisors-&-rentrix-rep") {
-          return ["supervisor", "representative"];
-        } else {
-          return converter[p];
-        }
-      })
-      .filter((p) => p)
-      .flat();
-
-    const response = await grantAccess(params?.userId, formatted);
+    console.log(permissions);
+    // return;
+    const response = await grantAccess(params?.userId, permissions);
     if (response.success) {
       navigate(-1);
     }
@@ -116,7 +71,9 @@ const GrantAccess = () => {
       >
         <Input
           value={selected.user}
-          selected={permissions.map((p) => p?.split(" ").join("-"))}
+          selected={permissions.map((p) =>
+            p === "representative" ? "rentrix-rep" : p?.split(" ").join("-"),
+          )}
           optionsStyles={{
             flexDirection: "row-reverse",
             justifyContent: "flex-end",
@@ -124,13 +81,19 @@ const GrantAccess = () => {
           }}
           onSelect={(v) => {
             setSelected((c) => ({ ...c, user: v }));
-
-            handleSelect(v);
+            console.log(v, "is selected", permissions);
+            handleSelect(v === "Rentrix Rep" ? "representative" : v);
           }}
           label="User Management"
           select
           multichoice
-          options={["Landlord & Tenant", "Supervisors & Rentrix Rep"]}
+          options={[
+            "Landlord",
+            "Tenant",
+            "Supervisor",
+            "Rentrix Rep",
+            "User Creation",
+          ]}
         />
         <Input
           value={selected.property}
@@ -147,7 +110,7 @@ const GrantAccess = () => {
           label="Property Management"
           select
           multichoice
-          options={["Property ID"]}
+          options={["Property"]}
         />
 
         <Input

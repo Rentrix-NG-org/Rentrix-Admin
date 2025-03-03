@@ -7,6 +7,7 @@ import { UserService } from "../services/user.service";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
 import { Column } from "@src/shared/types/shared.types";
+import { useUserContext } from "../providers/user.context";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -22,12 +23,24 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   const theme = useTheme();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<any[]>([]);
+  const { permissions } = useUserContext();
   const [refresh, setRefresh] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getUsers() {
-      const response = await getAllUsers("landlord=true&tenant=true");
+      let query = "";
+      if (permissions.includes("landlord")) {
+        query += "landlord=true";
+      }
+      if (permissions.includes("tenant")) {
+        if (query) {
+          query += "&tenant=true";
+        } else {
+          query = "tenant=true";
+        }
+      }
+      const response = await getAllUsers(`${query}`);
 
       if (response.success) {
         setRefresh(false);

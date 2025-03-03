@@ -8,7 +8,6 @@ import { Navigate } from "react-router";
 import Login from "./modules/auth/Login";
 import { useEffect, useState } from "react";
 import ForgotPassword from "./modules/auth/ForgotPassword";
-import AdminProfile from "./modules/profile/AdminProfile";
 import ChangePassword from "./modules/auth/ChangePassword";
 
 function App() {
