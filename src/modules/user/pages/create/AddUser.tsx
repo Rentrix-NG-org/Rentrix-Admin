@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import { UserService } from "../../services/user.service";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router";
+import { useUserContext } from "../../providers/user.context";
 
 const AddUser = () => {
+  const { permissions } = useUserContext();
   const theme = useTheme();
   const navigate = useNavigate();
   const { addUser } = UserService();
