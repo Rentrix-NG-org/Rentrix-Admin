@@ -9,4 +9,18 @@ export default defineConfig({
       "@src": "/src",
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-vendor": ["react", "react-dom"],
+          mui: ["@mui/material", "@mui/icons-material"],
+          table: ["@tanstack/react-table"],
+          "date-utils": ["dayjs", "moment"],
+          routing: ["react-router"],
+          carousel: ["react-slick", "slick-carousel"],
+        },
+      },
+    },
+  },
 });
