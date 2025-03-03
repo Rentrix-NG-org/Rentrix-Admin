@@ -11,6 +11,18 @@ const GrantAccess = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { grantAccess, getAllPermissions } = UserService();
+  const logsMap = {
+    "Communication and Interaction Logs": "communication-logs",
+    "Escrow and Dispute Resolution Logs": "escrow-dispute-logs",
+    "AI and Machine Learning Logs": "ai-ml-logs",
+    "Administrative Action Logs": "admin-action-logs",
+    "System Maintenance Logs": "system-maintenance-logs",
+    "User Account Management Logs": "user-account-logs",
+    "Payment and Transaction Logs": "payment-transaction-logs",
+  };
+  const logsReverse = Object.fromEntries(
+    Object.entries(logsMap).map(([k, v]) => [v, k]),
+  );
   const [selected, setSelected] = useState({
     user: "",
     property: "",
@@ -33,6 +45,12 @@ const GrantAccess = () => {
     }
     fetchPermissions();
   }, []);
+
+  console.log(
+    permissions
+      .filter((p) => p.checked && p.name in logsReverse)
+      .map((p) => logsReverse[p.name].split(" ").join("-").toLowerCase()),
+  );
 
   console.log(permissions, "is perm");
 
@@ -108,7 +126,9 @@ const GrantAccess = () => {
         />
         <Input
           value={selected.property}
-          selected={permissions.map((p) => p.name?.split(" ").join("-"))}
+          selected={permissions.map(
+            (p) => p.checked && p.name?.split(" ").join("-"),
+          )}
           optionsStyles={{
             flexDirection: "row-reverse",
             justifyContent: "flex-end",
@@ -127,7 +147,9 @@ const GrantAccess = () => {
         <Input
           value={selected.logs}
           multiple
-          selected={permissions.map((p) => p?.name?.split(" ").join("-"))}
+          selected={permissions
+            .filter((p) => p.checked && p.name in logsReverse)
+            .map((p) => logsReverse[p.name].split(" ").join("-").toLowerCase())}
           optionsStyles={{
             flexDirection: "row-reverse",
             justifyContent: "flex-end",
@@ -135,8 +157,7 @@ const GrantAccess = () => {
           }}
           onSelect={(v) => {
             setSelected((c) => ({ ...c, logs: v }));
-
-            handleSelect(v);
+            handleSelect(logsMap[v]);
           }}
           label="Logs"
           select
