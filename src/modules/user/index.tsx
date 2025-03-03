@@ -11,6 +11,8 @@ import LandlordsTenants from "./pages/landlords-tenants/Landlords-Tenants";
 import SupervisorsReps from "./pages/supervisors-reps/SupervisorsReps";
 import AdminDetails from "./pages/[userId]/AdminDetails";
 import GrantAccess from "./pages/[userId]/grant-access/GrantAccess";
+import AdminProfile from "../profile/AdminProfile";
+import ChangePassword from "../auth/ChangePassword";
 import AddRentrixRep from "./pages/add-rep/AddRep";
 import EditDetails from "./pages/add-rep/EditDetails";
 import ChangeLocation from "./pages/[userId]/change-location/ChangeLocation";
@@ -58,6 +60,8 @@ export const UserManagementModule: UserManagementModule = {
     },
     { path: "/users/:userId/admin", element: <AdminDetails /> },
     { path: "/users/:userId/admin/grant-access", element: <GrantAccess /> },
+    { path: "/admin/profile", element: <AdminProfile /> },
+    { path: "/admin/profile/change-password", element: <ChangePassword /> },
   ],
   name: "User Management",
   enabled: true,
