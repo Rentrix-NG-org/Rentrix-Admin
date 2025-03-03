@@ -5,11 +5,9 @@ import { Route } from "react-router";
 import AppLayout from "./modules/AppLayout";
 import { ModuleRegistry } from "./core/registry";
 import { Navigate } from "react-router";
-import { UserContext } from "./modules/user/providers/user.context";
 import Login from "./modules/auth/Login";
 import { useEffect, useState } from "react";
 import ForgotPassword from "./modules/auth/ForgotPassword";
-import AdminProfile from "./modules/profile/AdminProfile";
 import ChangePassword from "./modules/auth/ChangePassword";
 
 function App() {
