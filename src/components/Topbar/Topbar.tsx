@@ -3,10 +3,12 @@ import bell from "@src/assets/icons/bell.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { images } from "@src/utils/images";
+import Menu from "@src/shared/components/Menu";
 const Topbar = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [user, setUser] = useState<{ users: any[] | null }>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const getUser = localStorage.getItem("user");
@@ -47,9 +49,11 @@ const Topbar = () => {
             src={bell}
           />
           <Box
-            onClick={() => navigate("/admin/profile")}
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+            }}
             component="img"
-            sx={{ width: 32, borderRadius: 10 }}
+            sx={{ width: 32, borderRadius: 10, cursor: "pointer" }}
             src={
               user?.users[0]?.photoUrl
                 ? user?.users[0]?.photoUrl
@@ -58,7 +62,30 @@ const Topbar = () => {
           />
         </Box>
       </Box>
+      {menuOpen && (
+        <Menu
+          title="Account"
+          options={[
+            {
+              value: "Profile",
+              onClick: () => {
+                navigate("/profile");
+              },
+            },
+            {
+              value: "Log Out",
+              onClick: () => {
+                logout();
+              },
+            },
+          ]}
+          onCancel={() => {
+            setMenuOpen(false);
+          }}
+        />
+      )}
     </Box>
   );
 };
+
 export default Topbar;
