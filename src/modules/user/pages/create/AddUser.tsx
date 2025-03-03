@@ -261,7 +261,7 @@ const AddUser = () => {
           label="Role"
           icon={icons.usercircle}
           placeholderSx={{ color: theme.palette.grey[600] }}
-          options={["Rentrix Rep", "Supervisor", "Admin"]}
+          options={["Supervisor", "Admin"]}
           required
         />
         <SelectInput
