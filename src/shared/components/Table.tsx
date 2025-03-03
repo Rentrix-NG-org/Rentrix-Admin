@@ -10,6 +10,7 @@ interface TableProps {
   onRowClick: (row: string[]) => void;
   columns: Column[];
   data: string[][];
+  limit?: number;
 }
 
 const Table: React.FC<TableProps> = ({
@@ -17,6 +18,7 @@ const Table: React.FC<TableProps> = ({
   onRowClick,
   columns,
   data,
+  limit = 3,
 }) => {
   const [rows, setRows] = useState<string[][]>(data);
   const [paginatedRows, setPaginatedRows] = useState<string[][]>([]);
@@ -30,7 +32,6 @@ const Table: React.FC<TableProps> = ({
   const theme = useTheme();
 
   useEffect(() => {
-    const limit = 2;
     const start = (page - 1) * limit;
     const end = start + limit;
     const paginatedData = rows.slice(start, end);
