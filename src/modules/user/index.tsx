@@ -11,8 +11,6 @@ import LandlordsTenants from "./pages/landlords-tenants/Landlords-Tenants";
 import SupervisorsReps from "./pages/supervisors-reps/SupervisorsReps";
 import AdminDetails from "./pages/[userId]/AdminDetails";
 import GrantAccess from "./pages/[userId]/grant-access/GrantAccess";
-import AdminProfile from "../profile/AdminProfile";
-import ChangePassword from "../auth/ChangePassword";
 import AddRentrixRep from "./pages/add-rep/AddRep";
 import EditDetails from "./pages/add-rep/EditDetails";
 import ChangeLocation from "./pages/[userId]/change-location/ChangeLocation";
@@ -37,31 +35,118 @@ export const UserManagementModule: UserManagementModule = {
     },
     {
       path: "/users/roles/landlords-tenants",
-      element: <LandlordsTenants />,
+      element: (
+        <UserProvider>
+          <LandlordsTenants />
+        </UserProvider>
+      ),
       title: "Landlords & Tenants",
     },
     {
       path: "/users/roles/supervisors-reps",
-      element: <SupervisorsReps />,
+      element: (
+        <UserProvider>
+          <SupervisorsReps />
+        </UserProvider>
+      ),
       title: "Landlords & Tenants",
     },
-    { path: "/users/create", element: <AddUser /> },
-    { path: "/users/add-rep", element: <AddRentrixRep /> },
-    { path: "/users/:userId", element: <UserDetails /> },
-    { path: "/users/add-rep/:userId/details", element: <EditDetails /> },
-    { path: "/users/:userId/edit", element: <UserEdit /> },
-    { path: "/users/:userId/listings", element: <ViewListings /> },
-    { path: "/users/:userId/transactions", element: <TransactionHistories /> },
-    { path: "/users/:userId/logs", element: <ActivityLogs /> },
-    { path: "/users/:userId/rentrix-rep", element: <RepDetails /> },
+    {
+      path: "/users/create",
+      element: (
+        <UserProvider>
+          <AddUser />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/add-rep",
+      element: (
+        <UserProvider>
+          <AddRentrixRep />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId",
+      element: (
+        <UserProvider>
+          <UserDetails />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/add-rep/:userId/details",
+      element: (
+        <UserProvider>
+          <EditDetails />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/edit",
+      element: (
+        <UserProvider>
+          <UserEdit />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/listings",
+      element: (
+        <UserProvider>
+          <ViewListings />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/transactions",
+      element: (
+        <UserProvider>
+          <TransactionHistories />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/logs",
+      element: (
+        <UserProvider>
+          <ActivityLogs />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/rentrix-rep",
+      element: (
+        <UserProvider>
+          <RepDetails />
+        </UserProvider>
+      ),
+    },
     {
       path: "/users/:userId/rentrix-rep/change-location",
-      element: <ChangeLocation />,
+      element: (
+        <UserProvider>
+          <ChangeLocation />
+        </UserProvider>
+      ),
     },
-    { path: "/users/:userId/admin", element: <AdminDetails /> },
-    { path: "/users/:userId/admin/grant-access", element: <GrantAccess /> },
-    { path: "/admin/profile", element: <AdminProfile /> },
-    { path: "/admin/profile/change-password", element: <ChangePassword /> },
+    {
+      path: "/users/:userId/admin",
+      element: (
+        <UserProvider>
+          <AdminDetails />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/admin/grant-access",
+      element: (
+        <UserProvider>
+          <GrantAccess />
+        </UserProvider>
+      ),
+    },
   ],
   name: "User Management",
   enabled: true,
