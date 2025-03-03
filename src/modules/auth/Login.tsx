@@ -22,16 +22,22 @@ const login = () => {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [_, setUser] = useState({});
-  const [__, setIsAuthenticated] = useState(false);
-  const [___, setBearerToken] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [bearerToken, setBearerToken] = useState("");
   const [message, setMessage] = useState("");
   const [statusCode, setStatusCode] = useState(null);
-
   useEffect(() => {
     setTimeout(() => {
       setMessage("");
     }, 6000);
   });
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("user") || "{}")?.token;
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const login = async (data: any) => {
     setLoading(true);
@@ -68,6 +74,11 @@ const login = () => {
     e.preventDefault();
     login(loginData);
   };
+
+  if (isAuthenticated) {
+    navigate("/users", { replace: true });
+  }
+
   return (
     <Box
       width="100vw"
