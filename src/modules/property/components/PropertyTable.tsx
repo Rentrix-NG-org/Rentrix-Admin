@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import Table from "@src/shared/components/Table";
 import TableHeader from "@src/shared/components/TableHeader";
 import { useEffect, useState } from "react";
-import { GetListings } from "../pages/property.service";
+import { GetListings, UpdateListingStatus } from "../pages/property.service";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
 // import { PropertyService } from '../pages/property.service';
@@ -11,6 +11,8 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
   const navigate = useNavigate();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [properties, setProperties] = useState<any>([]);
+  const [refresh, setRefresh] = useState(true);
+
   // const { getAllProperties } = PropertyService()
 
   useEffect(() => {
@@ -18,12 +20,13 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
       const response = await GetListings();
 
       if (response?.status === 200) {
+        setRefresh(false);
         setProperties(response.data);
       }
     }
 
     handleGetListings();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     if (properties.length) {
@@ -38,6 +41,34 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
     }
   }, [search, properties]);
 
+  async function handleUpdateListingStatus(
+    listingId: string,
+    status: "listed" | "rented" | "under-review",
+  ) {
+    const response = await UpdateListingStatus(listingId, status);
+
+    if (response.success) {
+      setRefresh(true);
+    }
+  }
+
+  const handleTableSelection = (
+    row: string[],
+    selected: { value: string; index: number },
+  ) => {
+    switch (selected.value) {
+      case "LISTED":
+        handleUpdateListingStatus(row[0], "listed");
+        break;
+      case "RENTED":
+        handleUpdateListingStatus(row[0], "rented");
+        break;
+      case "UNDER REVIEW":
+        handleUpdateListingStatus(row[0], "under-review");
+        break;
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -49,7 +80,7 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
       <TableHeader onViewAll={() => {}} title="Property Management" />
       <Table
         onRowClick={() => {}}
-        onSelect={() => {}}
+        onSelect={handleTableSelection}
         limit={5}
         columns={[
           {
