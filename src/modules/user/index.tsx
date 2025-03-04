@@ -15,6 +15,8 @@ import AddRentrixRep from "./pages/add-rep/AddRep";
 import EditDetails from "./pages/add-rep/EditDetails";
 import ChangeLocation from "./pages/[userId]/change-location/ChangeLocation";
 import { UserProvider } from "./providers/user.provider";
+import Admins from "./pages/admins/Admins";
+import PasswordRequests from "./pages/password-requests/PasswordRequests";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -47,6 +49,24 @@ export const UserManagementModule: UserManagementModule = {
       element: (
         <UserProvider>
           <SupervisorsReps />
+        </UserProvider>
+      ),
+      title: "Landlords & Tenants",
+    },
+    {
+      path: "/users/roles/admins",
+      element: (
+        <UserProvider>
+          <Admins />
+        </UserProvider>
+      ),
+      title: "Landlords & Tenants",
+    },
+    {
+      path: "/users/roles/password-requests",
+      element: (
+        <UserProvider>
+          <PasswordRequests />
         </UserProvider>
       ),
       title: "Landlords & Tenants",

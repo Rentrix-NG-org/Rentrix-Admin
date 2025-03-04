@@ -153,6 +153,7 @@ const LandlordsTenants = () => {
         onRowClick={(v) => {
           navigate(`/users/${v[0]}`);
         }}
+        limit={users.length}
         columns={columns}
         data={filter}
       />

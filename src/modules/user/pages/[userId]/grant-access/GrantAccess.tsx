@@ -122,6 +122,7 @@ const GrantAccess = () => {
             "Supervisor",
             "Rentrix Rep",
             "User Creation",
+            "User Upgrade",
           ]}
         />
         <Input

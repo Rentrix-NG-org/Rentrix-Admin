@@ -8,20 +8,22 @@ import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import { UserService } from "../../services/user.service";
 import UserNav from "../../components/UserNav";
+import { useUserContext } from "../../providers/user.context";
 
-const SupervisorsReps = () => {
+const Admins = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
   const [refresh, setRefresh] = useState(false);
-
   const [users, setUsers] = useState<string[][]>([]);
+  const { permissions } = useUserContext();
   const navigate = useNavigate();
   const theme = useTheme();
   const { getAllUsers, changeRoles } = UserService();
 
   useEffect(() => {
     async function fetchUsers() {
-      const response = await getAllUsers("representative=true&supervisor=true");
+      const query = permissions.includes("admin") ? "admin=true" : "";
+      const response = await getAllUsers(query);
       if (response.success) {
         const formatted = (response.data as any[]).map((user) => {
           return Object.values({
@@ -68,7 +70,7 @@ const SupervisorsReps = () => {
       header: "ROLE",
       label: "role",
       type: "select",
-      options: ["Supervisor", "Representative"],
+      options: [],
     },
     {
       header: "LAST ACTIVE",
@@ -125,9 +127,6 @@ const SupervisorsReps = () => {
       case "Representative":
         handleChangeRoles(row[0], { role: "representative" });
         break;
-      // case "Active":
-      //   updateUserData(row[0], { status: selected.value.toLowerCase() });
-      //   break;
     }
   }
 
@@ -172,15 +171,13 @@ const SupervisorsReps = () => {
             letterSpacing: "-0.4px",
           }}
         >
-          Supervisors &amp; Rentrix Reps
+          Admins
         </Typography>
       </Box>
 
       <Table
         onSelect={handleTableSelection}
-        onRowClick={(v) => {
-          navigate(`/users/${v[0]}/rentrix-rep`);
-        }}
+        onRowClick={(row) => navigate(`/users/${row[0]}/admin`)}
         columns={columns}
         limit={users.length}
         data={filter}
@@ -188,4 +185,4 @@ const SupervisorsReps = () => {
     </Box>
   );
 };
-export default SupervisorsReps;
+export default Admins;

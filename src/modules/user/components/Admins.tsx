@@ -105,12 +105,13 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
       <TableHeader
         title="Admins"
         onViewAll={() => {
-          navigate("roles/supervisors-reps");
+          navigate("roles/admins");
         }}
       />
       <Table
         onSelect={handleTableSelection}
         onRowClick={(row) => navigate(`/users/${row[0]}/admin`)}
+        showPagination={false}
         columns={[
           {
             header: "USER ID",

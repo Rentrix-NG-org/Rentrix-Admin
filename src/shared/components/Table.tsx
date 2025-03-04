@@ -10,6 +10,7 @@ interface TableProps {
   onRowClick: (row: string[]) => void;
   columns: Column[];
   data: string[][];
+  showPagination?: boolean;
   limit?: number;
 }
 
@@ -18,7 +19,8 @@ const Table: React.FC<TableProps> = ({
   onRowClick,
   columns,
   data,
-  limit = 3,
+  showPagination = true,
+  limit = 10,
 }) => {
   const [rows, setRows] = useState<string[][]>(data);
   const [paginatedRows, setPaginatedRows] = useState<string[][]>([]);
@@ -170,11 +172,13 @@ const Table: React.FC<TableProps> = ({
         )}
       </Box>
 
-      <PaginationControl
-        onPage={(page) => setPage(page)}
-        data={rows}
-        limit={2}
-      />
+      {showPagination && (
+        <PaginationControl
+          onPage={(page) => setPage(page)}
+          data={rows}
+          limit={10}
+        />
+      )}
     </Box>
   );
 };
