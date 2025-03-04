@@ -8,28 +8,33 @@ import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import { UserService } from "../../services/user.service";
 import UserNav from "../../components/UserNav";
+import { useUserContext } from "../../providers/user.context";
 
-const SupervisorsReps = () => {
+const PasswordRequests = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
   const [refresh, setRefresh] = useState(false);
-
   const [users, setUsers] = useState<string[][]>([]);
+  const { permissions } = useUserContext();
   const navigate = useNavigate();
   const theme = useTheme();
-  const { getAllUsers, changeRoles } = UserService();
+  const { getAllUsers, handlePasswordRequest } = UserService();
 
   useEffect(() => {
     async function fetchUsers() {
-      const response = await getAllUsers("representative=true&supervisor=true");
+      const query = permissions.includes("password-request")
+        ? "password-request=true"
+        : "";
+      const response = await getAllUsers(query);
       if (response.success) {
         const formatted = (response.data as any[]).map((user) => {
           return Object.values({
-            userId: user.id,
-            name: user.name || "",
+            id: user.id,
+            name: user.name,
             role: user.role,
-            lastActive: user.lastActive || "",
-            location: user.locations?.[0]?.state || "No state",
+            status: user.status,
+            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
+            registrationDate: user.registrationDate,
           });
         });
         setRefresh(false);
@@ -68,7 +73,13 @@ const SupervisorsReps = () => {
       header: "ROLE",
       label: "role",
       type: "select",
-      options: ["Supervisor", "Representative"],
+      options: [],
+    },
+    {
+      header: "STATUS",
+      label: "status",
+      type: "select",
+      options: ["Authenticate", "Deny"],
     },
     {
       header: "LAST ACTIVE",
@@ -119,21 +130,24 @@ const SupervisorsReps = () => {
     selected: { value: string; index: number },
   ) {
     switch (selected.value) {
-      case "Supervisor":
-        handleChangeRoles(row[0], { role: selected.value.toLowerCase() });
+      case "Authenticate":
+        handleUpdatePasswordRequest(row[0], true);
         break;
-      case "Representative":
-        handleChangeRoles(row[0], { role: "representative" });
-        break;
-      // case "Active":
-      //   updateUserData(row[0], { status: selected.value.toLowerCase() });
-      //   break;
+      default:
+        handleUpdatePasswordRequest(row[0], false);
     }
   }
 
-  async function handleChangeRoles(id: string, data: any) {
-    const response = await changeRoles(id, data);
+  async function handleUpdatePasswordRequest(
+    userId: string,
+    approved: boolean,
+  ) {
+    const response = await handlePasswordRequest({ userId, approved });
     if (response.success) {
+      const filtered = users.filter((u: any) => u.id !== userId);
+      const formatted = filtered.map((u) => Object.values(u)) as string[][];
+      setUsers(filtered);
+      setFilter(formatted);
       setRefresh(true);
     }
   }
@@ -172,15 +186,13 @@ const SupervisorsReps = () => {
             letterSpacing: "-0.4px",
           }}
         >
-          Supervisors &amp; Rentrix Reps
+          Password Requests
         </Typography>
       </Box>
 
       <Table
         onSelect={handleTableSelection}
-        onRowClick={(v) => {
-          navigate(`/users/${v[0]}/rentrix-rep`);
-        }}
+        onRowClick={(row) => navigate(`/users/${row[0]}/admin`)}
         columns={columns}
         limit={users.length}
         data={filter}
@@ -188,4 +200,4 @@ const SupervisorsReps = () => {
     </Box>
   );
 };
-export default SupervisorsReps;
+export default PasswordRequests;

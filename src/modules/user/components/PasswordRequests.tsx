@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
+import { useUserContext } from "../providers/user.context";
 
 const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -12,14 +13,17 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
 }) => {
   const [users, setUsers] = useState<unknown[]>([]);
   const { getAllUsers, handlePasswordRequest } = UserService();
-  const navigate = useNavigate();
-
   const [refresh, setRefresh] = useState(false);
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
+  const navigate = useNavigate();
+  const { permissions } = useUserContext();
 
   useEffect(() => {
     async function getUsers() {
-      const response = await getAllUsers("password-request=true");
+      const query = permissions.includes("password-request")
+        ? "password-request=true"
+        : "";
+      const response = await getAllUsers(query);
 
       if (response.success) {
         const formatted = response.data.map((user: any) => {
@@ -100,12 +104,13 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
       <TableHeader
         title="Password Reset Requests"
         onViewAll={() => {
-          navigate("roles/supervisors-reps");
+          navigate("roles/password-requests");
         }}
       />
       <Table
         onSelect={handleTableSelection}
         onRowClick={(row) => navigate(`/users/${row[0]}/admin`)}
+        showPagination={false}
         columns={[
           {
             header: "USER ID",

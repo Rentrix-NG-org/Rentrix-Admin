@@ -206,6 +206,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         onRowClick={(row) => navigate(`/users/${row[0]}`)}
         columns={columns}
         data={searchFilter}
+        showPagination={false}
       />
     </Box>
   );

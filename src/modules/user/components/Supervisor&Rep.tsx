@@ -125,6 +125,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       <Table
         onSelect={handleTableSelection}
         onRowClick={(row) => navigate(`/users/${row[0]}/rentrix-rep`)}
+        showPagination={false}
         columns={[
           {
             header: "USER ID",
