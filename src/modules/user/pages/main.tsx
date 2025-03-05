@@ -6,11 +6,32 @@ import { useState } from "react";
 import Admins from "../components/Admins";
 import PasswordRequests from "../components/PasswordRequests";
 import { useUserContext } from "../providers/user.context";
+import Loading from "@src/shared/components/Loading";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
   const { permissions } = useUserContext();
+
+  if (!permissions) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          flexDirection: "column",
+          gap: 2,
+        }}
+      >
+        <Box sx={{ typography: "h6", color: "error.main" }}>
+          Failed to retrieve user permissions
+        </Box>
+      </Box>
+    );
+  }
+  if (permissions.length === 0) return <Loading />;
   return (
     <Box
       sx={{

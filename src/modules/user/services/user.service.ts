@@ -189,23 +189,47 @@ export const UserService = () => {
     },
 
     getAllPermissions: async (userId: string) => {
-      const response = await axios.get(`/admin/${userId}/permissions`);
+      if (!userId) {
+        return {
+          success: false,
+          message: "UserId missing",
+          data: null,
+        };
+      }
+      try {
+        const response = await axios.get(`/admin/${userId}/permissions`);
 
-      return {
-        success: response.status === 200,
-        message: "Fetched",
-        data: response.data,
-      };
+        return {
+          success: response.status === 200,
+          message: "Fetched",
+          data: response.data,
+        };
+      } catch (error) {
+        console.error("Error fetching permissions:", error);
+        return {
+          success: false,
+          message: "Failed to fetch permissions",
+          data: null,
+        };
+      }
     },
 
     getOwnedPermissions: async () => {
-      const response = await axios.get(`/admin/own-permissions`);
-
-      return {
-        success: response.status === 200,
-        message: "Fetched",
-        data: response.data,
-      };
+      try {
+        const response = await axios.get(`/admin/own-permissions`);
+        return {
+          success: response.status === 200,
+          message: "Fetched",
+          data: response.data,
+        };
+      } catch (error) {
+        console.error("Error fetching own permissions:", error);
+        return {
+          success: false,
+          message: "Failed to fetch permissions",
+          data: null,
+        };
+      }
     },
 
     grantAccess: async (

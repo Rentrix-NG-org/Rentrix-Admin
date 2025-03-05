@@ -8,12 +8,13 @@ interface UserProviderProps {
 }
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [permissions, setPermissions] = useState<string[]>([]);
+  const [permissions, setPermissions] = useState<string[] | null>([]);
   const location = useLocation();
   const { getOwnedPermissions } = UserService();
   useEffect(() => {
     async function fetchPermissions() {
       const response = await getOwnedPermissions();
+      console.log(response.success);
       if (response.success) {
         setPermissions(
           response.data.map((r: { name: string }) => {
@@ -21,7 +22,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
           }),
         );
       } else {
-        setPermissions([]);
+        setPermissions(null);
       }
     }
     fetchPermissions();
