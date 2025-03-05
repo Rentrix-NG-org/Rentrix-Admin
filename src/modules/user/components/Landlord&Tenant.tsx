@@ -10,11 +10,12 @@ import { Column } from "@src/shared/types/shared.types";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
 
+const { getAllUsers, updateUser } = UserService();
+
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
-  const { getAllUsers, updateUser } = UserService();
   const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState<{
     isOpen: boolean;

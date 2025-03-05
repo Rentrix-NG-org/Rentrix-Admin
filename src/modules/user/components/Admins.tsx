@@ -8,6 +8,8 @@ import { icons } from "@src/utils/icons";
 import Loading from "@src/shared/components/Loading";
 import { useUserContext } from "../providers/user.context";
 
+const { getAllUsers, updateUser, changeRoles } = UserService();
+
 const Admins: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
@@ -17,7 +19,6 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
   const [refresh, setRefresh] = useState(false);
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const { permissions } = useUserContext();
-  const { getAllUsers, updateUser, changeRoles } = UserService();
   const navigate = useNavigate();
 
   useEffect(() => {
