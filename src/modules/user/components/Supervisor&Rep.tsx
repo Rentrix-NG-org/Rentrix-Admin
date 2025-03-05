@@ -8,6 +8,8 @@ import { icons } from "@src/utils/icons";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
 
+const { getAllUsers, updateUser, changeRoles } = UserService();
+
 const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
@@ -17,7 +19,6 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 
   const { permissions } = useUserContext();
 
-  const { getAllUsers, updateUser, changeRoles } = UserService();
   const navigate = useNavigate();
 
   const [refresh, setRefresh] = useState(false);

@@ -8,13 +8,14 @@ import { icons } from "@src/utils/icons";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
 
+const { getAllUsers, handlePasswordRequest } = UserService();
+
 const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
   const [users, setUsers] = useState<unknown[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { getAllUsers, handlePasswordRequest } = UserService();
   const [refresh, setRefresh] = useState(false);
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const navigate = useNavigate();
