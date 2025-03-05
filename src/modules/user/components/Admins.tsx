@@ -5,21 +5,25 @@ import { useEffect, useState } from "react";
 import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
+import Loading from "@src/shared/components/Loading";
+import { useUserContext } from "../providers/user.context";
 
 const Admins: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
   const [users, setUsers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
+  const [searchFilter, setSearchFilter] = useState<string[][]>([]);
+  const { permissions } = useUserContext();
   const { getAllUsers, updateUser, changeRoles } = UserService();
   const navigate = useNavigate();
 
-  const [refresh, setRefresh] = useState(false);
-  const [searchFilter, setSearchFilter] = useState<string[][]>([]);
-
   useEffect(() => {
     async function getUsers() {
-      const response = await getAllUsers("admin=true");
+      const query = permissions.includes("admin") ? "admin=true" : "";
+      const response = await getAllUsers(query);
 
       if (response.success) {
         const formatted = response.data.map((user: any) => {
@@ -33,10 +37,11 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
         });
         setRefresh(false);
         setUsers(formatted as any[]);
+        setIsLoading(false);
       }
     }
     getUsers();
-  }, [refresh]);
+  }, [refresh, permissions]);
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
@@ -94,6 +99,9 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
         break;
     }
   }
+
+  if (isLoading) return <Loading />;
+
   return (
     <Box
       sx={{

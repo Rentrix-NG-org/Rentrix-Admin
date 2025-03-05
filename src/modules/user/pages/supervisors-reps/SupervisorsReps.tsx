@@ -8,20 +8,34 @@ import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import { UserService } from "../../services/user.service";
 import UserNav from "../../components/UserNav";
+import Loading from "@src/shared/components/Loading";
+import { useUserContext } from "../../providers/user.context";
 
 const SupervisorsReps = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
   const [refresh, setRefresh] = useState(false);
-
   const [users, setUsers] = useState<string[][]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { permissions } = useUserContext();
   const navigate = useNavigate();
   const theme = useTheme();
   const { getAllUsers, changeRoles } = UserService();
 
   useEffect(() => {
     async function fetchUsers() {
-      const response = await getAllUsers("representative=true&supervisor=true");
+      let query = "";
+      if (permissions.includes("representative")) {
+        query += "representative=true";
+      }
+      if (permissions.includes("supervisor")) {
+        if (query) {
+          query += "&supervisor=true";
+        } else {
+          query = "supervisor=true";
+        }
+      }
+      const response = await getAllUsers(query);
       if (response.success) {
         const formatted = (response.data as any[]).map((user) => {
           return Object.values({
@@ -33,13 +47,13 @@ const SupervisorsReps = () => {
           });
         });
         setRefresh(false);
-
         setFilter(formatted);
         setUsers(formatted);
+        setIsLoading(false);
       }
     }
     fetchUsers();
-  }, [refresh]);
+  }, [refresh, permissions]);
 
   useEffect(() => {
     const searchedUsers = users.filter((user) => {
@@ -125,9 +139,6 @@ const SupervisorsReps = () => {
       case "Representative":
         handleChangeRoles(row[0], { role: "representative" });
         break;
-      // case "Active":
-      //   updateUserData(row[0], { status: selected.value.toLowerCase() });
-      //   break;
     }
   }
 
@@ -137,6 +148,9 @@ const SupervisorsReps = () => {
       setRefresh(true);
     }
   }
+
+  if (isLoading) return <Loading />;
+
   return (
     <Box
       sx={{

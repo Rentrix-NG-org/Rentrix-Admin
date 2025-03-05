@@ -8,12 +8,14 @@ import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
 import { Column } from "@src/shared/types/shared.types";
 import { useUserContext } from "../providers/user.context";
+import Loading from "@src/shared/components/Loading";
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
   const { getAllUsers, updateUser } = UserService();
+  const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -54,10 +56,11 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
           };
         });
         setUsers(formatted as any[]);
+        setIsLoading(false);
       }
     }
     getUsers();
-  }, [refresh]);
+  }, [refresh, permissions]);
 
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
@@ -176,6 +179,8 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         break;
     }
   }
+
+  if (isLoading) return <Loading />;
   return (
     <Box
       sx={{
