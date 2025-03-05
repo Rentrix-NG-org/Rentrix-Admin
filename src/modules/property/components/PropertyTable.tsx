@@ -31,7 +31,6 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
   useEffect(() => {
     if (properties.length) {
       const arr = properties?.map((d: any) => Object.values(d));
-      console.log(arr);
       const filtered = arr.filter((d: any) => {
         return d.some((item: any) =>
           item.toString().toLowerCase().includes(search.toLowerCase()),

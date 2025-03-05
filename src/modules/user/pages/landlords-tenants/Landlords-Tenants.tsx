@@ -8,20 +8,34 @@ import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import { UserService } from "../../services/user.service";
 import UserNav from "../../components/UserNav";
+import { useUserContext } from "../../providers/user.context";
+import Loading from "@src/shared/components/Loading";
 
 const LandlordsTenants = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<string[][]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const theme = useTheme();
+  const { permissions } = useUserContext();
   const { getAllUsers } = UserService();
 
   useEffect(() => {
     async function fetchUsers() {
-      const response = await getAllUsers("landlord=true&tenant=true");
+      let query = "";
+      if (permissions.includes("landlord")) {
+        query += "landlord=true";
+      }
+      if (permissions.includes("tenant")) {
+        if (query) {
+          query += "&tenant=true";
+        } else {
+          query = "tenant=true";
+        }
+      }
+      const response = await getAllUsers(query);
       if (response.success) {
-        console.log(response.data, "data");
         const formatted = (response.data as any[]).map((user) => {
           return Object.values({
             userId: user.id,
@@ -33,10 +47,11 @@ const LandlordsTenants = () => {
         });
         setFilter(formatted);
         setUsers(formatted);
+        setIsLoading(false);
       }
     }
     fetchUsers();
-  }, []);
+  }, [permissions]);
 
   useEffect(() => {
     const searchedUsers = users.filter((user) => {
@@ -111,6 +126,9 @@ const LandlordsTenants = () => {
       setFilter(roleUsers);
     }
   }
+
+  if (isLoading) return <Loading />;
+
   return (
     <Box
       sx={{

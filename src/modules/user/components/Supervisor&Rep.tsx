@@ -6,12 +6,15 @@ import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
 import { useUserContext } from "../providers/user.context";
+import Loading from "@src/shared/components/Loading";
 
 const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
   const [users, setUsers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const { permissions } = useUserContext();
 
   const { getAllUsers, updateUser, changeRoles } = UserService();
@@ -47,10 +50,11 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
         });
         setRefresh(false);
         setUsers(formatted as any[]);
+        setIsLoading(false);
       }
     }
     getUsers();
-  }, [refresh]);
+  }, [refresh, permissions]);
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
@@ -97,17 +101,18 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     switch (selected.value) {
       case "Supervisor":
         handleChangeRoles(row[0], { role: selected.value.toLowerCase() });
-        // updateUserData(row[0], { role: selected.value.toLowerCase() });
         break;
       case "Representative":
         handleChangeRoles(row[0], { role: "representative" });
-        // updateUserData(row[0], { role: "representative" });
         break;
       case "Active":
         updateUserData(row[0], { status: selected.value.toLowerCase() });
         break;
     }
   }
+
+  if (isLoading) return <Loading />;
+
   return (
     <Box
       sx={{

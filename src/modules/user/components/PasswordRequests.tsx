@@ -6,12 +6,14 @@ import { UserService } from "../services/user.service";
 import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
 import { useUserContext } from "../providers/user.context";
+import Loading from "@src/shared/components/Loading";
 
 const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
   const [users, setUsers] = useState<unknown[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { getAllUsers, handlePasswordRequest } = UserService();
   const [refresh, setRefresh] = useState(false);
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
@@ -38,10 +40,11 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
         });
         setRefresh(false);
         setUsers(formatted as unknown[]);
+        setIsLoading(false);
       }
     }
     getUsers();
-  }, [refresh]);
+  }, [refresh, permissions]);
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
@@ -78,6 +81,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
       setUsers(filtered);
       setSearchFilter(formatted);
       setRefresh(true);
+      setIsLoading(false);
     }
   }
 
@@ -93,6 +97,9 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
         handleUpdatePasswordRequest(row[0], false);
     }
   }
+
+  if (isLoading) return <Loading />;
+
   return (
     <Box
       sx={{

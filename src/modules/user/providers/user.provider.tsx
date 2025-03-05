@@ -20,6 +20,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
             return r.name || r;
           }),
         );
+      } else {
+        setPermissions([]);
       }
     }
     fetchPermissions();

@@ -99,7 +99,7 @@ const AddUser = () => {
     }
   }
 
-  if (permissions.length && !permissions?.includes("user-creation")) {
+  if (!permissions.includes("user-creation")) {
     return <Unauthorized />;
   }
   return (

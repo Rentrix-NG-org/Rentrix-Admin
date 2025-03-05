@@ -11,7 +11,6 @@ const UserManagement = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[]>([]);
   const { permissions } = useUserContext();
-  console.log(permissions, "perm");
   return (
     <Box
       sx={{
