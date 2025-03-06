@@ -42,12 +42,7 @@ const Topbar = () => {
       <Box></Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Box
-            onClick={() => logout()}
-            component="img"
-            sx={{ width: 24 }}
-            src={bell}
-          />
+          <Box component="img" sx={{ width: 24 }} src={bell} />
           <Box
             onClick={() => {
               setMenuOpen(!menuOpen);
