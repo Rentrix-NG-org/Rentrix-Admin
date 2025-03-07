@@ -24,7 +24,7 @@ export const EditListingDetails = async (
 };
 export const UpdateListingStatus = async (
   listingId: string,
-  status: "listed" | "rented" | "under-review",
+  status: "listed" | "rented" | "under-review" | "available",
 ) => {
   if (!listingId) {
     return {
@@ -47,6 +47,32 @@ export const UpdateListingStatus = async (
     return {
       success: false,
       message: "Failed to update listing status",
+      data: error || null,
+    };
+  }
+};
+
+export const ApproveListing = async (listingId: string) => {
+  if (!listingId) {
+    return {
+      success: false,
+      message: "ListingId missing",
+      data: null,
+    };
+  }
+
+  try {
+    const response = await axios.patch(`/admin/listings/${listingId}/approve`);
+
+    return {
+      success: response.status === 200,
+      message: "Listing approved successfully",
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to approve listing",
       data: error || null,
     };
   }

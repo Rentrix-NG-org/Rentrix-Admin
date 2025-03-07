@@ -85,6 +85,14 @@ export interface IListing {
   fee: Fees;
   location: Location;
   owner: Owner;
+  status:
+    | "AVAILABLE"
+    | "PENDING-AVAILABLE"
+    | "listed"
+    | "rented"
+    | "SOLD"
+    | "under-offer"
+    | "under-review";
   media: Media[];
 }
 

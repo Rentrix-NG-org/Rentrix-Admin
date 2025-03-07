@@ -2,7 +2,11 @@ import { Box } from "@mui/material";
 import Table from "@src/shared/components/Table";
 import TableHeader from "@src/shared/components/TableHeader";
 import { useEffect, useState } from "react";
-import { GetListings, UpdateListingStatus } from "../pages/property.service";
+import {
+  ApproveListing,
+  GetListings,
+  UpdateListingStatus,
+} from "../pages/property.service";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
 // import { PropertyService } from '../pages/property.service';
@@ -51,6 +55,14 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
     }
   }
 
+  async function handleApproveListing(listingId: string) {
+    const response = await ApproveListing(listingId);
+
+    if (response.success) {
+      setRefresh(true);
+    }
+  }
+
   const handleTableSelection = (
     row: string[],
     selected: { value: string; index: number },
@@ -64,6 +76,9 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
         break;
       case "UNDER REVIEW":
         handleUpdateListingStatus(row[0], "under-review");
+        break;
+      case "AVAILABLE":
+        handleApproveListing(row[0]);
         break;
     }
   };
@@ -101,7 +116,7 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
             header: "STATUS",
             label: "availabilityStatus",
             type: "select",
-            options: ["LISTED", "UNDER REVIEW", "RENTED"],
+            options: ["LISTED", "UNDER REVIEW", "RENTED", "AVAILABLE"],
           },
           {
             header: "ACTIONS",
