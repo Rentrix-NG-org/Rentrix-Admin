@@ -16,7 +16,9 @@ const Listing: React.FC<{ listing: Partial<ListingType> }> = ({ listing }) => {
   useEffect(() => {
     const image = new Image();
     image.onload = () => setImageLoaded(true);
-    image.src = listing.media[currentMedia - 1].url;
+    image.src = listing.media.length
+      ? listing.media[currentMedia - 1].url
+      : icons.apartment;
   }, [currentMedia, listing.media]);
 
   function handleMedia() {
@@ -44,7 +46,11 @@ const Listing: React.FC<{ listing: Partial<ListingType> }> = ({ listing }) => {
             width: "100%",
             aspectRatio: "16 / 9",
           }}
-          src={imageLoaded ? listing.media[0].url : icons.apartment}
+          src={
+            imageLoaded
+              ? listing.media.length && listing.media[0].url
+              : icons.apartment
+          }
         />
 
         <Box

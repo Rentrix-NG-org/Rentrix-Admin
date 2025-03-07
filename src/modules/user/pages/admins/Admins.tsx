@@ -30,7 +30,7 @@ const Admins = () => {
             userId: user.id,
             name: user.name || "",
             role: user.role,
-            lastActive: user.lastActive || "",
+            lastActive: user.registrationDate || "",
             location: user.locations?.[0]?.state || "No state",
           });
         });
