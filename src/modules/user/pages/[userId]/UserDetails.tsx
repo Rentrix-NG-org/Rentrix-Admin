@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ListingType, TransactionType, User } from "../../types/user.types";
 import UserNav from "../../components/UserNav";
+import { LogType } from "@src/shared/types/shared.types";
 
 const UserDetails = () => {
   const { getUser } = UserService();
@@ -39,7 +40,7 @@ const UserDetails = () => {
       <TransactionHistory
         transactions={user.transactions as TransactionType[]}
       />
-      <ActivityLogs logs={user.logs!} />
+      <ActivityLogs logs={user.logs as LogType[]} />
     </Box>
   );
 };

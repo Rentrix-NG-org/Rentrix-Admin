@@ -8,16 +8,7 @@ import dayjs from "dayjs";
 import RepCard from "../../components/RepCard";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
-import { ActivityType } from "@src/shared/types/shared.types";
-
-const types: Record<ActivityType, string> = {
-  "login-event": "Login Event",
-  update: "Update",
-  download: "Download",
-  "user-role": "User Role",
-  "payment-made": "Payment Made",
-  "document-viewed": "Document Viewed",
-};
+import { types } from "@src/modules/logs/types/log.types";
 
 const RepDetails = () => {
   const { getUserRep } = UserService();
