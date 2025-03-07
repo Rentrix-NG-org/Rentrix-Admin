@@ -12,6 +12,7 @@ const Hero = ({
     id: "",
     createdAt: "",
     updatedAt: "",
+    status: "under-offer",
     title: "",
     description: "",
     label: "",

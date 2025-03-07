@@ -85,6 +85,7 @@ const Details = ({
     floorArea: 0,
     builtYear: 0,
     builtMonth: "",
+    status: "under-offer",
     floorLevel: 0,
     isDraft: false,
     fee: {
