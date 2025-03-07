@@ -8,18 +8,13 @@ import dayjs from "dayjs";
 import RepCard from "../../components/RepCard";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
-
-type ActivityType =
-  | "login-event"
-  | "update"
-  | "download"
-  | "payment-made"
-  | "document-viewed";
+import { ActivityType } from "@src/shared/types/shared.types";
 
 const types: Record<ActivityType, string> = {
   "login-event": "Login Event",
   update: "Update",
   download: "Download",
+  "user-role": "User Role",
   "payment-made": "Payment Made",
   "document-viewed": "Document Viewed",
 };
@@ -73,8 +68,8 @@ const RepDetails = () => {
         return {
           date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
           time: dayjs(Number(log.createdAt)).format("HH:mm"),
-          activityType: activityTypes[log.activityType as ActivityType],
-          details: log.description,
+          activityType: types[log.activityType],
+          details: log.description || "None",
         };
       });
       setLogs(formattedLogs);

@@ -10,19 +10,30 @@ import { UserService } from "../../services/user.service";
 import UserNav from "../../components/UserNav";
 import { useUserContext } from "../../providers/user.context";
 import Loading from "@src/shared/components/Loading";
+import Modal from "@src/shared/components/Modal";
+
+const { getAllUsers, updateUser } = UserService();
 
 const LandlordsTenants = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<string[][]>([]);
+  const [refresh, setRefresh] = useState(false);
+
+  const [modal, setModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string | React.ReactNode;
+    onConfirm: () => void;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const theme = useTheme();
   const { permissions } = useUserContext();
-  const { getAllUsers } = UserService();
 
   useEffect(() => {
     async function fetchUsers() {
+      setRefresh(true);
       let query = "";
       if (permissions.includes("landlord")) {
         query += "landlord=true";
@@ -41,17 +52,18 @@ const LandlordsTenants = () => {
             userId: user.id,
             name: user.name || "",
             role: user.role,
-            lastActive: user.lastActive || "",
-            location: user.locations?.[0]?.state || "No state",
+            status: user.status || "",
+            registrationDate: user.registrationDate || "",
           });
         });
         setFilter(formatted);
         setUsers(formatted);
         setIsLoading(false);
+        setRefresh(false);
       }
     }
     fetchUsers();
-  }, [permissions]);
+  }, [permissions, refresh]);
 
   useEffect(() => {
     const searchedUsers = users.filter((user) => {
@@ -83,13 +95,14 @@ const LandlordsTenants = () => {
       options: ["Landlord", "Tenant"],
     },
     {
-      header: "LAST ACTIVE",
-      label: "lastActive",
-      type: "text",
+      header: "STATUS",
+      label: "status",
+      type: "select",
+      options: ["Active", "Suspended"],
     },
     {
-      header: "LOCATION",
-      label: "location",
+      header: "REG DATE",
+      label: "registrationDate",
       type: "text",
     },
     {
@@ -124,6 +137,49 @@ const LandlordsTenants = () => {
         return filter.includes(user[2]);
       });
       setFilter(roleUsers);
+    }
+  }
+
+  async function updateUserData(id: string, data: any) {
+    const response = await updateUser(id, data);
+    if (response.success) {
+      setRefresh(true);
+    }
+  }
+
+  function handleTableSelection(
+    row: string[],
+    selected: { value: string; index: number },
+  ) {
+    switch (selected.value) {
+      case "Suspended":
+        setModal({
+          isOpen: true,
+          title: "Suspend",
+          message: (
+            <Box sx={{ display: "flex", gap: "4px" }}>
+              <Typography>Are you sure you want to</Typography>
+              <Typography
+                sx={{ color: theme.palette.secondary.main, fontWeight: 600 }}
+              >
+                Suspend
+              </Typography>
+              <Typography>{row[1]}?</Typography>
+            </Box>
+          ),
+          onConfirm: () => {
+            updateUserData(row[0], { status: selected.value.toLowerCase() });
+            setModal(null);
+          },
+        });
+        break;
+      case "Landlord":
+      case "Tenant":
+        updateUserData(row[0], { role: selected.value.toLowerCase() });
+        break;
+      case "Active":
+        updateUserData(row[0], { status: selected.value.toLowerCase() });
+        break;
     }
   }
 
@@ -166,8 +222,19 @@ const LandlordsTenants = () => {
         </Typography>
       </Box>
 
+      {modal?.isOpen && (
+        <Modal
+          onCancel={() => {
+            setModal(null);
+          }}
+          onConfirm={modal.onConfirm}
+        >
+          <Typography>{modal.message} </Typography>
+        </Modal>
+      )}
+
       <Table
-        onSelect={() => {}}
+        onSelect={handleTableSelection}
         onRowClick={(v) => {
           navigate(`/users/${v[0]}`);
         }}

@@ -34,3 +34,20 @@ interface TextColumn extends BaseColumn {
 }
 
 export type Column = SelectColumn | ActionColumn | TextColumn | CustomText;
+
+export type ActivityType =
+  | "login-event"
+  | "update"
+  | "download"
+  | "payment-made"
+  | "user-role"
+  | "document-viewed";
+
+export interface LogType {
+  createdAt: string;
+  description: string;
+  date: string;
+  time: string;
+  details: string;
+  activityType: ActivityType;
+}

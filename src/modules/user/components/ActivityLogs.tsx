@@ -1,25 +1,10 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import LogTable from "@src/shared/components/LogTable";
+import { ActivityType, LogType } from "@src/shared/types/shared.types";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router";
-
-type ActivityType =
-  | "login-event"
-  | "update"
-  | "download"
-  | "payment-made"
-  | "document-viewed";
-
-interface LogType {
-  createdAt: string;
-  description: string;
-  date: string;
-  time: string;
-  details: string;
-  activityType: ActivityType;
-}
 
 const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
   const types: Record<ActivityType, string> = {
@@ -42,8 +27,8 @@ const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
         return {
           date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
           time: dayjs(Number(log.createdAt)).format("HH:mm"),
-          details: log.description,
           actitityType: activityTypes[log.activityType as ActivityType],
+          details: log.description,
         };
       });
       setLogs(formatted as unknown as LogType[]);

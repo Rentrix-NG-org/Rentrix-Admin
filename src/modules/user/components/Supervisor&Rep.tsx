@@ -45,8 +45,8 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             id: user.id,
             name: user.name,
             role: user.role,
-            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
             registrationDate: user.registrationDate,
+            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
           };
         });
         setRefresh(false);

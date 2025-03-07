@@ -11,6 +11,8 @@ import UserNav from "../../components/UserNav";
 import Loading from "@src/shared/components/Loading";
 import { useUserContext } from "../../providers/user.context";
 
+const { getAllUsers, changeRoles } = UserService();
+
 const SupervisorsReps = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
@@ -20,7 +22,6 @@ const SupervisorsReps = () => {
   const { permissions } = useUserContext();
   const navigate = useNavigate();
   const theme = useTheme();
-  const { getAllUsers, changeRoles } = UserService();
 
   useEffect(() => {
     async function fetchUsers() {
@@ -42,7 +43,7 @@ const SupervisorsReps = () => {
             userId: user.id,
             name: user.name || "",
             role: user.role,
-            lastActive: user.lastActive || "",
+            lastActive: user.registrationDate || "",
             location: user.locations?.[0]?.state || "No state",
           });
         });

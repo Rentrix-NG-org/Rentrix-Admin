@@ -3,9 +3,18 @@ import PaginationControl from "@src/modules/user/components/PaginationControl";
 import UserNav from "@src/modules/user/components/UserNav";
 import { UserService } from "@src/modules/user/services/user.service";
 import LogTable from "@src/shared/components/LogTable";
+import { ActivityType } from "@src/shared/types/shared.types";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
+
+const types: Record<ActivityType, string> = {
+  "login-event": "Login Event",
+  update: "Update",
+  download: "Download",
+  "payment-made": "Payment Made",
+  "document-viewed": "Document Viewed",
+};
 
 const ActivityLogs = () => {
   const params = useParams();
@@ -13,6 +22,8 @@ const ActivityLogs = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [paginatedData, setPaginatedData] = useState<any[]>([]);
+
+  const activityTypes = useMemo(() => types, []);
 
   const columns = [
     { header: "Date", label: "date" },
@@ -35,7 +46,7 @@ const ActivityLogs = () => {
           return {
             date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
             time: dayjs(Number(log.createdAt)).format("HH:mm"),
-            activityType: log.activityType,
+            activityType: activityTypes[log.activityType],
             details: log.description,
           };
         });
