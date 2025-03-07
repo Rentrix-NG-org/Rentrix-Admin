@@ -11,6 +11,7 @@ const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
     "login-event": "Login Event",
     update: "Update",
     download: "Download",
+    "user-role": "User Role",
     "payment-made": "Payment Made",
     "document-viewed": "Document Viewed",
   };
