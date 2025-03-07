@@ -199,6 +199,8 @@ const Select: FC<{
     landlord: { value: "#297dfd", border: "transparent", accent: "#f7f7ff" },
     suspended: { value: "#cb1a14", border: "transparent", accent: "#f7dddc" },
     active: { value: "#099137", border: "transparent", accent: "#daefe1" },
+    available: { value: "#099137", border: "transparent", accent: "#daefe1" },
+    AVAILABLE: { value: "#099137", border: "transparent", accent: "#daefe1" },
     Supervisor: { value: "#430c7b", border: "transparent", accent: "#e3dbeb" },
     Admin: { value: "#cd9e14", border: "transparent", accent: "#fef5dc" },
     admin: { value: "#cd9e14", border: "transparent", accent: "#fef5dc" },
