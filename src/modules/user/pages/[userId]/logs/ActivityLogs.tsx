@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 const types: Record<ActivityType, string> = {
   "login-event": "Login Event",
   update: "Update",
+  "user-role": "User Role",
   download: "Download",
   "payment-made": "Payment Made",
   "document-viewed": "Document Viewed",
