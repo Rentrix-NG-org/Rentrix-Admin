@@ -1,4 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
+import { types } from "@src/modules/logs/types/log.types";
 import LogTable from "@src/shared/components/LogTable";
 import { ActivityType, LogType } from "@src/shared/types/shared.types";
 import dayjs from "dayjs";
@@ -7,15 +8,6 @@ import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 
 const ActivityLogs: React.FC<{ logs: LogType[] }> = ({ logs }) => {
-  const types: Record<ActivityType, string> = {
-    "login-event": "Login Event",
-    update: "Update",
-    download: "Download",
-    "user-role": "User Role",
-    "payment-made": "Payment Made",
-    "document-viewed": "Document Viewed",
-  };
-
   const activityTypes = useMemo(() => types, []);
   const theme = useTheme();
   const params = useParams();

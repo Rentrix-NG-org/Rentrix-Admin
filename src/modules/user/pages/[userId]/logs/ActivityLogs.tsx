@@ -1,21 +1,12 @@
 import { Box } from "@mui/material";
+import { types } from "@src/modules/logs/types/log.types";
 import PaginationControl from "@src/modules/user/components/PaginationControl";
 import UserNav from "@src/modules/user/components/UserNav";
 import { UserService } from "@src/modules/user/services/user.service";
 import LogTable from "@src/shared/components/LogTable";
-import { ActivityType } from "@src/shared/types/shared.types";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
-
-const types: Record<ActivityType, string> = {
-  "login-event": "Login Event",
-  update: "Update",
-  "user-role": "User Role",
-  download: "Download",
-  "payment-made": "Payment Made",
-  "document-viewed": "Document Viewed",
-};
 
 const ActivityLogs = () => {
   const params = useParams();
