@@ -24,6 +24,11 @@ import FailedLoginInfo from "./pages/user-auth/failed-login/[logId]/LogInfo";
 import PaymentTransactions from "./pages/payment/Payment";
 import PaymentInitiation from "./pages/payment/initiation/PaymentInitiation";
 import PaymentInitiationInfo from "./pages/payment/initiation/[logId]/LogInfo";
+import PropertyManagement from "./pages/property-mgmt/PropertyMgmt";
+import ListingCreation from "./pages/property-mgmt/listing-creation/ListingCreation";
+import ListingCreationInfo from "./pages/property-mgmt/listing-creation/[logId]/LogInfo";
+import ListingUpdates from "./pages/property-mgmt/listing-updates/ListingUpdates";
+import ListingUpdatesInfo from "./pages/property-mgmt/listing-updates/[logId]/LogInfo";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -157,6 +162,31 @@ export const LogsModule: LogsModule = {
       path: "/logs/payment/initiation/:logId",
       element: <PaymentInitiationInfo />,
       title: "Payment Initiation Info",
+    },
+    {
+      path: "/logs/property-management",
+      element: <PropertyManagement />,
+      title: "Property Management Logs",
+    },
+    {
+      path: "/logs/property-management/listing-creation",
+      element: <ListingCreation />,
+      title: "Property Listing Creation",
+    },
+    {
+      path: "/logs/property-management/listing-creation/:logId",
+      element: <ListingCreationInfo />,
+      title: "Property Listing Creation Info",
+    },
+    {
+      path: "/logs/property-management/listing-updates",
+      element: <ListingUpdates />,
+      title: "Property Listing Update",
+    },
+    {
+      path: "/logs/property-management/listing-updates/:logId",
+      element: <ListingUpdatesInfo />,
+      title: "Property Listing Update Info",
     },
   ],
   name: "Logs",
