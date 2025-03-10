@@ -1,8 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import logo from "@src/assets/icons/logo.svg";
-
 import { ModuleRegistry } from "@src/core/registry";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import users from "@src/assets/icons/users.svg";
 import logs from "@src/assets/icons/logs.svg";
@@ -10,9 +9,18 @@ import home from "@src/assets/icons/home.svg";
 
 const Sidebar = () => {
   const theme = useTheme();
-  const [selected, setSelected] = useState("User Management");
+  const [selected, setSelected] = useState("");
   const navigate = useNavigate();
   const routes = ModuleRegistry.getRoutes();
+
+  useEffect(() => {
+    const storedSelected = localStorage.getItem("selected");
+    if (storedSelected) {
+      setSelected(storedSelected);
+    } else {
+      setSelected("User Management");
+    }
+  }, []);
 
   const icons = {
     "User Management": users,
@@ -22,7 +30,7 @@ const Sidebar = () => {
 
   const sidebarRoutes = routes.filter((route) => {
     const split = route.path?.split("/");
-    return split[2] === 'profile' ? null : split && split.length === 2;
+    return split[2] === "profile" ? null : split && split.length === 2;
   });
 
   return (
@@ -49,6 +57,7 @@ const Sidebar = () => {
             component="button"
             onClick={() => {
               setSelected(title || "");
+              localStorage.setItem("selected", title || "");
               navigate(path || "");
             }}
             sx={{
