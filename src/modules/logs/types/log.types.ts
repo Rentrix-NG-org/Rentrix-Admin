@@ -11,11 +11,32 @@ export interface Transaction {
   id: string;
 }
 
+export interface Location {
+  id: string;
+  state: string;
+  streetName: string;
+  propertyNumber: string;
+}
+export interface Fee {
+  fee: string;
+}
+
+export interface Listing {
+  id: string;
+  title: string;
+  description: string;
+  owner: User;
+  location: Location;
+  fee: Fee;
+}
+
 export interface Log {
   id: string;
+  description: string;
   user: User;
   account: Account;
   amount: number;
+  listing: Listing;
   transaction: Transaction;
   affectedUser: User;
   createdAt: string;
