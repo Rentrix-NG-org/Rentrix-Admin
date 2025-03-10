@@ -29,6 +29,9 @@ import ListingCreation from "./pages/property-mgmt/listing-creation/ListingCreat
 import ListingCreationInfo from "./pages/property-mgmt/listing-creation/[logId]/LogInfo";
 import ListingUpdates from "./pages/property-mgmt/listing-updates/ListingUpdates";
 import ListingUpdatesInfo from "./pages/property-mgmt/listing-updates/[logId]/LogInfo";
+import ListingRemoval from "./pages/property-mgmt/listing-removal/ListingRemoval";
+import ListingRemovalInfo from "./pages/property-mgmt/listing-removal/[logId]/LogInfo";
+import ViewingRequest from "./pages/property-mgmt/viewing-request/ViewingRequest";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -187,6 +190,21 @@ export const LogsModule: LogsModule = {
       path: "/logs/property-management/listing-updates/:logId",
       element: <ListingUpdatesInfo />,
       title: "Property Listing Update Info",
+    },
+    {
+      path: "/logs/property-management/listing-removal",
+      element: <ListingRemoval />,
+      title: "Property Listing Deletion",
+    },
+    {
+      path: "/logs/property-management/listing-removal/:logId",
+      element: <ListingRemovalInfo />,
+      title: "Property Listing Deletion Info",
+    },
+    {
+      path: "/logs/property-management/viewing-requests",
+      element: <ViewingRequest />,
+      title: "Viewing Request",
     },
   ],
   name: "Logs",

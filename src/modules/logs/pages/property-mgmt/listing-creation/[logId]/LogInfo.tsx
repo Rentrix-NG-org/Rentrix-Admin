@@ -65,14 +65,7 @@ const ListingCreationInfo = () => {
           justifyContent: "space-between",
         }}
       >
-        <UserNav
-          routes={[
-            "Logs",
-            "Administrative Action Logs",
-            "User Role Assignment/Changes",
-            "View",
-          ]}
-        />
+        <UserNav routes={["Logs", "Property Management Logs", "View"]} />
         <Box
           component="button"
           onClick={() => {

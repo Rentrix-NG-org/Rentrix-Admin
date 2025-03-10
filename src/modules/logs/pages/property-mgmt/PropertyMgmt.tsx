@@ -9,7 +9,7 @@ const PropertyManagement = () => {
     { name: "Property Listing Creation", route: "listing-creation" },
     { name: "Property Listing Updates", route: "listing-updates" },
     { name: "Property Deactivation/Removal", route: "listing-removal" },
-    { name: "Viewing Requests", route: "viewing-request" },
+    { name: "Viewing Requests", route: "viewing-requests" },
   ];
 
   return (

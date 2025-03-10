@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const ListingUpdates = () => {
+const ViewingRequest = () => {
   const navigate = useNavigate();
   const { getAllLogs } = LogService();
   const [logs, setLogs] = useState<string[][]>([]);
@@ -20,16 +20,16 @@ const ListingUpdates = () => {
 
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getAllLogs("listing-updates=true");
+      const response = await getAllLogs("viewing-requests=true");
 
       if (response.success) {
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
             userId: log.listing?.owner?.id,
-            updatedFields: log.action,
-            valueBefore: log.valueBefore,
-            valueAfter: log.valueAfter,
-            details: log.description,
+            propertyId: log.listing?.id,
+            viewingDate: log.description,
+            rep: log.user.id,
+            staus: log.status,
             timestamp: dayjs(Number(log.createdAt)).format(
               "YYYY-MM-DD HH:mm:ss",
             ),
@@ -59,23 +59,23 @@ const ListingUpdates = () => {
       type: "text",
     },
     {
-      header: "UPDATED FIELDS",
+      header: "PROPERTY ID",
       label: "propertyId",
       type: "text",
     },
     {
-      header: "BEFORE VALUE",
-      label: "beforeValue",
+      header: "SCHEDULED VIEWING DATE/TIME",
+      label: "viewingDate",
       type: "text",
     },
     {
-      header: "AFTER VALUE",
-      label: "afterValue",
+      header: "RENTRIX REP",
+      label: "rep",
       type: "text",
     },
     {
-      header: "UPDATED CONFIRMATION",
-      label: "confirmation",
+      header: "STATUS",
+      label: "status",
       type: "text",
     },
     {
@@ -117,11 +117,7 @@ const ListingUpdates = () => {
       <LogHeader />
       <UserNav
         showBack={false}
-        routes={[
-          "Logs",
-          "Property Management Logs",
-          "Property Listing Updates",
-        ]}
+        routes={["Logs", "Property Management Logs", "Viewing Requests"]}
       />
 
       <Table
@@ -141,4 +137,4 @@ const ListingUpdates = () => {
     </Box>
   );
 };
-export default ListingUpdates;
+export default ViewingRequest;
