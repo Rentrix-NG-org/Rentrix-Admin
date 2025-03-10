@@ -1,4 +1,4 @@
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
 import { Log } from "@src/modules/logs/types/log.types";
