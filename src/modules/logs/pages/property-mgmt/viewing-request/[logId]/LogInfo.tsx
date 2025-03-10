@@ -64,7 +64,12 @@ const ListingUpdatesInfo = () => {
         }}
       >
         <UserNav
-          routes={["Logs", "Property Management Logs", "Info", "View"]}
+          routes={[
+            "Logs",
+            "Property Management Logs",
+            "Viewing Requests",
+            "Info",
+          ]}
         />
         <Box
           component="button"

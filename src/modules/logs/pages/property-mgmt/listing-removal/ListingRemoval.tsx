@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const ListingUpdates = () => {
+const ListingRemoval = () => {
   const navigate = useNavigate();
   const { getAllLogs } = LogService();
   const [logs, setLogs] = useState<string[][]>([]);
@@ -20,19 +20,19 @@ const ListingUpdates = () => {
 
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getAllLogs("listing-updates=true");
+      const response = await getAllLogs("listing-removal=true");
 
       if (response.success) {
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
             userId: log.listing?.owner?.id,
-            updatedFields: log.action,
-            valueBefore: log.valueBefore,
-            valueAfter: log.valueAfter,
+            propertyId: log.listing?.id,
+            reasons: log.description,
             details: log.description,
             timestamp: dayjs(Number(log.createdAt)).format(
               "YYYY-MM-DD HH:mm:ss",
             ),
+            devices: log.devices.join(", "),
           });
         });
 
@@ -59,28 +59,28 @@ const ListingUpdates = () => {
       type: "text",
     },
     {
-      header: "UPDATED FIELDS",
+      header: "PROPERTY ID",
       label: "propertyId",
       type: "text",
     },
     {
-      header: "BEFORE VALUE",
-      label: "beforeValue",
+      header: "REASON FOR REMOVAL",
+      label: "reasons",
       type: "text",
     },
     {
-      header: "AFTER VALUE",
-      label: "afterValue",
-      type: "text",
-    },
-    {
-      header: "UPDATED CONFIRMATION",
+      header: "SYSTEM CONFIRMATION",
       label: "confirmation",
       type: "text",
     },
     {
       header: "TIMESTAMPS",
       label: "timestamps",
+      type: "text",
+    },
+    {
+      header: "DEVICES & IP ADDRESS",
+      label: "devices",
       type: "text",
     },
     {
@@ -120,7 +120,7 @@ const ListingUpdates = () => {
         routes={[
           "Logs",
           "Property Management Logs",
-          "Property Listing Updates",
+          "Property Deactivation/Removal",
         ]}
       />
 
@@ -141,4 +141,4 @@ const ListingUpdates = () => {
     </Box>
   );
 };
-export default ListingUpdates;
+export default ListingRemoval;

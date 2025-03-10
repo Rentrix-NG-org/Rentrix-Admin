@@ -136,7 +136,7 @@ const ListingCreation = () => {
       <LogHeader />
       <UserNav
         showBack={false}
-        routes={["Logs", "Payment & Transaction Logs", "Payment Initiation"]}
+        routes={["Logs", "Property Management Logs", "Payment Initiation"]}
       />
 
       <Table
