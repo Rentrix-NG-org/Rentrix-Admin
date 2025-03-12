@@ -14,6 +14,7 @@ import { useNavigate } from "react-router";
 const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
   const navigate = useNavigate();
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
+  const [total, setTotal] = useState(0);
   const [properties, setProperties] = useState<any>([]);
   const [refresh, setRefresh] = useState(true);
 
@@ -25,7 +26,8 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
 
       if (response?.status === 200) {
         setRefresh(false);
-        setProperties(response.data);
+        setProperties(response.data.properties);
+        setTotal(response.data.total);
       }
     }
 
@@ -91,7 +93,10 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
         gap: 2,
       }}
     >
-      <TableHeader onViewAll={() => {}} title="Property Management" />
+      <TableHeader
+        onViewAll={() => {}}
+        title={`Property Management (${total})`}
+      />
       <Table
         onRowClick={() => {}}
         onSelect={handleTableSelection}
