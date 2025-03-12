@@ -86,6 +86,7 @@ const Table: React.FC<TableProps> = ({
               columns[cellIndex]?.type === "select" ? (
                 <Select
                   cell={cell}
+                  selected={cell}
                   onSelect={(title) => {
                     onSelect(row, { value: title, index: cellIndex });
                   }}
@@ -188,7 +189,8 @@ const Select: FC<{
   cell: string;
   options: string[];
   onSelect: (selected: string) => void;
-}> = ({ column, options, onSelect, cell }) => {
+  selected: string;
+}> = ({ column, options, onSelect, cell, selected }) => {
   const theme = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const colors: Record<
@@ -264,6 +266,7 @@ const Select: FC<{
       {isMenuOpen && (
         <Menu
           sx={{}}
+          curr_selected={selected}
           title={column}
           options={options}
           onSelect={(title) => {
@@ -279,14 +282,20 @@ const Select: FC<{
 const Menu: React.FC<{
   title: string;
   sx?: SxProps;
+  curr_selected?: string;
   options: string[];
   onClose: VoidFunction;
   onSelect: (title: string) => void;
-}> = ({ title, options = [], onSelect, sx, onClose }) => {
+}> = ({ title, options = [], onSelect, sx, curr_selected, onClose }) => {
   const [selected, setSelected] = useState("");
   const theme = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
   const position = useMenuPosition(menuRef);
+
+  useEffect(() => {
+    setSelected(curr_selected);
+    console.log(curr_selected);
+  }, [curr_selected]);
   return (
     <Box
       ref={menuRef}
@@ -356,7 +365,7 @@ const Menu: React.FC<{
                   color: theme.palette.secondary.main,
                 },
               }}
-              checked={selected === option}
+              checked={selected.toLowerCase() === option.toLowerCase()}
               onChange={() => {
                 setSelected(option);
                 onSelect(option);
