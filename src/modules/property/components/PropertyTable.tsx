@@ -95,7 +95,7 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
       <Table
         onRowClick={() => {}}
         onSelect={handleTableSelection}
-        limit={5}
+        limit={50}
         columns={[
           {
             header: "PROPERTY ID",
