@@ -29,7 +29,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
       const response = await getAllUsers(query);
 
       if (response.success) {
-        const formatted = response.data.map((user: any) => {
+        const formatted = response.data.users.map((user: any) => {
           return {
             id: user.id,
             name: user.name,

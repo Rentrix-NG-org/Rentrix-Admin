@@ -16,7 +16,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 }) => {
   const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [totals, setTotals] = useState({ supervisor: 0, representative: 0 });
   const { permissions } = useUserContext();
 
   const navigate = useNavigate();
@@ -40,7 +40,8 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       const response = await getAllUsers(query);
 
       if (response.success) {
-        const formatted = response.data.map((user: any) => {
+        setTotals(response.data.total);
+        const formatted = response.data.users.map((user: any) => {
           return {
             id: user.id,
             name: user.name,
@@ -123,7 +124,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
       }}
     >
       <TableHeader
-        title="Supervisors & Representatives"
+        title={`Supervisors & Representatives (${totals.supervisor} supervisors; ${totals.representative} representatives)`}
         onViewAll={() => {
           navigate("roles/supervisors-reps");
         }}
