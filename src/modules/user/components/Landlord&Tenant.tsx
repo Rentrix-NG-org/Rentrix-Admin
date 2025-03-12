@@ -53,7 +53,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
           return {
             id: user.id,
             name: user.name,
-            role: user.role,
+            role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
             status: user.status,
             registrationDate: user.registrationDate,
           };
@@ -103,8 +103,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     {
       header: "ROLE",
       label: "role",
-      type: "select",
-      options: ["Tenant", "Landlord"],
+      type: "text",
     },
     {
       header: "STATUS",
@@ -173,10 +172,10 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
           },
         });
         break;
-      case "Landlord":
-      case "Tenant":
-        updateUserData(row[0], { role: selected.value.toLowerCase() });
-        break;
+      // case "Landlord":
+      // case "Tenant":
+      //   updateUserData(row[0], { role: selected.value.toLowerCase() });
+      //   break;
       case "Active":
         updateUserData(row[0], { status: selected.value.toLowerCase() });
         break;
