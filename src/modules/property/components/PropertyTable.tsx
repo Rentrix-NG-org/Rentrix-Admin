@@ -116,7 +116,7 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
             header: "STATUS",
             label: "availabilityStatus",
             type: "select",
-            options: ["LISTED", "UNDER REVIEW", "RENTED", "AVAILABLE"],
+            options: ["LISTED", "RENTED", "AVAILABLE"],
           },
           {
             header: "ACTIONS",
