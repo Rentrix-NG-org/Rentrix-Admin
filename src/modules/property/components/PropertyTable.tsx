@@ -9,6 +9,7 @@ import {
 } from "../pages/property.service";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
+import { Listing } from "@src/modules/logs/types/log.types";
 // import { PropertyService } from '../pages/property.service';
 
 const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
@@ -26,7 +27,19 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
 
       if (response?.status === 200) {
         setRefresh(false);
-        setProperties(response.data.properties);
+        console.log(response.data);
+        const formatted = (response.data.properties as any[]).map((prop) => {
+          const { status } = prop;
+          const [one, two] = status.split("-");
+          if (one === "SAVED") {
+            return {
+              ...prop,
+              status: `${one} ${two ? `(${two})` : ""}`,
+            };
+          }
+          return prop;
+        });
+        setProperties(formatted);
         setTotal(response.data.total);
       }
     }

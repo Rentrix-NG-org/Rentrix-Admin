@@ -19,7 +19,6 @@ const AdminPanel = () => {
     async function fetchLogs() {
       const response = await getAllLogs("panel-access=true");
       if (response.success) {
-        console.log(response.data);
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
             adminId: log.user.id,
