@@ -19,12 +19,11 @@ const AdminPanel = () => {
     async function fetchLogs() {
       const response = await getAllLogs("panel-access=true");
       if (response.success) {
+        console.log(response.data);
         const formatted = (response.data as Admin[]).map((log) => {
           return Object.values({
             adminId: log.user.id,
-            action: log.accessModules.flat().length
-              ? log.accessModules.join(", ")
-              : "No Access",
+            action: log.action,
             timestamp: dayjs(Number(log.createdAt)).format(
               "YYYY-MM-DD HH:mm:ss",
             ),
