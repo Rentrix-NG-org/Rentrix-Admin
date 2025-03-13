@@ -9,7 +9,6 @@ import {
 } from "../pages/property.service";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
-import { Listing } from "@src/modules/logs/types/log.types";
 // import { PropertyService } from '../pages/property.service';
 
 const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
