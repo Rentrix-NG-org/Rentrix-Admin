@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
@@ -7,17 +7,25 @@ import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
+import Modal from "@src/shared/components/Modal";
 
-const { getAllUsers, updateUser, changeRoles } = UserService();
+const { getAllUsers, updateUser, changeRoles, deleteUser } = UserService();
 
 const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
   const [users, setUsers] = useState<any[]>([]);
+  const [selectedUser, setSelectedUser] = useState({
+    id: "",
+    name: "",
+    role: "",
+  });
+  const [showDeleteModal, setSHowDeleteModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [totals, setTotals] = useState({ supervisor: 0, representative: 0 });
   const { permissions } = useUserContext();
+  const theme = useTheme();
 
   const navigate = useNavigate();
 
@@ -113,6 +121,15 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     }
   }
 
+  async function handleDeleteUser() {
+    const response = await deleteUser(selectedUser.id);
+    if (response.success) {
+      setSHowDeleteModal(false);
+
+      setRefresh(true);
+    }
+  }
+
   if (isLoading) return <Loading />;
 
   return (
@@ -181,13 +198,48 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
                 component: (
                   <Box component="img" src={icons.bin} sx={{ width: 18 }} />
                 ),
-                onClick: () => {},
+                onClick: (v) => {
+                  const user = users.find((u) => u.id === v);
+                  console.log(user);
+                  setSelectedUser(user);
+                  setSHowDeleteModal(true);
+                },
               },
             ],
           },
         ]}
         data={searchFilter}
       />
+      {showDeleteModal && (
+        <Modal
+          onCancel={() => {
+            setSHowDeleteModal(false);
+          }}
+          onConfirm={handleDeleteUser}
+        >
+          Are you sure you want to delete &nbsp;
+          <Typography
+            sx={{
+              fontWeight: 600,
+              color: theme.palette.secondary.main,
+            }}
+          >
+            {" "}
+            {selectedUser.name}
+          </Typography>
+          &nbsp;from&nbsp;
+          <Typography
+            sx={{
+              fontWeight: 600,
+              color: theme.palette.secondary.main,
+            }}
+          >
+            {selectedUser.role.charAt(0).toUpperCase() +
+              selectedUser.role.slice(1)}
+          </Typography>
+          ?
+        </Modal>
+      )}
     </Box>
   );
 };
