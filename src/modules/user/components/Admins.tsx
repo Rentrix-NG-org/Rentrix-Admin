@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
@@ -7,8 +7,9 @@ import { useNavigate } from "react-router";
 import { icons } from "@src/utils/icons";
 import Loading from "@src/shared/components/Loading";
 import { useUserContext } from "../providers/user.context";
+import Modal from "@src/shared/components/Modal";
 
-const { getAllUsers, updateUser, changeRoles } = UserService();
+const { getAllUsers, updateUser, changeRoles, deleteUser } = UserService();
 
 const Admins: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -16,10 +17,17 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
 }) => {
   const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({
+    id: "",
+    name: "",
+    role: "",
+  });
   const [refresh, setRefresh] = useState(false);
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const { permissions } = useUserContext();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     async function getUsers() {
@@ -101,6 +109,14 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
     }
   }
 
+  async function handleDeleteUser() {
+    const response = await deleteUser(selectedUser.id);
+    if (response.success) {
+      setShowDeleteModal(false);
+      setRefresh(true);
+    }
+  }
+
   if (isLoading) return <Loading />;
 
   return (
@@ -169,13 +185,48 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
                 component: (
                   <Box component="img" src={icons.bin} sx={{ width: 18 }} />
                 ),
-                onClick: () => {},
+                onClick: (v) => {
+                  const user = users.find((u) => u.id === v);
+                  setSelectedUser(user);
+                  setShowDeleteModal(true);
+                },
               },
             ],
           },
         ]}
         data={searchFilter}
       />
+
+      {showDeleteModal && (
+        <Modal
+          onCancel={() => {
+            setShowDeleteModal(false);
+          }}
+          onConfirm={handleDeleteUser}
+        >
+          Are you sure you want to delete &nbsp;
+          <Typography
+            sx={{
+              fontWeight: 600,
+              color: theme.palette.secondary.main,
+            }}
+          >
+            {" "}
+            {selectedUser.name}
+          </Typography>
+          &nbsp;from&nbsp;
+          <Typography
+            sx={{
+              fontWeight: 600,
+              color: theme.palette.secondary.main,
+            }}
+          >
+            {selectedUser.role.charAt(0).toUpperCase() +
+              selectedUser.role.slice(1)}
+          </Typography>
+          ?
+        </Modal>
+      )}
     </Box>
   );
 };

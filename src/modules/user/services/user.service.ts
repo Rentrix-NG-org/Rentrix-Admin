@@ -28,7 +28,22 @@ export const UserService = () => {
         data: response.data,
       };
     },
+    deleteUser: async (userId: string) => {
+      if (!userId) {
+        return {
+          success: false,
+          message: "UserId missing",
+          data: null,
+        };
+      }
+      const response = await axios.delete(`/admin/users/${userId}`);
 
+      return {
+        success: response.status === 200,
+        message: "User deleted",
+        data: response.data,
+      };
+    },
     getUserRep: async (userId: string) => {
       if (!userId) {
         return {
