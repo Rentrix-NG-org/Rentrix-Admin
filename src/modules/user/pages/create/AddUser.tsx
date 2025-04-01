@@ -254,6 +254,7 @@ const AddUser = () => {
           onChange={(value) => {
             setForm((curr) => ({ ...curr, role: value }));
           }}
+          disabled
           containerSx={{
             border: `1px solid ${theme.palette.grey[300]}`,
             background: theme.palette.grey[100],
@@ -261,7 +262,7 @@ const AddUser = () => {
           label="Role"
           icon={icons.usercircle}
           placeholderSx={{ color: theme.palette.grey[600] }}
-          options={["Supervisor", "Admin"]}
+          options={["Admin"]}
           required
         />
         <SelectInput

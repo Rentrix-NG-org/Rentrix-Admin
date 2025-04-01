@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 const SelectInput: React.FC<{
   label: string;
   icon?: string;
+  disabled?: boolean;
   value?: string | number;
   options: string[];
   typeable?: boolean;
@@ -18,6 +19,7 @@ const SelectInput: React.FC<{
   icon,
   options = ["None"],
   typeable,
+  disabled = false,
   value,
   onChange,
   containerSx,
@@ -72,7 +74,9 @@ const SelectInput: React.FC<{
     <Box
       component="button"
       onClick={() => {
-        setIsOpen(!isOpen);
+        if (!disabled) {
+          setIsOpen(!isOpen);
+        }
       }}
       sx={{
         display: "flex",
@@ -208,25 +212,29 @@ const SelectInput: React.FC<{
             {selected || "Select " + label.toLowerCase()}{" "}
           </Typography>
 
-          <ChevronLeftRounded
-            sx={{
-              ml: "auto",
-              display: icon ? "none" : "block",
-              transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
-              color: theme.palette.text.secondary,
-              ...placeholderSx,
-            }}
-          />
+          {!disabled && (
+            <ChevronLeftRounded
+              sx={{
+                ml: "auto",
+                display: icon ? "none" : "block",
+                transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
+                color: theme.palette.text.secondary,
+                ...placeholderSx,
+              }}
+            />
+          )}
         </Box>
       </Box>
-      <ChevronLeftRounded
-        sx={{
-          ml: "auto",
-          display: icon ? "block" : "none",
-          transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
-          color: theme.palette.common.black,
-        }}
-      />
+      {!disabled && (
+        <ChevronLeftRounded
+          sx={{
+            ml: "auto",
+            display: icon ? "block" : "none",
+            transform: isOpen ? "rotate(90deg)" : "rotate(-90deg)",
+            color: theme.palette.common.black,
+          }}
+        />
+      )}
 
       <Box
         display={isOpen ? "flex" : "none"}
