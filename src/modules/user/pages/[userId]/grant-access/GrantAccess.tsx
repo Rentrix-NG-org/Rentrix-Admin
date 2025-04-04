@@ -12,12 +12,14 @@ const GrantAccess = () => {
   const navigate = useNavigate();
   const { grantAccess, getAllPermissions } = UserService();
   const logsMap = {
+    "User Authentication Logs": "user-auth-logs",
     "Communication and Interaction Logs": "communication-logs",
     "Escrow and Dispute Resolution Logs": "escrow-dispute-logs",
     "AI and Machine Learning Logs": "ai-ml-logs",
     "Administrative Action Logs": "admin-action-logs",
     "System Maintenance Logs": "system-maintenance-logs",
     "User Account Management Logs": "user-account-logs",
+    "System and Security Logs": "security-logs",
     "Payment and Transaction Logs": "payment-transaction-logs",
   };
   const logsReverse = Object.fromEntries(
@@ -170,6 +172,8 @@ const GrantAccess = () => {
             "Administrative Action Logs",
             "System Maintenance Logs",
             "User Account Management Logs",
+            "User Authentication Logs",
+            "System and Security Logs",
             "Payment and Transaction Logs",
           ]}
         />
