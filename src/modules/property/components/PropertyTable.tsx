@@ -26,7 +26,7 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
 
       if (response?.status === 200) {
         setRefresh(false);
-        console.log(response.data);
+        console.log(response.data, "");
         const formatted = (response.data.properties as any[]).map((prop) => {
           const { status } = prop;
           const [one, two] = status.split("-");
@@ -40,6 +40,9 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
         });
         setProperties(formatted);
         setTotal(response.data.total);
+      } else {
+        setRefresh(false);
+        console.error(response.data?.message);
       }
     }
 
@@ -60,7 +63,7 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
 
   async function handleUpdateListingStatus(
     listingId: string,
-    status: "listed" | "rented" | "under-review",
+    status: "LISTED" | "RENTED" | "UNDER_REVIEW",
   ) {
     const response = await UpdateListingStatus(listingId, status);
 
@@ -71,7 +74,7 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
 
   async function handleApproveListing(listingId: string) {
     const response = await ApproveListing(listingId);
-
+    console.log(response);
     if (response.success) {
       setRefresh(true);
     }
@@ -83,13 +86,13 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
   ) => {
     switch (selected.value) {
       case "LISTED":
-        handleUpdateListingStatus(row[0], "listed");
+        handleUpdateListingStatus(row[0], "LISTED");
         break;
       case "RENTED":
-        handleUpdateListingStatus(row[0], "rented");
+        handleUpdateListingStatus(row[0], "RENTED");
         break;
       case "UNDER REVIEW":
-        handleUpdateListingStatus(row[0], "under-review");
+        handleUpdateListingStatus(row[0], "UNDER_REVIEW");
         break;
       case "AVAILABLE":
         handleApproveListing(row[0]);

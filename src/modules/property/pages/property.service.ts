@@ -24,7 +24,7 @@ export const EditListingDetails = async (
 };
 export const UpdateListingStatus = async (
   listingId: string,
-  status: "listed" | "rented" | "under-review" | "available",
+  status: "LISTED" | "RENTED" | "UNDER_REVIEW" | "AVAILABLE",
 ) => {
   if (!listingId) {
     return {
