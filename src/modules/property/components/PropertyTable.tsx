@@ -133,6 +133,11 @@ const PropertyTable = ({ search }: { search: string; filter: string[] }) => {
             type: "text",
           },
           {
+            header: "DATE OF CREATION",
+            label: "createdAt",
+            type: "text",
+          },
+          {
             header: "STATUS",
             label: "availabilityStatus",
             type: "select",
