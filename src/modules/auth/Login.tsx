@@ -15,7 +15,7 @@ import { useNavigate } from "react-router";
 import axiosInstance from "@src/core/axios";
 import axios from "axios";
 
-const login = () => {
+const Login = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -228,4 +228,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
