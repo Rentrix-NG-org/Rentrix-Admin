@@ -76,6 +76,21 @@ const Hero = ({
         email: "",
       },
     },
+
+    representative: {
+      id: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      photoUrl: null,
+      dateOfBirth: "",
+      type: "",
+      account: {
+        id: "",
+        email: "",
+      },
+    },
+    tenants: [],
     media: [],
   },
 }: {
