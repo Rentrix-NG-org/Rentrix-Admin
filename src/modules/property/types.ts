@@ -16,7 +16,7 @@ interface Location {
   city: City;
 }
 
-interface Owner {
+interface User {
   id: string;
   firstName: string;
   lastName: string;
@@ -84,7 +84,8 @@ export interface IListing {
   isDraft: boolean;
   fee: Fees;
   location: Location;
-  owner: Owner;
+  owner: User;
+  representative: User;
   status:
     | "AVAILABLE"
     | "PENDING-AVAILABLE"
@@ -94,6 +95,7 @@ export interface IListing {
     | "under-offer"
     | "under-review";
   media: Media[];
+  tenants: User[];
 }
 
 export enum PropertyType {
