@@ -124,6 +124,20 @@ const Details = ({
         email: "",
       },
     },
+    representative: {
+      id: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      photoUrl: null,
+      dateOfBirth: "",
+      type: "",
+      account: {
+        id: "",
+        email: "",
+      },
+    },
+    tenants: [],
     media: [],
   },
 }: {
@@ -133,6 +147,49 @@ const Details = ({
   const [imageLoadingStatus, setImageLoadingStatus] = useState<
     "notset" | "success" | "error" | "pending"
   >("notset");
+  console.log(listing, "list");
+  const informations = [
+    {
+      title: "Landlord Information",
+      values: {
+        avatar: listing?.owner?.photoUrl,
+        fullName: listing?.owner?.firstName + " " + listing?.owner?.lastName,
+        email: listing?.owner?.account?.email,
+        userId: listing?.owner?.id,
+      },
+    },
+    {
+      title: "Tenant Information",
+      values: {
+        avatar:
+          listing.tenants && listing.tenants[0]
+            ? listing.tenants[0].photoUrl
+            : undefined,
+        fullName:
+          listing.tenants && listing.tenants[0]
+            ? listing.tenants[0].firstName + " " + listing.tenants[0].lastName
+            : "",
+        email:
+          listing.tenants && listing.tenants[0] && listing.tenants[0].account
+            ? listing.tenants[0].account.email
+            : "",
+        userId:
+          listing.tenants && listing.tenants[0] ? listing.tenants[0].id : "",
+      },
+    },
+    {
+      title: "Rentrix Rep Information",
+      values: {
+        avatar: listing.representative.photoUrl,
+        fullName:
+          listing.representative.firstName +
+          " " +
+          listing.representative.lastName,
+        email: listing.representative.account.email,
+        userId: listing.representative.id,
+      },
+    },
+  ];
 
   useEffect(() => {
     if (listing) {
@@ -334,62 +391,13 @@ const Details = ({
         )} */}
       </Box>
 
-      <Box
-        sx={{
-          display: { xs: "none", sm: "flex" },
-          flexDirection: "column",
-          gap: "8px",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: "16px",
-            fontWeight: 600,
-            lineHeight: "140%",
-            letterSpacing: "-0.32px",
-          }}
-        >
-          Landlord Information
-        </Typography>
-
-        <Button
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            border: "2px solid #c7ebeb",
-            background: "#e6f6f6",
-            padding: "12px",
-            borderRadius: "12px",
-            gap: "4px",
-            textTransform: "none",
-          }}
-        >
-          {imageLoadingStatus !== "error" ? (
-            <Avatar
-              src={listing?.owner?.photoUrl || ""}
-              sx={{ width: 48, height: 48 }}
-            />
-          ) : (
-            <Avatar
-              sx={{
-                background: "#00a3a3",
-                width: 48,
-                height: 48,
-                fontWeight: 700,
-                fontSize: 24,
-              }}
-            >
-              {listing?.owner?.firstName?.charAt(0)}
-              {listing?.owner?.lastName?.charAt(0)}
-            </Avatar>
-          )}
+      {informations.map(
+        ({ title, values: { avatar, fullName, email, userId } }) => (
           <Box
             sx={{
-              display: "flex",
+              display: { xs: "none", sm: "flex" },
               flexDirection: "column",
-              color: "#828b9b",
-              gap: "4px",
-              alignItems: "flex-start",
+              gap: "8px",
             }}
           >
             <Typography
@@ -400,26 +408,95 @@ const Details = ({
                 letterSpacing: "-0.32px",
               }}
             >
-              {listing?.owner?.firstName} {listing?.owner?.lastName}
+              {title}
             </Typography>
-            <Typography
+
+            <Button
               sx={{
-                fontSize: "14px",
-                fontWeight: 400,
-                lineHeight: "140%",
-                letterSpacing: "-0.28px",
+                display: "flex",
+                alignItems: "center",
+                border: "2px solid #c7ebeb",
+                background: "#e6f6f6",
+                padding: "12px",
+                borderRadius: "12px",
+                gap: "4px",
+                textTransform: "none",
               }}
             >
-              {listing?.owner?.account?.email}
-            </Typography>
+              {imageLoadingStatus !== "error" ? (
+                <Avatar src={avatar || ""} sx={{ width: 48, height: 48 }} />
+              ) : (
+                <Avatar
+                  sx={{
+                    background: "#00a3a3",
+                    width: 48,
+                    height: 48,
+                    fontWeight: 700,
+                    fontSize: 24,
+                  }}
+                >
+                  {listing?.owner?.firstName?.charAt(0)}
+                  {listing?.owner?.lastName?.charAt(0)}
+                </Avatar>
+              )}
+              <Box
+                sx={{
+                  display: "flex",
+                  color: "#828b9b",
+                  gap: "4px",
+                  alignItems: "flex-start",
+                  width: "100%",
+                  paddingX: "8px",
+                  paddingRight: "12px",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    color: "#828b9b",
+                    gap: "4px",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      lineHeight: "140%",
+                      letterSpacing: "-0.32px",
+                    }}
+                  >
+                    {fullName}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: "140%",
+                      letterSpacing: "-0.28px",
+                    }}
+                  >
+                    {email}
+                  </Typography>
+                </Box>
+                <Typography
+                  sx={{
+                    ml: "auto",
+                  }}
+                >
+                  {userId}
+                </Typography>
+              </Box>
+              <img
+                style={{ marginLeft: "auto", transform: "scale(1.2)" }}
+                src={right}
+                alt=""
+              />
+            </Button>
           </Box>
-          <img
-            style={{ marginLeft: "auto", transform: "scale(1.2)" }}
-            src={right}
-            alt=""
-          />
-        </Button>
-      </Box>
+        ),
+      )}
     </Box>
   );
 };
