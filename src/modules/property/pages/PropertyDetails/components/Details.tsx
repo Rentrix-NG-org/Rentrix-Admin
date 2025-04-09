@@ -6,7 +6,7 @@ import menu from "../assets/menu.svg";
 import location from "../assets/location.svg";
 import apartment from "../assets/apartment.svg";
 import right from "../assets/chevron-right.svg";
-import { IListing, PropertyType } from "@src/modules/property/types";
+import { IListing, PropertyType, User } from "@src/modules/property/types";
 
 export const formatNumber = (num: number): string => {
   if (num < 100000) {
@@ -85,7 +85,7 @@ const Details = ({
     floorArea: 0,
     builtYear: 0,
     builtMonth: "",
-    status: "under-offer",
+    status: "under-offer" as const,
     floorLevel: 0,
     isDraft: false,
     fee: {
@@ -123,7 +123,7 @@ const Details = ({
         id: "",
         email: "",
       },
-    },
+    } as User,
     representative: {
       id: "",
       firstName: "",
@@ -147,7 +147,6 @@ const Details = ({
   const [imageLoadingStatus, setImageLoadingStatus] = useState<
     "notset" | "success" | "error" | "pending"
   >("notset");
-  console.log(listing, "list");
   const informations = [
     {
       title: "Landlord Information",

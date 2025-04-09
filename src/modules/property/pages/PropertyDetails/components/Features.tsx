@@ -25,6 +25,8 @@ const Features = ({
     id: "",
     createdAt: "",
     updatedAt: "",
+
+    tenants: [],
     status: "under-offer",
     title: "",
     description: "",
@@ -77,6 +79,19 @@ const Features = ({
       },
     },
     owner: {
+      id: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      photoUrl: null,
+      dateOfBirth: "",
+      type: "",
+      account: {
+        id: "",
+        email: "",
+      },
+    },
+    representative: {
       id: "",
       firstName: "",
       lastName: "",
