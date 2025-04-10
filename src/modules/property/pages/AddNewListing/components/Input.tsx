@@ -160,6 +160,8 @@ const Input = ({
         zIndex={2}
         sx={{
           boxShadow: "0px 4px 10px 4px rgba(0, 0, 0, .25)",
+          maxHeight: "300px",
+          overflowY: "scroll",
         }}
       >
         {options?.map((option: string) => (
