@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Input, Typography } from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import naira from "../assets/naira.svg";
 import bookmark from "../assets/bookmark.svg";
@@ -7,7 +7,6 @@ import location from "../assets/location.svg";
 import apartment from "../assets/apartment.svg";
 import right from "../assets/chevron-right.svg";
 import { IListing, PropertyType, User } from "@src/modules/property/types";
-import TextInput from "@src/shared/components/TextInput";
 import { UserService } from "@src/modules/user/services/user.service";
 import { useNavigate } from "react-router";
 
