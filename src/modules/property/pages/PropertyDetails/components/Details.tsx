@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Button, Input, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import naira from "../assets/naira.svg";
 import bookmark from "../assets/bookmark.svg";
@@ -7,6 +7,9 @@ import location from "../assets/location.svg";
 import apartment from "../assets/apartment.svg";
 import right from "../assets/chevron-right.svg";
 import { IListing, PropertyType, User } from "@src/modules/property/types";
+import TextInput from "@src/shared/components/TextInput";
+import { UserService } from "@src/modules/user/services/user.service";
+import { useNavigate } from "react-router";
 
 export const formatNumber = (num: number): string => {
   if (num < 100000) {
@@ -143,10 +146,16 @@ const Details = ({
 }: {
   listing?: IListing;
 }) => {
+  const { getUserRep, changeRepresentative } = UserService();
+  const navigate = useNavigate();
   const [showInspection, setShowInspectiion] = useState(false);
+  const [repId, setRepId] = useState("");
+  const [repDetails, setRepDetails] = useState<User>();
+  const [isRepLoading, setIsRepLoading] = useState(false);
   const [imageLoadingStatus, setImageLoadingStatus] = useState<
     "notset" | "success" | "error" | "pending"
   >("notset");
+  const [isChangeRepModalOpen, setIsChangeRepModalOpen] = useState(false);
   const informations = [
     {
       title: "Landlord Information",
@@ -156,6 +165,7 @@ const Details = ({
         email: listing?.owner?.account?.email,
         userId: listing?.owner?.id,
       },
+      action: null,
     },
     {
       title: "Tenant Information",
@@ -175,9 +185,10 @@ const Details = ({
         userId:
           listing.tenants && listing.tenants[0] ? listing.tenants[0].id : "",
       },
+      action: null,
     },
     {
-      title: "Rentrix Rep Information",
+      title: "Rentrix Rep's Information",
       values: {
         avatar: listing.representative.photoUrl,
         fullName:
@@ -186,6 +197,12 @@ const Details = ({
           listing.representative.lastName,
         email: listing.representative.account.email,
         userId: listing.representative.id,
+      },
+      action: {
+        title: "Change Rentrix Rep",
+        onClick: () => {
+          setIsChangeRepModalOpen(!isChangeRepModalOpen);
+        },
       },
     },
   ];
@@ -207,6 +224,51 @@ const Details = ({
 
   function handleBookInspection() {
     setShowInspectiion(!showInspection);
+  }
+
+  async function handleFetchRepDetails(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
+    if (isNaN(Number(value)) || value.includes("e")) return;
+    setRepId(value);
+    if (value.trim().length === 9) {
+      e.target.disabled = true;
+      try {
+        setIsRepLoading(true);
+        const response = await getUserRep(value);
+        if (response.success) {
+          setIsRepLoading(false);
+
+          e.target.disabled = false;
+          setRepDetails(response.data);
+        } else {
+          setIsRepLoading(false);
+
+          setIsRepLoading(false);
+          e.target.disabled = false;
+          alert(response.message || "Could not get rentrix rep");
+        }
+      } catch (error) {
+        setIsRepLoading(false);
+        setRepDetails(null);
+        e.target.disabled = false;
+        alert(
+          error.response.data.message ||
+            "An error occurred while fetching the rep details",
+        );
+      }
+    } else {
+      setRepDetails(null);
+    }
+  }
+
+  async function handleChangeRep() {
+    const response = await changeRepresentative(repId, listing.id);
+    if (response.success) {
+      setRepDetails(response.data);
+      navigate(0);
+    } else {
+      alert(response.message || "Could not change representative");
+    }
   }
 
   return (
@@ -391,14 +453,8 @@ const Details = ({
       </Box>
 
       {informations.map(
-        ({ title, values: { avatar, fullName, email, userId } }) => (
-          <Box
-            sx={{
-              display: { xs: "none", sm: "flex" },
-              flexDirection: "column",
-              gap: "8px",
-            }}
-          >
+        ({ title, values: { avatar, fullName, email, userId }, action }) => (
+          <Box>
             <Typography
               sx={{
                 fontSize: "16px",
@@ -409,90 +465,245 @@ const Details = ({
             >
               {title}
             </Typography>
-
-            <Button
+            <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
-                border: "2px solid #c7ebeb",
+                display: { xs: "none", sm: "flex" },
+                flexDirection: "column",
+                gap: "8px",
                 background: "#e6f6f6",
-                padding: "12px",
+                border: "2px solid #c7ebeb",
                 borderRadius: "12px",
-                gap: "4px",
-                textTransform: "none",
+                padding: "12px",
               }}
             >
-              {imageLoadingStatus !== "error" ? (
-                <Avatar src={avatar || ""} sx={{ width: 48, height: 48 }} />
-              ) : (
-                <Avatar
-                  sx={{
-                    background: "#00a3a3",
-                    width: 48,
-                    height: 48,
-                    fontWeight: 700,
-                    fontSize: 24,
-                  }}
-                >
-                  {listing?.owner?.firstName?.charAt(0)}
-                  {listing?.owner?.lastName?.charAt(0)}
-                </Avatar>
-              )}
-              <Box
+              <Button
                 sx={{
                   display: "flex",
-                  color: "#828b9b",
+                  alignItems: "center",
                   gap: "4px",
-                  alignItems: "flex-start",
-                  width: "100%",
-                  paddingX: "8px",
-                  paddingRight: "12px",
+                  padding: 0,
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
                 }}
               >
+                {imageLoadingStatus !== "error" ? (
+                  <Avatar src={avatar || ""} sx={{ width: 48, height: 48 }} />
+                ) : (
+                  <Avatar
+                    sx={{
+                      background: "#00a3a3",
+                      width: 48,
+                      height: 48,
+                      fontWeight: 700,
+                      fontSize: 24,
+                    }}
+                  >
+                    {listing?.owner?.firstName?.charAt(0)}
+                    {listing?.owner?.lastName?.charAt(0)}
+                  </Avatar>
+                )}
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
                     color: "#828b9b",
                     gap: "4px",
                     alignItems: "flex-start",
+                    width: "100%",
+                    paddingX: "8px",
+                    paddingRight: "12px",
                   }}
                 >
-                  <Typography
+                  <Box
                     sx={{
-                      fontSize: "16px",
-                      fontWeight: 600,
-                      lineHeight: "140%",
-                      letterSpacing: "-0.32px",
+                      display: "flex",
+                      flexDirection: "column",
+                      color: "#828b9b",
+                      gap: "4px",
+                      alignItems: "flex-start",
                     }}
                   >
-                    {fullName}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        lineHeight: "140%",
+                        letterSpacing: "-0.32px",
+                      }}
+                    >
+                      {fullName}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "140%",
+                        letterSpacing: "-0.28px",
+                      }}
+                    >
+                      {email}
+                    </Typography>
+                  </Box>
                   <Typography
                     sx={{
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      lineHeight: "140%",
-                      letterSpacing: "-0.28px",
+                      ml: "auto",
                     }}
                   >
-                    {email}
+                    {userId}
                   </Typography>
                 </Box>
-                <Typography
-                  sx={{
-                    ml: "auto",
-                  }}
-                >
-                  {userId}
-                </Typography>
-              </Box>
-              <img
-                style={{ marginLeft: "auto", transform: "scale(1.2)" }}
-                src={right}
-                alt=""
-              />
-            </Button>
+                <img
+                  style={{ marginLeft: "auto", transform: "scale(1.2)" }}
+                  src={right}
+                  alt=""
+                />
+              </Button>
+              {action && (
+                <div style={{ position: "relative" }}>
+                  <Box
+                    component="button"
+                    onClick={action.onClick}
+                    sx={{
+                      padding: "16px",
+                      height: "36px",
+                      background: "none",
+                      cursor: "pointer",
+                      boxSizing: "border-box",
+                      border: "1px solid #9fa6b2",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 100,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#9fa6b2",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {action.title}
+                    </Typography>
+                  </Box>
+                  {isChangeRepModalOpen && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        position: "absolute",
+                        top: 56,
+                        left: -12,
+                        background: "#c2ccd8",
+                        padding: "12px",
+                        width: "100%",
+                        borderRadius: "8px",
+                        gap: "12px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#48505e",
+                          fontSize: 19,
+                          fontWeight: 400,
+                        }}
+                      >
+                        Change Rentrix Rep
+                      </Typography>
+                      <Box
+                        component="input"
+                        type="number"
+                        value={repId}
+                        onChange={handleFetchRepDetails}
+                        placeholder="Rentrix Rep ID"
+                        sx={{
+                          padding: "12px",
+                          outline: "none",
+                          background: "#f6f7f8",
+                          border: "none",
+                          color: "#828b9b",
+                          borderRadius: "8px",
+                          "&::placeholder": {
+                            color: "#9fa6b2",
+                          },
+                        }}
+                      />
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {repDetails && (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "12px",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                width: "50px",
+
+                                height: "50px",
+                                background: "white",
+                                borderRadius: "50%",
+                                overflow: "hidden",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <img
+                                src={
+                                  repDetails.photoUrl ||
+                                  "https://ui-avatars.com/api/?name=Cal+Newton&background=random"
+                                }
+                                style={{
+                                  objectFit: "contain",
+                                }}
+                                alt=""
+                              />
+                            </Box>
+
+                            <Box>
+                              <Typography
+                                sx={{ color: "#48505e", fontWeight: 600 }}
+                              >
+                                {repDetails.firstName} {repDetails.lastName}
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  color: "#828b9b",
+                                }}
+                              >
+                                {repDetails.id}
+                              </Typography>
+                            </Box>
+                          </Box>
+                        )}
+                        <Button
+                          disabled={isRepLoading}
+                          onClick={handleChangeRep}
+                          sx={{
+                            textTransform: "unset",
+                            borderRadius: 100,
+                            width: "120px",
+                            ml: "auto",
+                            border: "1px solid #00a3a3",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {isRepLoading ? "Loading..." : "Proceed"}
+                        </Button>
+                      </Box>
+                    </Box>
+                  )}
+                </div>
+              )}
+            </Box>
           </Box>
         ),
       )}

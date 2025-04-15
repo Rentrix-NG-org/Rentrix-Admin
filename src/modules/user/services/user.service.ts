@@ -61,6 +61,26 @@ export const UserService = () => {
       };
     },
 
+    changeRepresentative: async (repId: string, listingId: string) => {
+      if (!repId || !listingId) {
+        return {
+          success: false,
+          message: "Rentrix Rep ID or Listing ID missing",
+          data: null,
+        };
+      }
+      const response = await axios.patch(`/admin/change-rep`, {
+        repId,
+        listingId,
+      });
+
+      return {
+        success: response.status === 200,
+        message: "Representative changed successfully",
+        data: response.data,
+      };
+    },
+
     getUserAdmin: async (adminId: string | undefined) => {
       if (!adminId) {
         return {
