@@ -2,7 +2,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 import LogTable from "@src/shared/components/LogTable";
 import UserNav from "../../components/UserNav";
 import { UserService } from "../../services/user.service";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import dayjs from "dayjs";
 import RepCard from "../../components/RepCard";
@@ -13,7 +13,7 @@ import TabNavigation from "../../components/TabNavigation";
 
 const RepDetails = () => {
   const { getUserRep } = UserService();
-  const activityTypes = useMemo(() => types, []);
+  // const activityTypes = useMemo(() => types, []);
 
   const params = useParams();
   const [rep, setRep] = useState({

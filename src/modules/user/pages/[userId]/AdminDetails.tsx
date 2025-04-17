@@ -48,12 +48,13 @@ const AdminDetails = () => {
     },
   ]);
 
-  const columns = [
-    { header: "Date", label: "date" },
-    { header: "Time", label: "time" },
-    { header: "Activity Type", label: "activityType" },
-    { header: "Details", label: "details" },
-  ];
+  const columns: { label: string; header: string; type: "text" | "custom" }[] =
+    [
+      { header: "Date", label: "date", type: "text" },
+      { header: "Time", label: "time", type: "text" },
+      { header: "Activity Type", label: "activityType", type: "text" },
+      { header: "Details", label: "details", type: "text" },
+    ];
 
   useEffect(() => {
     async function fetchUser() {
