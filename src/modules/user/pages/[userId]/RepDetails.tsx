@@ -9,6 +9,7 @@ import RepCard from "../../components/RepCard";
 import { icons } from "@src/utils/icons";
 import { useNavigate } from "react-router";
 import { types } from "@src/modules/logs/types/log.types";
+import TabNavigation from "../../components/TabNavigation";
 
 const RepDetails = () => {
   const { getUserRep } = UserService();
@@ -26,8 +27,51 @@ const RepDetails = () => {
     account: { email: "", status: "" },
     logs: [],
     locations: [],
+    bookInspections: [
+      {
+        id: "",
+        start: {
+          hour: "",
+          minute: "",
+        },
+        end: {
+          hour: "",
+          minute: "",
+        },
+        selected: false,
+        status: "",
+        userId: "",
+        date: "",
+        listingId: "",
+      },
+    ],
+    listings: [
+      {
+        id: "",
+        name: "",
+        owner: { firstName: "", lastName: "" },
+        status: "",
+      },
+    ],
   });
-  const [logs, setLogs] = useState([
+  const [tabSelected, setTabSelected] = useState("Activity Logs");
+  const [properties, setProperties] = useState([
+    {
+      propertyId: "",
+      propertyName: "",
+      owner: "",
+      status: "",
+    },
+  ]);
+  const [inspection, setInspection] = useState([
+    {
+      tenantId: "",
+      propertyId: "",
+      scheduledViewingTime: "",
+      status: "",
+    },
+  ]);
+  const [activityLogs, setActivityLogs] = useState([
     {
       date: "",
       time: "",
@@ -36,12 +80,50 @@ const RepDetails = () => {
     },
   ]);
 
-  const columns = [
-    { header: "Date", label: "date" },
-    { header: "Time", label: "time" },
-    { header: "Activity Type", label: "activityType" },
-    { header: "Details", label: "details" },
+  const [logs, setLogs] = useState([]);
+
+  const activity_columns: {
+    label: string;
+    header: string;
+    type: "text" | "custom";
+  }[] = [
+    { header: "Date", label: "date", type: "text" },
+    { header: "Time", label: "time", type: "text" },
+    { header: "Activity Type", label: "activityType", type: "text" },
+    { header: "Details", label: "details", type: "text" },
   ];
+  const properties_column: {
+    label: string;
+    header: string;
+    type: "text" | "custom";
+  }[] = [
+    { header: "Property ID", label: "propertyId", type: "text" },
+    { header: "Property Name", label: "propertyName", type: "text" },
+    { header: "Owner", label: "owner", type: "text" },
+    { header: "Status", label: "status", type: "custom" },
+  ];
+  const inspection_column: {
+    label: string;
+    header: string;
+    type: "text" | "custom";
+  }[] = [
+    { header: "Tenant ID", label: "tenantId", type: "text" },
+    { header: "Property ID", label: "propertyId", type: "text" },
+    {
+      header: "Scheduled viewing Date/Time",
+      label: "scheduledViewingDateTime",
+      type: "text",
+    },
+    { header: "Status", label: "status", type: "custom" },
+  ];
+  const selectedColumn =
+    tabSelected === "Activity Logs"
+      ? activity_columns
+      : tabSelected === "Properties"
+        ? properties_column
+        : tabSelected === "Inspection"
+          ? inspection_column
+          : [];
 
   useEffect(() => {
     async function fetchUser() {
@@ -54,7 +136,17 @@ const RepDetails = () => {
   }, [params]);
 
   useEffect(() => {
-    if (rep.logs.length > 0) {
+    if (tabSelected === "Activity Logs") {
+      setLogs(activityLogs);
+    } else if (tabSelected === "Properties") {
+      setLogs(properties);
+    } else if (tabSelected === "Inspection") {
+      setLogs(inspection);
+    }
+  }, [tabSelected, activityLogs, properties, inspection]);
+
+  useEffect(() => {
+    if (rep.logs.length) {
       const formattedLogs = rep.logs.map((log: any) => {
         return {
           date: dayjs(Number(log.createdAt)).format("DD MMM YYYY"),
@@ -63,9 +155,40 @@ const RepDetails = () => {
           details: log.description || "None",
         };
       });
-      setLogs(formattedLogs);
+      setActivityLogs(formattedLogs);
     }
-  }, [rep, activityTypes]);
+
+    if (rep.listings.length) {
+      const formattedProperties = rep.listings.map((property: any) => {
+        return {
+          propertyId: property.id,
+          propertyName: property.title,
+          owner: `${property.owner.firstName} ${property.owner.lastName}`,
+          status:
+            property.status.charAt(0).toUpperCase() +
+            property.status.slice(1).toLowerCase(),
+        };
+      });
+      setProperties(formattedProperties);
+    }
+
+    if (rep.bookInspections) {
+      const formattedInspections = rep.bookInspections.map((inspection) => {
+        const startTime = dayjs()
+          .hour(Number(inspection.start.hour))
+          .minute(Number(inspection.start.minute))
+          .format("HH:mm A");
+        return {
+          tenantId: inspection.userId,
+          propertyId: inspection.listingId,
+          scheduledViewingTime: `${inspection.date} ${startTime}`,
+          status: inspection.status,
+        };
+      });
+
+      setInspection(formattedInspections);
+    }
+  }, [rep]);
 
   return (
     <Box
@@ -102,7 +225,18 @@ const RepDetails = () => {
         <Options />
       </Box>
 
-      <LogTable columns={columns} data={logs} />
+      <Box sx={{ display: "flex", gap: "32px" }}>
+        <Typography sx={{ fontWeight: 700 }}>LAST SESSION DURATION</Typography>
+        <Typography>2 hours 15 minutes</Typography>
+      </Box>
+
+      <TabNavigation
+        tabs={["Activity Logs", "Properties", "Inspection"]}
+        setTabSelected={setTabSelected}
+        tabSelected={tabSelected}
+      />
+
+      <LogTable columns={selectedColumn} data={logs} />
     </Box>
   );
 };

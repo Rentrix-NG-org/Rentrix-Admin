@@ -2,7 +2,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const LogTable: React.FC<{
-  columns: { label: string; header: string }[];
+  columns: { label: string; header: string; type: "text" | "custom" }[];
   data: any[];
 }> = ({ columns, data }) => {
   const [rows, setRows] = useState<string[][]>([]);
@@ -13,6 +13,15 @@ const LogTable: React.FC<{
     setRows(formatted);
     // console.log(formatted, "f");
   }, [data]);
+
+  const map = {
+    available: { color: "#099137", border: "#099137" },
+    "under review": { color: "#dd900d", border: "#dd900d" },
+    pending: { color: "#dd900d", border: "#dd900d" },
+    rented: { color: "#297dfd", border: "#297dfd" },
+    confirmed: { color: "#297dfd", border: "#297dfd" },
+  };
+  console.log(data[0], "is row");
   return (
     <Box sx={{ border: `1px solid ${theme.palette.grey[300]}` }}>
       <Box
@@ -49,25 +58,54 @@ const LogTable: React.FC<{
               gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
             }}
           >
-            {row.map((cell, cellIndex) => (
-              <Typography
-                sx={{
-                  padding: "10px",
-                  borderBottom:
-                    index + 1 === rows.length
-                      ? "none"
-                      : `1px solid ${theme.palette.grey[300]}`,
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "150%",
-                  color: theme.palette.common.black,
-                }}
-                key={`${index}-${cellIndex}`}
-              >
-                {cell}
-              </Typography>
-            ))}
+            {row.map((cell, cellIndex) =>
+              columns[cellIndex].type === "text" ? (
+                <Typography
+                  sx={{
+                    padding: "10px",
+                    borderBottom:
+                      index + 1 === rows.length
+                        ? "none"
+                        : `1px solid ${theme.palette.grey[300]}`,
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: 400,
+                    lineHeight: "150%",
+                    color: theme.palette.common.black,
+                  }}
+                  key={`${index}-${cellIndex}`}
+                >
+                  {cell}
+                </Typography>
+              ) : (
+                <Box
+                  sx={{
+                    padding: "10px",
+                    borderBottom:
+                      index + 1 === rows.length
+                        ? "none"
+                        : `1px solid ${theme.palette.grey[300]}`,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontStyle: "normal",
+                      width: "fit-content",
+                      padding: "4px 16px",
+                      borderRadius: "10px",
+                      fontWeight: 600,
+                      lineHeight: "150%",
+                      color: map?.[cell?.toLowerCase()]?.color,
+                      border: `1px solid ${map?.[cell?.toLowerCase()]?.border}`,
+                    }}
+                    key={`${index}-${cellIndex}`}
+                  >
+                    {cell}
+                  </Typography>
+                </Box>
+              ),
+            )}
           </Box>
         ))}
       </Box>
