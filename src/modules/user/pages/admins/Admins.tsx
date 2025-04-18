@@ -25,7 +25,7 @@ const Admins = () => {
       const query = permissions.includes("admin") ? "admin=true" : "";
       const response = await getAllUsers(query);
       if (response.success) {
-        const formatted = (response.data as any[]).map((user) => {
+        const formatted = (response.data.users as any[]).map((user) => {
           return Object.values({
             userId: user.id,
             name: user.name || "",
