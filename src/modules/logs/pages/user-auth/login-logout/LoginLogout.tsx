@@ -29,7 +29,7 @@ const LoginLogout = () => {
               ...prev,
               {
                 logId: log.id,
-                adminId: log.user.id,
+                adminId: log.user?.id ?? "Unknown",
                 timestamp: dayjs(Number(log.createdAt)).format(
                   "YYYY-MM-DD HH:mm:ss",
                 ),
@@ -40,7 +40,7 @@ const LoginLogout = () => {
 
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
-            userId: log.user.id,
+            userId: log.user?.id,
             action: log.action,
             timestamp: dayjs(Number(log.createdAt)).format(
               "YYYY-MM-DD HH:mm:ss",
