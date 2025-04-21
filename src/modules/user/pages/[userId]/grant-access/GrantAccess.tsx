@@ -13,6 +13,7 @@ const GrantAccess = () => {
   const { grantAccess, getAllPermissions } = UserService();
   const logsMap = {
     "User Authentication Logs": "user-auth-logs",
+    "Property Management Logs": "property",
     "Communication and Interaction Logs": "communication-logs",
     "Escrow and Dispute Resolution Logs": "escrow-dispute-logs",
     "AI and Machine Learning Logs": "ai-ml-logs",
@@ -167,6 +168,7 @@ const GrantAccess = () => {
           multichoice
           options={[
             "Communication and Interaction Logs",
+            "Property Management Logs",
             "Escrow and Dispute Resolution Logs",
             "AI and Machine Learning Logs",
             "Administrative Action Logs",

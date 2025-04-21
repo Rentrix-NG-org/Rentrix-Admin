@@ -1,4 +1,5 @@
 import axios from "axios";
+import { deviceInfo } from "./device";
 
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 const axiosInstance = axios.create({
@@ -14,6 +15,8 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    config.headers["x-device-info"] = JSON.stringify(deviceInfo);
     return config;
   },
   (error) => {
