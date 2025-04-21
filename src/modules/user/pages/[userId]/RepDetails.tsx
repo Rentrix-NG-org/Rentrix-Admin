@@ -27,6 +27,7 @@ const RepDetails = () => {
     account: { email: "", status: "" },
     logs: [],
     locations: [],
+    sessionDuration: 0,
     bookInspections: [
       {
         id: "",
@@ -129,6 +130,11 @@ const RepDetails = () => {
     async function fetchUser() {
       const response = await getUserRep(params?.userId || "");
       if (response.success) {
+        console.log(
+          response.data,
+          "yedk",
+          typeof response.data.sessionDuration,
+        );
         setRep(response.data);
       }
     }
@@ -227,7 +233,9 @@ const RepDetails = () => {
 
       <Box sx={{ display: "flex", gap: "32px" }}>
         <Typography sx={{ fontWeight: 700 }}>LAST SESSION DURATION</Typography>
-        <Typography>2 hours 15 minutes</Typography>
+        <Typography>
+          {dayjs(rep.sessionDuration).format("HH [hours], MM [minutes]")}
+        </Typography>
       </Box>
 
       <TabNavigation

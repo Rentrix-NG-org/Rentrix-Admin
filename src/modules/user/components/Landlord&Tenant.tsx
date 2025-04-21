@@ -58,6 +58,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
             registrationDate: user.registrationDate,
           };
         });
+        console.log(formatted, "is formatted");
         setUsers(formatted as any[]);
         setIsLoading(false);
       }
