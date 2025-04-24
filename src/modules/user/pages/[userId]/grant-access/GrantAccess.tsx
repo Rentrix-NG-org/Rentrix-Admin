@@ -13,7 +13,8 @@ const GrantAccess = () => {
   const { grantAccess, getAllPermissions } = UserService();
   const logsMap = {
     "User Authentication Logs": "user-auth-logs",
-    "Property Management Logs": "property",
+    "Property Management": "property",
+    "Property Management Logs": "property-logs",
     "Communication and Interaction Logs": "communication-logs",
     "Escrow and Dispute Resolution Logs": "escrow-dispute-logs",
     "AI and Machine Learning Logs": "ai-ml-logs",
