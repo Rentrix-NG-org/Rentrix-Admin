@@ -36,6 +36,7 @@ export interface Log {
   user: User;
   account: Account;
   amount: number;
+  targetDate: number;
   listing: Listing;
   transaction: Transaction;
   affectedUser: User;

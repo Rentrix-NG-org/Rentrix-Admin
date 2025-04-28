@@ -11,6 +11,7 @@ const UserAccountManagement = () => {
     { name: "Profile Updates", route: "profile-updates" },
     { name: "Password Changes", route: "password-changes" },
     { name: "Account Deactivation/Deletion", route: "account-deletion" },
+    { name: "Age Restriction Alert", route: "age-restriction" },
   ];
   return (
     <Box
