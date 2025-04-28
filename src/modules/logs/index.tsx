@@ -32,6 +32,8 @@ import ListingUpdatesInfo from "./pages/property-mgmt/listing-updates/[logId]/Lo
 import ListingRemoval from "./pages/property-mgmt/listing-removal/ListingRemoval";
 import ListingRemovalInfo from "./pages/property-mgmt/listing-removal/[logId]/LogInfo";
 import ViewingRequest from "./pages/property-mgmt/viewing-request/ViewingRequest";
+import AgeRestriction from "./pages/account-mgmt/age-restriction/AgeRestriction";
+import AgeRestrictionInfo from "./pages/account-mgmt/age-restriction/[logId]/LogInfo";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -125,6 +127,16 @@ export const LogsModule: LogsModule = {
       path: "/logs/user-account/account-deletion/:logId",
       element: <AccountDeletionInfo />,
       title: "Account Deletion Info",
+    },
+    {
+      path: "/logs/user-account/age-restriction",
+      element: <AgeRestriction />,
+      title: "Age Restriction",
+    },
+    {
+      path: "/logs/user-account/age-restriction/:logId",
+      element: <AgeRestrictionInfo />,
+      title: "Age Restriction Info",
     },
     {
       path: "/logs/user-auth",
