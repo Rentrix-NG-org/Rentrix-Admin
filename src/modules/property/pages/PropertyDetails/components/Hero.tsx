@@ -12,6 +12,7 @@ const Hero = ({
     id: "",
     createdAt: "",
     updatedAt: "",
+    applications: [],
     status: "under-offer",
     title: "",
     description: "",

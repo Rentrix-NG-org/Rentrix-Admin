@@ -24,6 +24,7 @@ const Features = ({
   listing = {
     id: "",
     createdAt: "",
+    applications: [],
     updatedAt: "",
 
     tenants: [],
