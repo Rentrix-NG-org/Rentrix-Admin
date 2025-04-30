@@ -3,10 +3,18 @@ import { icons } from "@src/utils/icons";
 import { User } from "../types/user.types";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router";
+import { useState } from "react";
+import Menu from "@src/shared/components/Menu";
+import { ChevronRight } from "@mui/icons-material";
+import { UserService } from "../services/user.service";
 
 const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
+  const { updateidentityStatus } = UserService();
+  const [identityLoaded, setIdentityLoaded] = useState(true);
+  const [identityMenuOpen, setIdentityMenuOpen] = useState(false);
   const theme = useTheme();
   const navigate = useNavigate();
+  console.log(user, "is user");
 
   const userDetails: { label: string; value: string }[] = [
     { label: "Email", value: user?.account?.email || "" },
@@ -18,11 +26,21 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
     },
   ];
 
+  async function handleIdentityApproval(status: string) {
+    const response = await updateidentityStatus(user.id, status);
+    if (response.success) {
+      navigate(0);
+    }
+  }
+
   const colors: Record<string, { value: string; accent: string }> = {
     Tenant: { value: "#9747ff", accent: "#efe3ff" },
     Landlord: { value: "#297dfd", accent: "#f7f7ff" },
     suspended: { value: "#cb1a14", accent: "#f7dddc" },
     active: { value: "#099137", accent: "#daefe1" },
+    verified: { value: "#099137", accent: "#daefe1" },
+    pending: { value: "#ad6f07", accent: "#fbe2b7" },
+    rejected: { value: "#cb1a14", accent: "#bfa9b0" },
     Admin: { value: "#cd9e14", accent: "#fef5dc" },
     Supervisor: { value: "#430c7b", accent: "#e3dbeb" },
     "Rentrix Rep": { value: "#00a3a3", accent: "#e5f6f6" },
@@ -37,6 +55,13 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
     admin: "Admin",
     supervisor: "Supervisor",
   };
+
+  function handleDocumentError(
+    e: React.SyntheticEvent<HTMLImageElement, Event>,
+  ) {
+    setIdentityLoaded(false);
+    e.currentTarget.src = icons.folder;
+  }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -197,6 +222,111 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
               </Typography>
             </Box>
           </Box>
+        </Box>
+        <Box
+          sx={{
+            background: "#daeeee",
+            height: identityLoaded ? "100%" : "169px",
+            width: "170px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "10px",
+            borderRadius: "8px",
+            gap: "28px",
+            ml: 4,
+          }}
+        >
+          <Box
+            component="img"
+            onError={handleDocumentError}
+            src={user.identity?.identityUrl ?? icons.folder}
+            sx={{
+              height: "auto",
+              objectFit: "contain",
+              width: identityLoaded ? "100%" : "82px",
+              mt: "auto",
+            }}
+          />
+
+          <Box
+            display={identityLoaded ? "flex" : "none"}
+            sx={{ position: "relative" }}
+          >
+            <Box
+              component="button"
+              onClick={() => setIdentityMenuOpen(!identityMenuOpen)}
+              sx={{
+                display: "flex",
+                border: `1px solid ${colors[user.identity?.status || "Default"].value}`,
+                padding: "6px 16px",
+                background: colors[user.identity?.status || "Default"].accent,
+                borderRadius: "10px",
+                gap: "10px",
+                cursor: "pointer",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: colors[user.identity?.status || "Default"].value,
+                  fontWeight: 600,
+                }}
+              >
+                {user.identity?.status.charAt(0).toUpperCase() +
+                  user.identity?.status.slice(1)}
+              </Typography>
+              <ChevronRight
+                sx={{
+                  transform: identityMenuOpen
+                    ? "rotate(-90deg)"
+                    : "rotate(90deg)",
+                  color: colors[user.identity?.status || "Default"].value,
+                }}
+              />
+            </Box>
+            {identityMenuOpen && (
+              <Menu
+                title="Status"
+                options={[
+                  {
+                    value: "Verify",
+                    onClick: () => {
+                      setIdentityMenuOpen(false);
+                      handleIdentityApproval("verified");
+                    },
+                  },
+                  {
+                    value: "Reject",
+                    onClick: () => {
+                      setIdentityMenuOpen(false);
+                      handleIdentityApproval("rejected");
+                    },
+                  },
+                  {
+                    value: "Set Pending",
+                    onClick: () => {
+                      setIdentityMenuOpen(false);
+                      handleIdentityApproval("pending");
+                    },
+                  },
+                ]}
+                onCancel={() => {}}
+                sx={{
+                  right: 0,
+                  top: 50,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              />
+            )}
+          </Box>
+
+          <Typography
+            display={identityLoaded ? "none" : "unset"}
+            sx={{ fontWeight: 600 }}
+          >
+            No identity document
+          </Typography>
         </Box>
 
         <Box
