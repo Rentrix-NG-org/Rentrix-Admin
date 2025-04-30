@@ -250,7 +250,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
           />
 
           <Box
-            display={identityLoaded ? "flex" : "none"}
+            display={user.identity && identityLoaded ? "flex" : "none"}
             sx={{ position: "relative" }}
           >
             <Box
@@ -322,7 +322,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
           </Box>
 
           <Typography
-            display={identityLoaded ? "none" : "unset"}
+            display={user.identity && identityLoaded ? "none" : "unset"}
             sx={{ fontWeight: 600 }}
           >
             No identity document
