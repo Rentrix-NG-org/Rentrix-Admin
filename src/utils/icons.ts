@@ -23,6 +23,8 @@ import mail from "@src/assets/icons/mail.svg";
 import location from "@src/assets/icons/location.svg";
 import lock from "@src/assets/icons/lock.svg";
 import useradd from "@src/assets/icons/user-add.svg";
+import clock from "@src/assets/icons/clock.svg";
+import folder from "@src/assets/icons/folder.svg";
 
 export const icons = {
   edit,
@@ -51,4 +53,6 @@ export const icons = {
   location,
   lock,
   useradd,
+  clock,
+  folder,
 };

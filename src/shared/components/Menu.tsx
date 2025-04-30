@@ -1,13 +1,14 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, SxProps, Typography, useTheme } from "@mui/material";
 
 interface MenuProps {
   title: string;
   onCancel: VoidFunction;
   options: { value: string; onClick: VoidFunction }[];
+  sx?: SxProps;
 }
 
-const Menu: React.FC<MenuProps> = ({ title, options, onCancel }) => {
+const Menu: React.FC<MenuProps> = ({ title, options, onCancel, sx }) => {
   const theme = useTheme();
   return (
     <Box
@@ -21,6 +22,7 @@ const Menu: React.FC<MenuProps> = ({ title, options, onCancel }) => {
         display: "flex",
         flexDirection: "column",
         gap: "12px",
+        ...sx,
       }}
     >
       <Box

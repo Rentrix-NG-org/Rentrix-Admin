@@ -9,6 +9,7 @@ import right from "../assets/chevron-right.svg";
 import { IListing, PropertyType, User } from "@src/modules/property/types";
 import { UserService } from "@src/modules/user/services/user.service";
 import { useNavigate } from "react-router";
+import { icons } from "@src/utils/icons";
 
 export const formatNumber = (num: number): string => {
   if (num < 100000) {
@@ -80,6 +81,7 @@ const Details = ({
     kitchenFittings: [],
     interiorFlooring: "",
     exteriorFlooring: "",
+    applications: [],
     furnishedType: "",
     servicing: "",
     propertyAge: "",
@@ -113,6 +115,7 @@ const Details = ({
         },
       },
     },
+
     owner: {
       id: "",
       firstName: "",
@@ -151,6 +154,15 @@ const Details = ({
   const [repId, setRepId] = useState("");
   const [repDetails, setRepDetails] = useState<User>();
   const [isRepLoading, setIsRepLoading] = useState(false);
+  const [applicants, setApplicants] = useState([
+    // {
+    //   fullName: "Jerome Bell",
+    //   photoUrl: "",
+    //   id: "12345",
+    //   inspectionDate: "Thursday 7th May",
+    //   inspectionTime: "07:00 - 07:20 AM",
+    // },
+  ]);
   const [imageLoadingStatus, setImageLoadingStatus] = useState<
     "notset" | "success" | "error" | "pending"
   >("notset");
@@ -205,6 +217,19 @@ const Details = ({
       },
     },
   ];
+
+  useEffect(() => {
+    console.log(listing.applications, "cool");
+    const formatted = listing.applications.map((application) => {
+      const applicant = application.applicant;
+      return {
+        id: applicant.id,
+        photoUrl: applicant.photoUrl,
+        fullName: `${applicant.firstName} ${applicant.lastName}`,
+      };
+    });
+    setApplicants(formatted as any[]);
+  }, [listing.applications]);
 
   useEffect(() => {
     if (listing) {
@@ -706,6 +731,121 @@ const Details = ({
           </Box>
         ),
       )}
+
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <Typography sx={{ color: "#2e333c", fontWeight: 600 }}>
+          Property Applicants
+        </Typography>
+
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          {applicants.map((applicant) => (
+            <Applicant {...applicant} />
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+const Applicant = ({
+  fullName,
+  photoUrl,
+  id,
+  inspectionDate,
+  inspectionTime,
+}) => {
+  return (
+    <Box
+      sx={{
+        background: "#f0f1f3",
+        display: "flex",
+        gap: "12px",
+        padding: "16px",
+        borderRadius: "12px",
+      }}
+    >
+      <Box
+        sx={{
+          width: "50px",
+          height: "50px",
+          background: "#00a3a3",
+          borderRadius: "50%",
+          overflow: "hidden",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: 24,
+          fontWeight: 700,
+          color: "white",
+        }}
+      >
+        {photoUrl ? (
+          <Avatar src={photoUrl} sx={{ width: "100%", height: "100%" }} />
+        ) : fullName ? (
+          fullName
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .substring(0, 2)
+            .toUpperCase()
+        ) : (
+          ""
+        )}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <Typography
+          sx={{ fontSize: "19px", color: "#48505e", fontWeight: 600 }}
+        >
+          {fullName}
+        </Typography>
+        <Typography sx={{ fontSize: "16px", color: "#48505e" }}>
+          {id}
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          ml: "auto",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <Typography
+          sx={{
+            color: "#828b9b",
+            textAlign: "right",
+          }}
+        >
+          {inspectionDate}
+        </Typography>
+        <Typography
+          sx={{
+            color: "#2e333c",
+            fontWeight: 600,
+            fontSize: "19px",
+            display: "flex",
+            gap: "4px",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            component="img"
+            src={icons.clock}
+            alt=""
+            sx={{
+              width: "20px",
+              height: "20px",
+            }}
+          />
+          <span>{inspectionTime}</span>
+        </Typography>
+      </Box>
     </Box>
   );
 };

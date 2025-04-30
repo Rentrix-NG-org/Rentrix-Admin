@@ -106,6 +106,16 @@ export const UserService = () => {
         data: response.data,
       };
     },
+    updateidentityStatus: async (userId: string, status: string) => {
+      const response = await axios.patch(
+        `/admin/users/${userId}/identity/${status}`,
+      );
+      return {
+        success: response.status === 200,
+        message: "Success",
+        data: response.data,
+      };
+    },
     updateUser: async (id: string, data: any) => {
       const response = await axios.patch(`/admin/users/${id}`, data);
       return {

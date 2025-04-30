@@ -55,6 +55,7 @@ export interface IListing {
   id: string;
   createdAt: string;
   updatedAt: string;
+  applications: { applicant: User }[];
   title: string;
   description: string;
   label: string;
