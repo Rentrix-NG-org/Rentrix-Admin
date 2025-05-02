@@ -780,7 +780,10 @@ const Applicant = ({
         }}
       >
         {photoUrl ? (
-          <Avatar src={photoUrl} sx={{ width: "100%", height: "100%" }} />
+          <Avatar
+            src={photoUrl}
+            sx={{ width: "48px", height: "48px", aspectRatio: "1 / 1" }}
+          />
         ) : fullName ? (
           fullName
             .split(" ")
