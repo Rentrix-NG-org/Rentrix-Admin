@@ -1,6 +1,5 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import { images } from "@src/utils/images";
-import { icons } from "@src/utils/icons";
 import { useState } from "react";
 
 // Custom document modal component
@@ -13,8 +12,6 @@ const DocumentModal = ({
   document: string;
   onClose: () => void;
 }) => {
-  const theme = useTheme();
-
   if (!isOpen) return null;
 
   return (
