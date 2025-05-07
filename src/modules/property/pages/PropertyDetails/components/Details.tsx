@@ -347,7 +347,6 @@ const Details = ({
           </Button>
         </Box>
       </Box>
-
       <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
         <Typography
           sx={{
@@ -376,7 +375,6 @@ const Details = ({
           {ConstructAddress(listing as IListing)}
         </Typography>
       </Box>
-
       <Box
         sx={{
           padding: "12px 0",
@@ -423,7 +421,6 @@ const Details = ({
           </Box>
         </Typography>
       </Box>
-
       <Box
         sx={{
           display: "flex",
@@ -475,7 +472,6 @@ const Details = ({
           <InspectionModal handleShowInspection={handleBookInspection} />
         )} */}
       </Box>
-
       {informations.map(
         ({ title, values: { avatar, fullName, email, userId }, action }) => (
           <Box>
@@ -731,7 +727,6 @@ const Details = ({
           </Box>
         ),
       )}
-
       <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         <Typography sx={{ color: "#2e333c", fontWeight: 600 }}>
           Property Applicants
