@@ -7,6 +7,7 @@ import Breadcrumbs from "@src/shared/components/BreadCrumbs";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { ApproveListing, GetListingsDetails } from "../property.service";
 import { IListing } from "../../types";
+import { PropertyDocuments } from "./components/Documents";
 
 const PropertyDetails = () => {
   const location = useLocation();
@@ -106,6 +107,7 @@ const PropertyDetails = () => {
           <Features listing={listing as IListing} />
         </Grid>
       </Grid>
+      <PropertyDocuments />
     </Box>
   );
 };
