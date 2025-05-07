@@ -24,6 +24,7 @@ const PropertyDetails = () => {
       const response = await GetListingsDetails(propertyId || "");
 
       if (response?.status === 200) {
+        console.log(response.data);
         setListing(response.data);
       }
     }
@@ -107,7 +108,7 @@ const PropertyDetails = () => {
           <Features listing={listing as IListing} />
         </Grid>
       </Grid>
-      <PropertyDocuments />
+      <PropertyDocuments documents={["", "", "", ""]} />
     </Box>
   );
 };
