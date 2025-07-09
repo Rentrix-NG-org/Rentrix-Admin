@@ -4,7 +4,7 @@ import { deviceInfo } from "./device";
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 const axiosInstance = axios.create({
   baseURL: backend_url,
-  timeout: 5000,
+  timeout: 50000,
   headers: {
     "Content-Type": "application/json",
   },

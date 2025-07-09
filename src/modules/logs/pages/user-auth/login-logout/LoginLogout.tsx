@@ -1,7 +1,7 @@
 import { Box, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
-import { Log } from "@src/modules/logs/types/log.types";
+import { Log, paginationType } from "@src/modules/logs/types/log.types";
 import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
@@ -10,10 +10,13 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+const limit = 10
+
 const LoginLogout = () => {
-  const { getAllLogs } = LogService();
+  const { getAllLoginLogs } = LogService();
   const theme = useTheme();
   const navigate = useNavigate();
+  const [pagination, setPagintion] = useState<paginationType>({ page: 1, totalPage: 1 })
   const [logs, setLogs] = useState<string[][]>([]);
   const [logIds, setLogIds] = useState<
     { logId: string; adminId: string; timestamp: string }[]
@@ -21,7 +24,7 @@ const LoginLogout = () => {
 
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getAllLogs("login=true");
+      const response = await getAllLoginLogs({ page: pagination.page, limit: limit });
       if (response.success) {
         if (response.data) {
           (response.data as Log[]).map((log) => {
@@ -38,16 +41,22 @@ const LoginLogout = () => {
           });
         }
 
+        setPagintion({
+          page: response.pagination?.page,
+          totalPage: response.pagination?.totalPages,
+        })
+
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
             userId: log.user?.id,
-            action: log.action,
+            details: log.username,
             timestamp: dayjs(Number(log.createdAt)).format(
               "YYYY-MM-DD HH:mm:ss",
             ),
             device: log.devices.join(", "),
-            location: "N\\A",
+            location: log.location || "N\\A",
             status: log.status,
+            route: log.route || "N\\A",
           });
         });
         setLogs(formatted);
@@ -74,7 +83,7 @@ const LoginLogout = () => {
       type: "text",
     },
     {
-      header: "DEVICE & IP ADDRESS",
+      header: "DEVICE",
       label: "device",
       type: "text",
     },
@@ -97,23 +106,29 @@ const LoginLogout = () => {
       },
     },
     {
+      header: "ROUTE",
+      label: "route",
+      type: "text",
+    },
+
+    {
       header: "ACTIONS",
       label: "actions",
       type: "action",
       component: [
         {
           component: <Box component="img" src={icons.eye} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: (
             <Box component="img" src={icons.edit} sx={{ width: 18 }} />
           ),
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: <Box component="img" src={icons.bin} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     },
@@ -129,12 +144,12 @@ const LoginLogout = () => {
     >
       <LogHeader />
       <UserNav
-        showBack={false}
+        showBack={true}
         routes={["Logs", "User Authentication Logs", "Login/Logout Events"]}
       />
 
       <Table
-        onSelect={() => {}}
+        onSelect={() => { }}
         onRowClick={(v) => {
           const id = logIds.find(
             (id) => id.adminId === v[0] && id.timestamp === v[2],

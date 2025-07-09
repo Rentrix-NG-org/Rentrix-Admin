@@ -47,6 +47,10 @@ export interface Log {
   devices: string[];
   referral: string;
   status: string;
+  route?: string;
+  location: string;
+  username?: string
+  reason?: string;
 }
 
 export interface Admin {
@@ -54,6 +58,11 @@ export interface Admin {
   user: User;
   accessModules: string[];
   createdAt: string;
+}
+
+export type paginationType = {
+  page: number;
+  totalPage: number
 }
 
 export const types: Record<ActivityType, string> = {

@@ -1,7 +1,39 @@
 import axios from "@src/core/axios";
+import { AxiosResponse } from "axios";
 
 export const LogService = () => {
   return {
+    getAllLoginLogs: async (query: { page: number, limit: number }, isFailed?: boolean) => {
+      try {
+        let response: AxiosResponse<any, any>
+        
+        if(isFailed){
+          response = await axios.get(`/admin/logs/failed/logins`, {
+            params: query
+          });
+        }else {
+          response = await axios.get(`/admin/logs/login/logs`, {
+            params: query
+          });
+        }
+
+        return {
+          success: true,
+          message: "Fetched",
+          data: response.data.data,
+          pagination: {
+            page: Number(response.data.page),
+            totalPages: Number(response.data.totalPages)
+          }
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: String(error) || "Failed to fetch logs",
+          data: null,
+        };
+      }
+    },
     getAllLogs: async (query?: string) => {
       try {
         const response = await axios.get(`/admin/logs?${query}`);
