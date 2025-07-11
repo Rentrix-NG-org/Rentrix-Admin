@@ -32,6 +32,7 @@ export interface Listing {
 
 export interface Log {
   id: string;
+  userId: string;
   description: string;
   user: User;
   account: Account;

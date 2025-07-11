@@ -48,11 +48,9 @@ const LoginLogout = () => {
 
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
-            userId: log.user?.id,
+            userId: log.userId,
             details: log.username,
-            timestamp: dayjs(Number(log.createdAt)).format(
-              "YYYY-MM-DD HH:mm:ss",
-            ),
+            timestamp: log.createdAt,
             device: log.devices.join(", "),
             location: log.location || "N\\A",
             status: log.status,
