@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Tooltip, Typography, useTheme, Modal } from "@mui/material";
 import { icons } from "@src/utils/icons";
 import { User } from "../types/user.types";
 import dayjs from "dayjs";
@@ -12,9 +12,10 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
   const { updateidentityStatus } = UserService();
   const [identityLoaded, setIdentityLoaded] = useState(true);
   const [identityMenuOpen, setIdentityMenuOpen] = useState(false);
+  const [documentModalOpen, setDocumentModalOpen] = useState(false); 
   const theme = useTheme();
   const navigate = useNavigate();
-  console.log(user, "is user");
+  // console.log(user, "is user");
 
   const userDetails: { label: string; value: string }[] = [
     { label: "Email", value: user?.account?.email || "" },
@@ -171,23 +172,34 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
               user.roles.map((role) => {
                 const roleKey = role as keyof typeof userRoles;
                 return (
-                  <Box
-                    sx={{
-                      background: colors?.[userRoles[roleKey]]?.accent,
-                      padding: "6px 16px",
-                      borderRadius: "10px",
-                    }}
+                  <Tooltip
+                    title={`Registered: ${user?.roleRegistrationDates?.[role] || 'Date not available'}`}
+                    arrow
+                    placement="top"
+                    key={role}
                   >
-                    <Typography
+                    <Box
                       sx={{
-                        color: colors?.[userRoles[roleKey]]?.value,
-                        fontSize: 12,
-                        fontWeight: 600,
+                        background: colors?.[userRoles[roleKey]]?.accent,
+                        padding: "6px 16px",
+                        borderRadius: "10px",
+                        '&:hover': {
+                          transform: 'translateY(-2px)',
+                          transition: 'transform 0.2s ease-in-out'
+                        }
                       }}
                     >
-                      {userRoles[roleKey]}
-                    </Typography>
-                  </Box>
+                      <Typography
+                        sx={{
+                          color: colors?.[userRoles[roleKey]]?.value,
+                          fontSize: 12,
+                          fontWeight: 600,
+                        }}
+                      >
+                        {userRoles[roleKey]}
+                      </Typography>
+                    </Box>
+                  </Tooltip>
                 );
               })}
           </Box>
@@ -235,6 +247,12 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
             borderRadius: "8px",
             gap: "28px",
             ml: 4,
+            cursor: user.identity?.identityUrl && identityLoaded ? 'pointer' : 'default',
+          }}
+          onClick={() => {
+            if (user.identity?.identityUrl && identityLoaded) {
+              setDocumentModalOpen(true);
+            }
           }}
         >
           <Box
@@ -252,11 +270,14 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
           <Box
             display={user.identity && identityLoaded ? "flex" : "none"}
             sx={{ position: "relative" }}
+            onClick={(e) => e.stopPropagation()}
           >
             <Box
               component="button"
-              onClick={() => setIdentityMenuOpen(!identityMenuOpen)}
-              sx={{
+              onClick={(e) => {
+                e.stopPropagation();
+                setIdentityMenuOpen(!identityMenuOpen);
+              }}              sx={{
                 display: "flex",
                 border: `1px solid ${colors[user.identity?.status || "Default"].value}`,
                 padding: "6px 16px",
@@ -284,9 +305,11 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
                 }}
               />
             </Box>
+
             {identityMenuOpen && (
               <Menu
                 title="Status"
+                hideArrow={true}
                 options={[
                   {
                     value: "Verify",
@@ -310,7 +333,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
                     },
                   },
                 ]}
-                onCancel={() => {}}
+                onCancel={() => { }}
                 sx={{
                   right: 0,
                   top: 50,
@@ -328,7 +351,62 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
             No identity document
           </Typography>
         </Box>
-
+        <Modal
+          open={documentModalOpen}
+          onClose={() => setDocumentModalOpen(false)}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(2px)',
+          }}
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              maxWidth: '90vw',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 2,
+              borderRadius: '8px',
+            }}
+          >
+            <Box
+              component="img"
+              src={user.identity?.identityUrl}
+              sx={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '80vh',
+                objectFit: 'contain',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <Box
+              component="button"
+              onClick={() => setDocumentModalOpen(false)}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                background: theme.palette.error.main,
+                color: 'white',
+                border: 'none',
+                borderRadius: '50%',
+                width: 30,
+                height: 30,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              ×
+            </Box>
+          </Box>
+        </Modal>
         <Box
           component="button"
           onClick={() => navigate("edit")}

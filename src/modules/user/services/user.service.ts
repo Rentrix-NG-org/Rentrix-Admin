@@ -22,6 +22,8 @@ export const UserService = () => {
       }
       const response = await axios.get(`/admin/users/${userId}`);
 
+      // console.log('data', response)
+
       return {
         success: response.status === 200,
         message: "Fetched",

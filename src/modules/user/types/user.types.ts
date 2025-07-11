@@ -119,4 +119,5 @@ export interface User {
   listings: ListingType[];
   transactions: TransactionType[];
   logs: LogType[];
+  roleRegistrationDates: object;
 }

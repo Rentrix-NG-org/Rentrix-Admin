@@ -27,8 +27,11 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const { permissions } = useUserContext();
-  const [totals, setTotals] = useState({ landlord: 0, tenant: 0 });
-  const [refresh, setRefresh] = useState(false);
+  const [totals, setTotals] = useState({ 
+    landlord: 0, 
+    tenant: 0,
+    totalUsers: 0
+  });  const [refresh, setRefresh] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -193,7 +196,11 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       }}
     >
       <TableHeader
-        title={`Landlord & Tenants (${totals.landlord} landlord${totals.landlord > 1 ? "s" : ""}; ${totals.tenant} tenant${totals.tenant > 1 ? "s" : ""})`}
+        title={`Landlord & Tenants (
+          ${totals.landlord} landlord${totals.landlord !== 1 ? 's' : ''}; 
+          ${totals.tenant} tenant${totals.tenant !== 1 ? 's' : ''};
+          ${totals.totalUsers} total users
+        )`}
         onViewAll={() => {
           navigate("roles/landlords-tenants");
         }}
