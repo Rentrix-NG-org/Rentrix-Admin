@@ -2,7 +2,6 @@ import { Box, useTheme } from "@mui/material";
 import bell from "@src/assets/icons/bell.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { images } from "@src/utils/images";
 import Menu from "@src/shared/components/Menu";
 import { icons } from "@src/utils/icons";
 const Topbar = () => {
