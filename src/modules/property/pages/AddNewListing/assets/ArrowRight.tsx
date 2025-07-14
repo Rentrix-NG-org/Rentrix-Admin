@@ -1,6 +1,18 @@
 import { colors } from '@src/shared/constants/constants';
 
-const ArrowRight = ({width='24px', height='24px', fill = colors.light}) => {
+interface ArrowRightProps {
+  width?: string;
+  height?: string;
+  fill?: string;
+  style?: React.CSSProperties;
+}
+
+const ArrowRight = ({
+  width = '24px', 
+  height = '24px', 
+  fill = colors.light,
+  style
+}: ArrowRightProps) => {
   return (
     <svg
       width={width}
@@ -8,6 +20,7 @@ const ArrowRight = ({width='24px', height='24px', fill = colors.light}) => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={style}
     >
       <path
         d="M21.7071 12.7071C22.0976 12.3166 22.0976 11.6834 21.7071 11.2929L17.7071 7.29289C17.3166 6.90237 16.6834 6.90237 16.2929 7.29289C15.9024 7.68342 15.9024 8.31658 16.2929 8.70711L18.5858 11L3 11C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13L18.5858 13L16.2929 15.2929C15.9024 15.6834 15.9024 16.3166 16.2929 16.7071C16.6834 17.0976 17.3166 17.0976 17.7071 16.7071L21.7071 12.7071Z"
@@ -15,6 +28,6 @@ const ArrowRight = ({width='24px', height='24px', fill = colors.light}) => {
       />
     </svg>
   );
-}
+};
 
 export default ArrowRight

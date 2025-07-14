@@ -1,7 +1,7 @@
 import { Box, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
-import { Log } from "@src/modules/logs/types/log.types";
+import { Log, paginationType } from "@src/modules/logs/types/log.types";
 import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
@@ -10,10 +10,13 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+const limit = 10;
+
 const FailedLogin = () => {
-  const { getAllLogs } = LogService();
+  const { getAllLoginLogs } = LogService();
   const theme = useTheme();
   const navigate = useNavigate();
+  const [pagination, setPagintion] = useState<paginationType>({ page: 1, totalPage: 1 })
   const [logs, setLogs] = useState<string[][]>([]);
   const [logIds, setLogIds] = useState<
     { logId: string; adminId: string; timestamp: string }[]
@@ -21,7 +24,7 @@ const FailedLogin = () => {
 
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getAllLogs("failed-login=true");
+      const response = await getAllLoginLogs({ page: pagination.page, limit: limit }, true);
       if (response.success) {
         if (response.data) {
           (response.data as Log[]).map((log) => {
@@ -29,7 +32,7 @@ const FailedLogin = () => {
               ...prev,
               {
                 logId: log.id,
-                adminId: log.user.id,
+                adminId: log.user?.id ?? "Unknown",
                 timestamp: dayjs(Number(log.createdAt)).format(
                   "YYYY-MM-DD HH:mm:ss",
                 ),
@@ -38,16 +41,23 @@ const FailedLogin = () => {
           });
         }
 
+        setPagintion({
+          page: response.pagination?.page,
+          totalPage: response.pagination?.totalPages,
+        })
+
         const formatted = (response.data as Log[]).map((log) => {
           return Object.values({
-            userId: log.user.id,
-            action: log.action,
+            userId: log.user?.id,
+            details: log.username || "N\\A",
+            reason: log.reason,
             timestamp: dayjs(Number(log.createdAt)).format(
               "YYYY-MM-DD HH:mm:ss",
             ),
             device: log.devices.join(", "),
-            location: "N\\A",
+            location: log.location || "N\\A",
             status: log.status,
+            route: log.route || "N\\A",
           });
         });
         setLogs(formatted);
@@ -63,6 +73,11 @@ const FailedLogin = () => {
       type: "text",
     },
     {
+      header: "DETAILS",  
+      label: "details",
+      type: "text",
+    },
+    {
       header: "REASONS",
       label: "reasons",
       type: "text",
@@ -74,7 +89,7 @@ const FailedLogin = () => {
       type: "text",
     },
     {
-      header: "DEVICE & IP ADDRESS",
+      header: "DEVICE",
       label: "device",
       type: "text",
     },
@@ -95,6 +110,11 @@ const FailedLogin = () => {
       sx: {
         padding: "6px 16px",
       },
+    },
+    {
+      header: "ROUTE",
+      label: "route",
+      type: "text",
     },
     {
       header: "ACTIONS",
@@ -129,7 +149,7 @@ const FailedLogin = () => {
     >
       <LogHeader />
       <UserNav
-        showBack={false}
+        showBack={true}
         routes={["Logs", "User Authentication Logs", "Failed Login Attempts"]}
       />
 

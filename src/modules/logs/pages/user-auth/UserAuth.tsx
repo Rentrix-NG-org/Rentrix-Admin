@@ -20,7 +20,7 @@ const UserAuthentication = () => {
       }}
     >
       <LogHeader />
-      <UserNav showBack={false} routes={["Logs", "User Authentication Logs"]} />
+      <UserNav showBack={true} routes={["Logs", "User Authentication Logs"]} />
 
       <Box
         sx={{

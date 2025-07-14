@@ -6,9 +6,10 @@ interface MenuProps {
   onCancel: VoidFunction;
   options: { value: string; onClick: VoidFunction }[];
   sx?: SxProps;
+  hideArrow?: boolean;
 }
 
-const Menu: React.FC<MenuProps> = ({ title, options, onCancel, sx }) => {
+const Menu: React.FC<MenuProps> = ({ title, options, onCancel, sx, hideArrow }) => {
   const theme = useTheme();
   return (
     <Box
@@ -36,21 +37,23 @@ const Menu: React.FC<MenuProps> = ({ title, options, onCancel, sx }) => {
           borderBottom: `1px solid ${theme.palette.grey[300]}`,
         }}
       >
-        <Typography>{title}</Typography>
-        <Box
-          onClick={onCancel}
-          component="button"
-          sx={{ border: "none", background: "none", cursor: "pointer" }}
-        >
-          <ChevronLeftRounded
-            sx={{
-              transform: "rotate(90deg)",
-              width: 32,
-              height: 32,
-              color: theme.palette.secondary.main,
-            }}
-          />
-        </Box>
+        <Typography sx={{ fontWeight: 600 }}>{title}</Typography>
+        {!hideArrow && (
+          <Box
+            onClick={onCancel}
+            component="button"
+            sx={{ border: "none", background: "none", cursor: "pointer" }}
+          >
+            <ChevronLeftRounded
+              sx={{
+                transform: "rotate(90deg)",
+                width: 32,
+                height: 32,
+                color: theme.palette.secondary.main,
+              }}
+            />
+          </Box>
+        )}
       </Box>
       <Box
         sx={{
@@ -66,7 +69,8 @@ const Menu: React.FC<MenuProps> = ({ title, options, onCancel, sx }) => {
           <Box
             onClick={onClick}
             component="button"
-            sx={{ background: "none", border: "none", padding: 0 }}
+            key={value}
+            sx={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
           >
             <Typography sx={{ fontSize: 14 }}>{value}</Typography>
           </Box>
@@ -75,4 +79,6 @@ const Menu: React.FC<MenuProps> = ({ title, options, onCancel, sx }) => {
     </Box>
   );
 };
+
 export default Menu;
+
