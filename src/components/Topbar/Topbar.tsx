@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { images } from "@src/utils/images";
 import Menu from "@src/shared/components/Menu";
+import { icons } from "@src/utils/icons";
 const Topbar = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ const Topbar = () => {
             src={
               user?.users[0]?.photoUrl
                 ? user?.users[0]?.photoUrl
-                : images.avatar
+                : icons.avatar
             }
           />
         </Box>

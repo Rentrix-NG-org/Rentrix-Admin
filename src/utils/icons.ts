@@ -25,6 +25,7 @@ import lock from "@src/assets/icons/lock.svg";
 import useradd from "@src/assets/icons/user-add.svg";
 import clock from "@src/assets/icons/clock.svg";
 import folder from "@src/assets/icons/folder.svg";
+import avatar from "@src/assets/icons/avatar.svg";
 
 export const icons = {
   edit,
@@ -55,4 +56,5 @@ export const icons = {
   useradd,
   clock,
   folder,
+  avatar,
 };
