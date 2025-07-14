@@ -51,9 +51,7 @@ const Topbar = () => {
             component="img"
             sx={{ width: 32, borderRadius: 10, cursor: "pointer" }}
             src={
-              user?.users[0]?.photoUrl
-                ? user?.users[0]?.photoUrl
-                : icons.avatar
+              user?.users[0]?.photoUrl ? user?.users[0]?.photoUrl : icons.avatar
             }
           />
         </Box>
