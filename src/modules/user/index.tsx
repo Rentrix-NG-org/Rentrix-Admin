@@ -20,6 +20,7 @@ import PasswordRequests from "./pages/password-requests/PasswordRequests";
 import AdminProfile from "../profile/AdminProfile";
 import ChangePassword from "../auth/ChangePassword";
 import UserProfile from "./pages/admins/Profile";
+import AdminEdit from "./pages/[userId]/edit/AdminEdit";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -125,6 +126,14 @@ export const UserManagementModule: UserManagementModule = {
       element: (
         <UserProvider>
           <UserEdit />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/admin/edit",
+      element: (
+        <UserProvider>
+          <AdminEdit />
         </UserProvider>
       ),
     },

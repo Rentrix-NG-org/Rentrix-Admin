@@ -137,7 +137,7 @@ const AdminsLogs: React.FC<{ search: string; filter: string[] }> = ({
       }}
     >
       <TableHeader
-        title="Admins"
+        title="Admins Logs"
         onViewAll={() => {
           navigate("roles/admins");
         }}
