@@ -8,8 +8,9 @@ import { icons } from "@src/utils/icons";
 import Loading from "@src/shared/components/Loading";
 import { useUserContext } from "../providers/user.context";
 import Modal from "@src/shared/components/Modal";
+import moment from "moment";
 
-const { getAllUsers, updateUser, changeRoles, deleteUser } = UserService();
+const { getTypeUsers, updateUser, changeRoles, deleteUser } = UserService();
 
 const Admins: React.FC<{ search: string; filter: string[] }> = ({
   search,
@@ -31,26 +32,34 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
 
   useEffect(() => {
     async function getUsers() {
-      const query = permissions.includes("admin") ? "admin=true" : "";
-      const response = await getAllUsers(query);
+      try {
+        const isAdmin = permissions.includes("admin")
+        const response = isAdmin ? await getTypeUsers("/admin/logs/admin/logs") : { success: false, data: [], message: '' }
 
-      if (response.success) {
-        const formatted = response.data.users.map((user: any) => {
-          return {
-            id: user.id,
-            name: user.name,
-            role: user.role,
-            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
-            registrationDate: user.registrationDate,
-          };
-        });
-        setRefresh(false);
-        setUsers(formatted as any[]);
+        if (response.success) {
+          const formatted = response.data.data?.map((user: any) => {
+            return {
+              id: user.id,
+              name: user.username,
+              role: user.role || "N/A",
+              lastActive: moment(user.lastSeen).format('MMM D, YYYY, h:mm A'),
+              location: user.location || "N/A",
+              assignedLocation: user.assignedLocation?.join(", ") || "None",
+            };
+          });
+          setRefresh(false);
+          setUsers(formatted as any[]);
+        }
+      }
+      catch (e) { }
+      finally { 
         setIsLoading(false);
       }
     }
     getUsers();
   }, [refresh, permissions]);
+
+
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
@@ -151,8 +160,7 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
           {
             header: "ROLE",
             label: "role",
-            type: "select",
-            options: [],
+            type: "text",
           },
           {
             header: "LAST ACTIVE",
@@ -165,6 +173,11 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
             type: "text",
           },
           {
+            header: "ASSIGNED LOCATION",
+            label: "assignedLocation",
+            type: "text",
+          },
+          {
             header: "ACTIONS",
             label: "actions",
             type: "action",
@@ -173,13 +186,13 @@ const Admins: React.FC<{ search: string; filter: string[] }> = ({
                 component: (
                   <Box component="img" src={icons.eye} sx={{ width: 18 }} />
                 ),
-                onClick: () => {},
+                onClick: () => { },
               },
               {
                 component: (
                   <Box component="img" src={icons.edit} sx={{ width: 18 }} />
                 ),
-                onClick: () => {},
+                onClick: () => { },
               },
               {
                 component: (

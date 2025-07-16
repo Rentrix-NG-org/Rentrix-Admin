@@ -17,6 +17,7 @@ import ChangeLocation from "./pages/[userId]/change-location/ChangeLocation";
 import { UserProvider } from "./providers/user.provider";
 import Admins from "./pages/admins/Admins";
 import PasswordRequests from "./pages/password-requests/PasswordRequests";
+import AdminProfile from "../profile/AdminProfile";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -26,6 +27,14 @@ export interface UserManagementModule {
 
 export const UserManagementModule: UserManagementModule = {
   routes: [
+    {
+      path: "/profile",
+      element: (
+        <UserProvider>
+          <AdminProfile />
+        </UserProvider>
+      )
+    },
     {
       path: "/users",
       element: (
