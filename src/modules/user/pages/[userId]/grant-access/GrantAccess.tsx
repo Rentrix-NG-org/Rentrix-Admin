@@ -74,6 +74,7 @@ const GrantAccess = () => {
   }
 
   async function handleSubmit() {
+    console.log("Submitting permissions:", permissions);
     const response = await grantAccess(params?.userId, permissions);
     if (response.success) {
       navigate(-1);
@@ -183,6 +184,7 @@ const GrantAccess = () => {
       </Box>
 
       <Box
+        type="submit"
         component="button"
         onClick={handleSubmit}
         sx={{

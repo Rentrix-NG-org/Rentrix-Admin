@@ -161,7 +161,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
                 component: (
                   <Box component="img" src={icons.eye} sx={{ width: 18 }} />
                 ),
-                onClick: () => {},
+                onClick: (v) => {navigate(`/users/${v}/profile`)},
               },
               {
                 component: (
