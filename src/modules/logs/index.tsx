@@ -34,6 +34,8 @@ import ListingRemovalInfo from "./pages/property-mgmt/listing-removal/[logId]/Lo
 import ViewingRequest from "./pages/property-mgmt/viewing-request/ViewingRequest";
 import AgeRestriction from "./pages/account-mgmt/age-restriction/AgeRestriction";
 import AgeRestrictionInfo from "./pages/account-mgmt/age-restriction/[logId]/LogInfo";
+import AdminLogins from "./pages/user-auth/admin-login/AdminLogins";
+import { UserProvider } from "../user/providers/user.provider";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -218,6 +220,15 @@ export const LogsModule: LogsModule = {
       element: <ViewingRequest />,
       title: "Viewing Request",
     },
+    {
+      path: "/logs/user-auth/admin-login-logout",
+      element: (
+        <UserProvider>
+          <AdminLogins />
+        </UserProvider>
+        ),
+      title: "Admin Login/Logout Logs",
+    }
   ],
   name: "Logs",
   enabled: true,

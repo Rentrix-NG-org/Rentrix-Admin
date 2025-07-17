@@ -7,7 +7,6 @@ import Admins from "../components/Admins";
 import PasswordRequests from "../components/PasswordRequests";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
-import AdminsLogs from "../components/AdminLogs";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
@@ -58,11 +57,6 @@ const UserManagement = () => {
       {permissions.some((p) => ["landlord", "tenant"].includes(p)) && (
         <LandlordAndTenant search={search} filter={filter} />
       )}
-
-      {permissions.some((p) => ["admin"].includes(p)) && (
-        <AdminsLogs search={search} filter={filter} />
-      )}
-
       {permissions.some((p) =>
         ["supervisor", "representative"].includes(p),
       ) && <SupervisorAndRep search={search} filter={filter} />}

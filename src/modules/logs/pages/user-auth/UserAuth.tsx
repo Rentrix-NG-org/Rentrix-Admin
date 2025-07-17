@@ -9,6 +9,7 @@ const UserAuthentication = () => {
   const categories = [
     { name: "Login/Logout Events", route: "login-logout" },
     { name: "Failed Login Attempts", route: "failed-login" },
+    { name: "Admin Login/logout", route: "admin-login-logout" },
   ];
   return (
     <Box
@@ -37,6 +38,7 @@ const UserAuthentication = () => {
       >
         {categories.map((category) => (
           <Box
+          key={category.name}
             component="button"
             onClick={() => navigate(category.route)}
             sx={{
