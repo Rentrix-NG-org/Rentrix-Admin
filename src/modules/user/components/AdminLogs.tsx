@@ -1,5 +1,4 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
 import { UserService } from "../services/user.service";
@@ -136,12 +135,6 @@ const AdminsLogs: React.FC<{ search: string; filter: string[] }> = ({
         gap: 2,
       }}
     >
-      <TableHeader
-        title="Admins Logs"
-        onViewAll={() => {
-          navigate("roles/admins");
-        }}
-      />
       <Table
         onSelect={handleTableSelection}
         onRowClick={(row) => navigate(`/users/${row[0]}/admin`)}
