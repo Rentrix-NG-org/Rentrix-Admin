@@ -53,7 +53,7 @@ const LoginLogout = () => {
             timestamp: log.createdAt,
             device: log.devices.join(", "),
             location: log.location || "N\\A",
-            status: log.status,
+            status: log.status === "verified" ? "successful" : log?.status === "pending" ? "pending" : "unsuccessful",
             route: log.route || "N\\A",
           });
         });
@@ -95,9 +95,9 @@ const LoginLogout = () => {
       label: "status",
       type: "custom-text",
       colors: {
-        verified: theme.palette.success.main,
+        successful: theme.palette.success.main,
         pending: theme.palette.warning.main,
-        unverified: theme.palette.error.main,
+        unsuccessful: theme.palette.error.main,
       },
       sx: {
         padding: "6px 16px",

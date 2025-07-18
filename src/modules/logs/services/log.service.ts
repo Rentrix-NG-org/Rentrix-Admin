@@ -27,6 +27,7 @@ export const LogService = () => {
           }
         };
       } catch (error) {
+        console.log('errorhiggfaugifuhiuhifr', error)
         return {
           success: false,
           message: String(error) || "Failed to fetch logs",

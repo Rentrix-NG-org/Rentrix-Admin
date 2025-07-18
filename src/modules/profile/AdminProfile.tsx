@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import UserNav from "../user/components/UserNav";
 import { ImageEdit } from "../user/pages/[userId]/edit/UserEdit";
-import { images } from "@src/utils/images";
+// import { images } from "@src/utils/images";
+import { icons } from "@src/utils/icons";
 import CustomButton from "../property/pages/AddNewListing/components/Button";
 import moment from "moment";
 
@@ -47,7 +48,7 @@ const AdminProfile = () => {
       <Box width="fit-content" mt="25px">
         <Box display="flex" justifyContent="center">
           <ImageEdit
-            value={images.avatar}
+            value={user?.users[0]?.photoUrl || icons.avatar}
             onImage={(__, file) => {
               setImage(file);
             }}

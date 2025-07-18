@@ -13,6 +13,7 @@ const UserNav: React.FC<{ routes: string[]; showBack?: boolean }> = ({
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <Box
+
         component="button"
         onClick={() => navigate(-1)}
         sx={{
@@ -35,7 +36,13 @@ const UserNav: React.FC<{ routes: string[]; showBack?: boolean }> = ({
       </Box>
       <Box sx={{ display: "flex", gap: 0.5 }}>
         {routes.map((route, index) => (
-          <>
+          <div
+            key={index}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}>
             <Typography
               sx={{
                 fontSize: 20,
@@ -59,7 +66,7 @@ const UserNav: React.FC<{ routes: string[]; showBack?: boolean }> = ({
                 {">"}
               </Typography>
             ) : null}
-          </>
+          </div>
         ))}
       </Box>
     </Box>

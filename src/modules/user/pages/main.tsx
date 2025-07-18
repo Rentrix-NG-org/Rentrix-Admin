@@ -57,7 +57,6 @@ const UserManagement = () => {
       {permissions.some((p) => ["landlord", "tenant"].includes(p)) && (
         <LandlordAndTenant search={search} filter={filter} />
       )}
-
       {permissions.some((p) =>
         ["supervisor", "representative"].includes(p),
       ) && <SupervisorAndRep search={search} filter={filter} />}

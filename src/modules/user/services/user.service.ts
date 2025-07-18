@@ -12,6 +12,23 @@ export const UserService = () => {
       };
     },
 
+    getTypeUsers: async (url: string) => {
+      try {
+        const response = await axios.get(url);
+        return {
+          success: response.status === 200,
+          message: "Fetched",
+          data: response.data,
+        };
+      } catch (e) {
+        return {
+          success: false,
+          message: "failed",
+          data: []
+        }
+      }
+    },
+
     getUser: async (userId: string) => {
       if (!userId) {
         return {

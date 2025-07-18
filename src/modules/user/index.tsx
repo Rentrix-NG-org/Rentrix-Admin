@@ -17,6 +17,10 @@ import ChangeLocation from "./pages/[userId]/change-location/ChangeLocation";
 import { UserProvider } from "./providers/user.provider";
 import Admins from "./pages/admins/Admins";
 import PasswordRequests from "./pages/password-requests/PasswordRequests";
+import AdminProfile from "../profile/AdminProfile";
+import ChangePassword from "../auth/ChangePassword";
+import UserProfile from "./pages/admins/Profile";
+import AdminEdit from "./pages/[userId]/edit/AdminEdit";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -26,6 +30,20 @@ export interface UserManagementModule {
 
 export const UserManagementModule: UserManagementModule = {
   routes: [
+    {
+      path: "/profile",
+      element: (
+        <UserProvider>
+          <AdminProfile />
+        </UserProvider>
+      )
+    },
+    {
+      path: "/admin/profile/change-password",
+      element: (
+        <ChangePassword />  
+      )
+    },
     {
       path: "/users",
       element: (
@@ -112,6 +130,14 @@ export const UserManagementModule: UserManagementModule = {
       ),
     },
     {
+      path: "/users/:userId/admin/edit",
+      element: (
+        <UserProvider>
+          <AdminEdit />
+        </UserProvider>
+      ),
+    },
+    {
       path: "/users/:userId/listings",
       element: (
         <UserProvider>
@@ -156,6 +182,14 @@ export const UserManagementModule: UserManagementModule = {
       element: (
         <UserProvider>
           <AdminDetails />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/:userId/profile",
+      element: (
+        <UserProvider>
+          <UserProfile />
         </UserProvider>
       ),
     },
