@@ -48,7 +48,7 @@ const Topbar = () => {
               setMenuOpen(!menuOpen);
             }}
             component="img"
-            sx={{ width: 32, borderRadius: 10, cursor: "pointer" }}
+            sx={{ width: 32, height: 32, overflow: 'hidden', objectFit: 'cover', borderRadius: 10, cursor: "pointer" }}
             src={
               user?.users[0]?.photoUrl ? user?.users[0]?.photoUrl : icons.avatar
             }

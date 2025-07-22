@@ -13,8 +13,10 @@ import CustomButton from "../property/pages/AddNewListing/components/Button";
 import axios from "axios";
 import axiosInstance from "@src/core/axios";
 import { User } from "../profile/AdminProfile";
+import { useNavigate } from "react-router";
 
 const ChangePassword = () => {
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,6 +50,9 @@ const ChangePassword = () => {
       setStatusCode(200);
       setPassword("");
       setConfirmPassword("");
+      setTimeout(() => {
+        navigate(-1)
+      }, 1000);
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error)) {
