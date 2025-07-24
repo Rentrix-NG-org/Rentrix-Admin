@@ -34,11 +34,10 @@ const AdminsLogs: React.FC<{ search: string; filter: string[] }> = ({
       try {
         const isAdmin = permissions.includes("admin")
         const response = isAdmin ? await getTypeUsers("/admin/logs/admin/logs") : { success: false, data: [], message: '' }
-
         if (response.success) {
           const formatted = response.data.data?.map((user: any) => {
             return {
-              id: user.id,
+              id: user.userId || "" ,
               name: user.username,
               role: user.role || "N/A",
               lastActive: moment(user.lastSeen).format('MMM D, YYYY, h:mm A'),

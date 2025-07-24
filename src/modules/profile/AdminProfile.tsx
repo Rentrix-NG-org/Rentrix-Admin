@@ -7,6 +7,8 @@ import { ImageEdit } from "../user/pages/[userId]/edit/UserEdit";
 import { icons } from "@src/utils/icons";
 import CustomButton from "../property/pages/AddNewListing/components/Button";
 import moment from "moment";
+import { MediaService } from "@src/shared/services/media.service";
+import { UserService } from "../user/services/user.service";
 
 export interface User {
   id: string;
@@ -32,16 +34,66 @@ export interface User {
 const AdminProfile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-  const [_, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { uploadFile } = MediaService();
+  const { updateUser } = UserService();
   const theme = useTheme();
-  const date = new Date(user?.users[0]?.dateOfBirth);
-  const formattedDob = moment(date).format("DD MMM YYYY");
+  const date = user?.users[0]?.dateOfBirth
+  const formattedDob = moment(Number(date)).format("DD MMM YYYY");
 
   useEffect(() => {
     const getUser = localStorage.getItem("user");
     if (getUser) setUser(JSON.parse(getUser));
     else setUser(null);
   }, []);
+
+
+  async function uploadImage() {
+    const formData = new FormData();
+    if (!image) {
+      return null;
+    }
+    formData.append("file", image, image.name);
+    const response = await uploadFile(formData);
+    if (response.success) {
+      return response.data.data.url as string;
+    }
+    return null;
+  }
+
+
+  const uploadProfilePicture = async () => {
+    try {
+      setLoading(true);
+      const url = await uploadImage();
+
+      const constructed = {
+        photoUrl: url,
+      };
+
+      const response = await updateUser(user?.users[0]?.id, constructed);
+      if (response.success) {
+        const updatedUser = {
+          ...user,
+          users: [
+            {
+              ...user.users[0],
+              photoUrl: url,
+            },
+          ],
+        };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        setImage(null);
+      }
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <Box mt="60px" px="20px">
       <UserNav routes={["Profile", "My Details"]} />
@@ -54,6 +106,27 @@ const AdminProfile = () => {
             }}
           />
         </Box>
+
+        {image &&
+          <CustomButton
+            disabled={loading}
+            onClick={uploadProfilePicture}
+            variant="contained"
+            buttonStyles={{
+              height: { xs: "34px", sm: "34px" },
+              mt: "16px",
+              color: theme.palette.common.white,
+              background: theme.palette.secondary.main,
+              "&:hover": {
+                background: theme.palette.secondary.light,
+                borderColor: "transparent",
+                color: theme.palette.common.white,
+              },
+            }}
+          >
+            {loading ? 'Saving....' : 'Save Profile Picture'}
+          </CustomButton>
+        }
         <Box
           width="fit-content"
           my="32px"
