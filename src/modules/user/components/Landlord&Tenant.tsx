@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
@@ -10,12 +10,13 @@ import { Column } from "@src/shared/types/shared.types";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
 
-const { getAllUsers, updateUser } = UserService();
+const { getAllUsers, updateUser, deleteUserByEmail } = UserService();
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
+  const [open, setOpen] = useState({email:"", state:false});
   const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState<{
     isOpen: boolean;
@@ -27,11 +28,11 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const { permissions } = useUserContext();
-  const [totals, setTotals] = useState({ 
-    landlord: 0, 
+  const [totals, setTotals] = useState({
+    landlord: 0,
     tenant: 0,
     totalUsers: 0
-  });  const [refresh, setRefresh] = useState(false);
+  }); const [refresh, setRefresh] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,9 +60,10 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
             role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
             status: user.status,
             registrationDate: user.registrationDate,
+            email: user.email,
           };
         });
-        console.log(formatted, "is formatted");
+        // console.log(formatted, "is formatted");
         setUsers(formatted as any[]);
         setIsLoading(false);
       }
@@ -93,6 +95,29 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     });
     setSearchFilter(filtered);
   }, [filter, users]);
+
+
+  const handleDeleteUser = async (email: string) => {
+    try {
+      console.log("Deleting user with email:", email);
+      if (!email) {
+        console.error("Email is required to delete a user.");
+        return;
+      }
+      const response = await deleteUserByEmail(email);
+      if (response.success) {
+        setRefresh(true);
+        setOpen({email: "", state: false});
+        console.log("User deleted successfully");
+      } else {
+        console.error("Failed to delete user:", response.message);
+      }
+    }
+    catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  }
+
   const columns: Column[] = [
     {
       header: "USER ID",
@@ -121,23 +146,33 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       type: "text",
     },
     {
+      header: "EMAIL",
+      label: "email",
+      type: "text",
+    },
+    {
       header: "ACTIONS",
       label: "actions",
       type: "action",
       component: [
         {
           component: <Box component="img" src={icons.eye} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: (
             <Box component="img" src={icons.edit} sx={{ width: 18 }} />
           ),
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: <Box component="img" src={icons.bin} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: (userId) => {
+            const selectedUser = users?.find(u => u.id === userId);
+            const userEmail = selectedUser?.email;
+            // console.log("Selected user email:", userEmail);
+            setOpen({email: userEmail, state: true});
+           },
         },
       ],
     },
@@ -195,6 +230,37 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         gap: 2,
       }}
     >
+
+      <Dialog
+        open={open.state}
+        onClose={() => setOpen({email:"", state:false})}
+        aria-labelledby="delete-confirmation-title"
+        aria-describedby="delete-confirmation-description"
+      >
+        <DialogTitle id="delete-confirmation-title">
+          Confirm Delete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-confirmation-description">
+            Are you sure you want to delete this item? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen({email: "", state: false})} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleDeleteUser(open.email)}
+            color="error"
+            variant="contained"
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
       <TableHeader
         title={`Landlord & Tenants (
           ${totals.landlord} landlord${totals.landlord !== 1 ? 's' : ''}; 

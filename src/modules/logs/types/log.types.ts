@@ -52,6 +52,8 @@ export interface Log {
   location: string;
   username?: string
   reason?: string;
+  deviceType?: string;
+  email?: string;
 }
 
 export interface Admin {

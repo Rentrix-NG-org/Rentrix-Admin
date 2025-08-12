@@ -35,6 +35,28 @@ export const LogService = () => {
         };
       }
     },
+    getPasswordRequestsLogs: async (query?: { page: number, limit: number }) => {
+      try {
+        const response = await axios.get(`/admin/password-reset-logs`, {
+          params: query
+        });
+        return {
+          success: true,
+          message: "Fetched",
+          data: response.data.data,
+          pagination: {
+            page: Number(response.data.page),
+            totalPages: Number(response.data.totalPages)
+          }
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: String(error) || "Failed to fetch password requests",
+          data: null,
+        };
+      }
+    },
     getAllLogs: async (query?: string) => {
       try {
         const response = await axios.get(`/admin/logs?${query}`);

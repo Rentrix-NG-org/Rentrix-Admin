@@ -29,6 +29,23 @@ export const UserService = () => {
       }
     },
 
+    deleteUserByEmail: async (email: string) => {
+      try {
+        const response = await axios.delete(`/admin/users/by-email/${email}`);
+        return {
+          success: response.status === 200,
+          message: "User deleted",
+          data: response.data,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Failed to delete user",
+          data: null,
+        };
+      }
+    },
+
     getUser: async (userId: string) => {
       if (!userId) {
         return {
