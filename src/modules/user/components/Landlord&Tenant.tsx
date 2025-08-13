@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, useTheme } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
@@ -16,7 +16,8 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
-  const [open, setOpen] = useState({email:"", state:false});
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [open, setOpen] = useState({ email: "", state: false });
   const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState<{
     isOpen: boolean;
@@ -99,6 +100,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
   const handleDeleteUser = async (email: string) => {
     try {
+      setDeleteLoading(true);
       console.log("Deleting user with email:", email);
       if (!email) {
         console.error("Email is required to delete a user.");
@@ -107,7 +109,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       const response = await deleteUserByEmail(email);
       if (response.success) {
         setRefresh(true);
-        setOpen({email: "", state: false});
+        setOpen({ email: "", state: false });
         console.log("User deleted successfully");
       } else {
         console.error("Failed to delete user:", response.message);
@@ -115,6 +117,8 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     }
     catch (error) {
       console.error("Error deleting user:", error);
+    } finally {
+      setDeleteLoading(false);
     }
   }
 
@@ -171,8 +175,8 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
             const selectedUser = users?.find(u => u.id === userId);
             const userEmail = selectedUser?.email;
             // console.log("Selected user email:", userEmail);
-            setOpen({email: userEmail, state: true});
-           },
+            setOpen({ email: userEmail, state: true });
+          },
         },
       ],
     },
@@ -233,7 +237,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
 
       <Dialog
         open={open.state}
-        onClose={() => setOpen({email:"", state:false})}
+        onClose={() => setOpen({ email: "", state: false })}
         aria-labelledby="delete-confirmation-title"
         aria-describedby="delete-confirmation-description"
       >
@@ -246,7 +250,10 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen({email: "", state: false})} color="primary">
+          <Button onClick={() => setOpen({ email: "", state: false })}
+            color="primary"
+            disabled={deleteLoading}
+          >
             Cancel
           </Button>
           <Button
@@ -254,8 +261,10 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
             color="error"
             variant="contained"
             autoFocus
+            disabled={deleteLoading}
+            startIcon={deleteLoading && <CircularProgress size={18} color="inherit" />}
           >
-            Delete
+             {deleteLoading ? "Deleting..." : "Delete"}
           </Button>
         </DialogActions>
       </Dialog>
