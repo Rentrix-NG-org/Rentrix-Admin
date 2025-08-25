@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography, useTheme } from "@mui/material";
 import TableHeader from "@src/shared/components/TableHeader";
 import Table from "@src/shared/components/Table";
 import { useEffect, useState } from "react";
@@ -10,13 +10,16 @@ import { Column } from "@src/shared/types/shared.types";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
 
-const { getAllUsers, updateUser } = UserService();
+const { getAllUsers, updateUser, deleteUserById } = UserService();
 
 const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [open, setOpen] = useState({ email: "", userId: "", state: false });
   const [isLoading, setIsLoading] = useState(true);
+  const [confirmationInput, setConfirmationInput] = useState("");
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -27,11 +30,11 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const { permissions } = useUserContext();
-  const [totals, setTotals] = useState({ 
-    landlord: 0, 
+  const [totals, setTotals] = useState({
+    landlord: 0,
     tenant: 0,
     totalUsers: 0
-  });  const [refresh, setRefresh] = useState(false);
+  }); const [refresh, setRefresh] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,9 +62,10 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
             role: user.role.charAt(0).toUpperCase() + user.role.slice(1),
             status: user.status,
             registrationDate: user.registrationDate,
+            email: user.email,
           };
         });
-        console.log(formatted, "is formatted");
+        // console.log(formatted, "is formatted");
         setUsers(formatted as any[]);
         setIsLoading(false);
       }
@@ -93,6 +97,32 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     });
     setSearchFilter(filtered);
   }, [filter, users]);
+
+
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      setDeleteLoading(true);
+      console.log("Deleting user with userId:", userId);
+      if (!userId) {
+        console.error("userId is required to delete a user.");
+        return;
+      }
+      const response = await deleteUserById(userId);
+      if (response.success) {
+        setRefresh(true);
+        setOpen({ email: "", userId: "", state: false });
+        console.log("User deleted successfully");
+      } else {
+        console.error("Failed to delete user:", response.message);
+      }
+    }
+    catch (error) {
+      console.error("Error deleting user:", error);
+    } finally {
+      setDeleteLoading(false);
+    }
+  }
+
   const columns: Column[] = [
     {
       header: "USER ID",
@@ -121,23 +151,33 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
       type: "text",
     },
     {
+      header: "EMAIL",
+      label: "email",
+      type: "text",
+    },
+    {
       header: "ACTIONS",
       label: "actions",
       type: "action",
       component: [
         {
           component: <Box component="img" src={icons.eye} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: (
             <Box component="img" src={icons.edit} sx={{ width: 18 }} />
           ),
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: <Box component="img" src={icons.bin} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: (userId) => {
+            const selectedUser = users?.find(u => u.id === userId);
+            const userEmail = selectedUser?.email;
+            // console.log("Selected user email:", userEmail);
+            setOpen({ email: userEmail, userId: userId, state: true });
+          },
         },
       ],
     },
@@ -195,6 +235,66 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         gap: 2,
       }}
     >
+
+      <Dialog
+        open={open.state}
+        onClose={() => {
+          setOpen({ email: "", userId: "", state: false });
+          setConfirmationInput("");
+        }}
+        aria-labelledby="delete-confirmation-title"
+        aria-describedby="delete-confirmation-description"
+      >
+        <DialogTitle id="delete-confirmation-title">
+          Confirm Delete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-confirmation-description">
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Typography>
+                To confirm deletion, please type{" "}
+                <Typography
+                  component="span"
+                  sx={{ color: theme.palette.error.main, fontWeight: 600 }}
+                >
+                  delete {open.email}
+                </Typography>{" "}
+                below:
+              </Typography>
+              <TextField
+                fullWidth
+                value={confirmationInput}
+                onChange={(e) => setConfirmationInput(e.target.value)}
+                placeholder={`delete ${open.email}`}
+                size="small"
+                autoFocus
+              />
+            </Box>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpen({ email: "", userId: "", state: false });
+              setConfirmationInput("");
+            }}
+            color="primary"
+            disabled={deleteLoading}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleDeleteUser(open.userId)}
+            color="error"
+            variant="contained"
+            disabled={deleteLoading || confirmationInput !== `delete ${open.email}`}
+            startIcon={deleteLoading && <CircularProgress size={18} color="inherit" />}
+          >
+            {deleteLoading ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <TableHeader
         title={`Landlord & Tenants (
           ${totals.landlord} landlord${totals.landlord !== 1 ? 's' : ''}; 

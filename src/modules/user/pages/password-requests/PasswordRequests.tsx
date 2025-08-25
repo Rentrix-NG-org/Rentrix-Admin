@@ -19,8 +19,14 @@ const PasswordRequests = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const { getAllUsers, handlePasswordRequest } = UserService();
+  const [user, setUser] = useState<{ users: any[] | null }>(null);
+  const adminId = user?.users[0]?.id
 
   useEffect(() => {
+    const getUser = localStorage.getItem("user");
+    if (getUser) setUser(JSON.parse(getUser));
+    else setUser(null);
+
     async function fetchUsers() {
       const query = permissions.includes("password-request")
         ? "password-request=true"
@@ -33,7 +39,7 @@ const PasswordRequests = () => {
             name: user.name,
             role: user.role,
             status: user.status,
-            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
+            location: user.locations?.map((l : any) => l.state)?.join(", ") || "None",
             registrationDate: user.registrationDate,
           });
         });
@@ -131,18 +137,19 @@ const PasswordRequests = () => {
   ) {
     switch (selected.value) {
       case "Authenticate":
-        handleUpdatePasswordRequest(row[0], true);
+        handleUpdatePasswordRequest(row[0], true, adminId);
         break;
       default:
-        handleUpdatePasswordRequest(row[0], false);
+        handleUpdatePasswordRequest(row[0], false, adminId);
     }
   }
 
   async function handleUpdatePasswordRequest(
     userId: string,
     approved: boolean,
+    adminId: string
   ) {
-    const response = await handlePasswordRequest({ userId, approved });
+    const response = await handlePasswordRequest({ userId, approved, adminId });
     if (response.success) {
       const filtered = users.filter((u: any) => u.id !== userId);
       const formatted = filtered.map((u) => Object.values(u)) as string[][];

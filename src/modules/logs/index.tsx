@@ -36,6 +36,7 @@ import AgeRestriction from "./pages/account-mgmt/age-restriction/AgeRestriction"
 import AgeRestrictionInfo from "./pages/account-mgmt/age-restriction/[logId]/LogInfo";
 import AdminLogins from "./pages/user-auth/admin-login/AdminLogins";
 import { UserProvider } from "../user/providers/user.provider";
+import PasswordRequests from "./pages/admin-menu/password-requests/Password-Requests";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -69,6 +70,11 @@ export const LogsModule: LogsModule = {
       path: "/logs/admin-action/policy-terms",
       element: <PolicyUpdates />,
       title: "Policy/Terms Updates",
+    },
+    {
+      path: "/logs/admin-action/password-requests",
+      element: <PasswordRequests />,
+      title: "Password Requests Logs",
     },
     {
       path: "/logs/admin-action/policy-terms/:logId",

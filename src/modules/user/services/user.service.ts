@@ -29,6 +29,23 @@ export const UserService = () => {
       }
     },
 
+    deleteUserById: async (userId: string) => {
+      try {
+        const response = await axios.delete(`/admin/users/${userId}`);
+        return {
+          success: response.status === 200,
+          message: "User deleted",
+          data: response.data,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Failed to delete user",
+          data: null,
+        };
+      }
+    },
+
     getUser: async (userId: string) => {
       if (!userId) {
         return {
@@ -339,6 +356,7 @@ export const UserService = () => {
     handlePasswordRequest: async (request: {
       userId: string;
       approved: boolean;
+      adminId?: string;
     }) => {
       const response = await axios.patch(`/admin/password-request`, request);
 

@@ -52,6 +52,27 @@ export interface Log {
   location: string;
   username?: string
   reason?: string;
+  deviceType?: string;
+  email?: string;
+  processedBy?: process;
+  getPasswordRequestsLogs: (query?: {
+    page?: number,
+    limit?: number,
+    status?: PasswordResetStatus
+  }) => Promise<{
+    success: boolean;
+    message: string;
+    data: Log[] | null;
+    pagination?: {
+      page: number;
+      totalPages: number;
+    };
+  }>;
+}
+
+interface process {
+  name?: string,
+  id?: number
 }
 
 export interface Admin {
@@ -99,3 +120,9 @@ export const types: Record<ActivityType, string> = {
   [ActivityType.POLICY_UPDATE]: "Policy Update",
   [ActivityType.UNKNOWN]: "Unknown",
 };
+
+export enum PasswordResetStatus {
+  REQUESTED = "requested",
+  COMPLETED = "completed",
+  FAILED = "failed",
+}
