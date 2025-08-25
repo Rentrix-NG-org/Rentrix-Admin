@@ -1,5 +1,6 @@
 import axios from "@src/core/axios";
 import { AxiosResponse } from "axios";
+import { PasswordResetStatus } from "../types/log.types";
 
 export const LogService = () => {
   return {
@@ -35,7 +36,7 @@ export const LogService = () => {
         };
       }
     },
-    getPasswordRequestsLogs: async (query?: { page: number, limit: number }) => {
+    getPasswordRequestsLogs: async (query?: { page?: number, limit?: number, status: PasswordResetStatus }) => {
       try {
         const response = await axios.get(`/admin/password-reset-logs`, {
           params: query

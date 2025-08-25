@@ -1,7 +1,7 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
-import { Log } from "@src/modules/logs/types/log.types";
+import { Log, PasswordResetStatus } from "@src/modules/logs/types/log.types";
 import UserNav from "@src/modules/user/components/UserNav";
 import Table from "@src/shared/components/Table";
 import { Column } from "@src/shared/types/shared.types";
@@ -12,11 +12,14 @@ import { useEffect, useState } from "react";
 const PasswordRequests = () => {
   const theme = useTheme();
   const [logs, setLogs] = useState<string[][]>([]);
+  const [statusFilter, setStatusFilter] = useState<PasswordResetStatus | "all">("all");
   const { getPasswordRequestsLogs } = LogService();
 
   useEffect(() => {
     async function fetchLogs() {
-      const response = await getPasswordRequestsLogs();
+      const response = await getPasswordRequestsLogs({
+        status: statusFilter === "all" ? undefined : statusFilter
+      });
       if (response.success) {
         const formatted = (response.data as Log[]).map((user) => {
           return Object.values({
@@ -26,6 +29,7 @@ const PasswordRequests = () => {
             deviceType: user.deviceType,
             status: user.status.charAt(0).toUpperCase() + user.status.slice(1),
             email: user.email,
+            processedBy: user?.processedBy?.name
           });
         });
 
@@ -33,7 +37,7 @@ const PasswordRequests = () => {
       }
     }
     fetchLogs();
-  }, []);
+  }, [statusFilter]);
 
   const columns: Column[] = [
     {
@@ -74,10 +78,15 @@ const PasswordRequests = () => {
       },
     },
     {
-        header: "EMAIL",
-        label: "email",
-        type: "text",
-      },
+      header: "EMAIL",
+      label: "email",
+      type: "text",
+    },
+    {
+      header: "PROCESSED BY",
+      label: "processedBy",
+      type: "text",
+    },
     {
       header: "ACTIONS",
       label: "actions",
@@ -85,17 +94,17 @@ const PasswordRequests = () => {
       component: [
         {
           component: <Box component="img" src={icons.eye} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: (
             <Box component="img" src={icons.edit} sx={{ width: 18 }} />
           ),
-          onClick: () => {},
+          onClick: () => { },
         },
         {
           component: <Box component="img" src={icons.bin} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     },
@@ -121,9 +130,47 @@ const PasswordRequests = () => {
         ]}
       />
 
+      {/* Status Filter Dropdown */}
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'flex-end',
+        marginBottom: '-20px',
+        marginRight: '10px'
+      }}>
+        <FormControl sx={{ minWidth: 180, backgroundColor: theme.palette.background.paper }} size="small">
+          <InputLabel sx={{
+            color: theme.palette.text.secondary,
+            '&.Mui-focused': {
+              color: theme.palette.text.secondary
+            }
+          }}>
+            Filter by Status
+          </InputLabel>
+          <Select
+            value={statusFilter}
+            label="Filter by Status"
+            onChange={(e) => setStatusFilter(e.target.value as PasswordResetStatus | "all")}
+            sx={{
+              borderRadius: '8px',
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.palette.divider,
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.palette.primary.main,
+              },
+            }}
+          >
+            <MenuItem value="all">All Statuses</MenuItem>
+            <MenuItem value={PasswordResetStatus.REQUESTED}>Requested</MenuItem>
+            <MenuItem value={PasswordResetStatus.COMPLETED}>Completed</MenuItem>
+            <MenuItem value={PasswordResetStatus.FAILED}>Failed</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
       <Table
-        onSelect={() => {}}
-        onRowClick={() => {}}
+        onSelect={() => { }}
+        onRowClick={() => { }}
         columns={columns}
         data={logs}
       />

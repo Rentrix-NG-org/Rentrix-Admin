@@ -29,9 +29,9 @@ export const UserService = () => {
       }
     },
 
-    deleteUserByEmail: async (email: string) => {
+    deleteUserById: async (userId: string) => {
       try {
-        const response = await axios.delete(`/admin/users/by-email/${email}`);
+        const response = await axios.delete(`/admin/users/${userId}`);
         return {
           success: response.status === 200,
           message: "User deleted",
@@ -356,6 +356,7 @@ export const UserService = () => {
     handlePasswordRequest: async (request: {
       userId: string;
       approved: boolean;
+      adminId?: string;
     }) => {
       const response = await axios.patch(`/admin/password-request`, request);
 
