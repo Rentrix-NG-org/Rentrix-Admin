@@ -56,7 +56,7 @@ const AdminsLogs: React.FC<{ search: string; filter: string[] }> = ({
       }
     }
     getUsers();
-  }, []); //ummm
+  }, [refresh, permissions]);
 
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];

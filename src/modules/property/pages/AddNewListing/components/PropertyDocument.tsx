@@ -9,7 +9,7 @@ import play from "../assets/play.svg";
 const PropertyDocument = ({
   onPageChange,
   newListing,
-  setNewListing,
+  // setNewListing,
 }: {
   onPageChange: (x: string) => void;
   newListing: INewListing;

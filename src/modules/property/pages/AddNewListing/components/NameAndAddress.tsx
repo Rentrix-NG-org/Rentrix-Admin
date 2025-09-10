@@ -5,7 +5,6 @@ import { colors } from "@src/shared/constants/constants";
 import Input from "./Input";
 import CustomSwitch from "./CustomSwitch";
 import CustomButton from "./Button";
-import { DateInput } from "./DateInput";
 import { UserService } from "@src/modules/user/services/user.service";
 
 const NameAndAddress = ({
@@ -220,7 +219,7 @@ const NameAndAddress = ({
           </Typography>
           <CustomSwitch
             value={newListing.currentlyLivedIn}
-            onChange={(e) => {
+            onChange={() => {
               // setLiveHere(e)
               setNewListing((prev: INewListing) => ({
                 ...prev,

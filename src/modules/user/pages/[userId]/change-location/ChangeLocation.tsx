@@ -10,8 +10,8 @@ import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 
 const ChangeLocation = () => {
-  const [locations, setLocations] = useState<string[]>([]);
-  const { getLocations, updateLocations, getCitites, getStates, getLgas } =
+  // const [locations, setLocations] = useState<string[]>([]);
+  const { updateLocations, getCitites, getStates, getLgas } =
   UserService();
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -50,24 +50,24 @@ const ChangeLocation = () => {
     }
   }, [selectedState, selectedCity]);
 
-  useEffect(() => {
-    async function fetchLocation() {
-      const response = await getLocations();
-      if (response.success) {
-        const all_locations = (
-          response.data as { city: string; country: string }[]
-        ).map((d) => d.city || d.country);
-        setLocations(all_locations as string[]);
-      }
-    }
-    fetchLocation();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchLocation() {
+  //     const response = await getLocations();
+  //     if (response.success) {
+  //       const all_locations = (
+  //         response.data as { city: string; country: string }[]
+  //       ).map((d) => d.city || d.country);
+  //       setLocations(all_locations as string[]);
+  //     }
+  //   }
+  //   fetchLocation();
+  // }, []);
 
   async function handleUpdateLocation() {
     if (selectedLgas.length === 0) {
       alert("Please select a location to continue");
     } else {
-      const user = JSON.parse(localStorage.getItem("user") ?? "");
+      // const user = JSON.parse(localStorage.getItem("user") ?? "");
       const response = await updateLocations(userId || "", selectedLgas);
 
       if (response.success) {

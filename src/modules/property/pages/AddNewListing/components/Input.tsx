@@ -45,7 +45,6 @@ const Input = ({
   multichoice = false,
   select,
   options,
-  optionsStyles,
   onSelect,
   inputContainerStyles,
   selected,

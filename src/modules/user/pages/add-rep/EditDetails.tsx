@@ -13,7 +13,7 @@ import EmptyCheckbox from "@src/modules/property/pages/AddNewListing/assets/Empt
 
 const EditDetails = () => {
   const theme = useTheme();
-  const { upgradeToRep, getLocations } = UserService();
+  const { upgradeToRep } = UserService();
   const [user, setUser] = useState<{
     id: string;
     firstName: string;
@@ -36,8 +36,8 @@ const EditDetails = () => {
     status: "",
   });
   const { getUser, getLgas, getCitites, getStates } = UserService();
-  const [location, setLocation] = useState([]);
-  const [locations, setLocations] = useState<string[]>([]);
+  // const [location, setLocation] = useState([]);
+  // const [locations, setLocations] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
@@ -85,23 +85,23 @@ const EditDetails = () => {
     fetchUser();
   }, [params?.userId]);
 
-  useEffect(() => {
-    async function fetchLocations() {
-      const response = await getLocations();
+  // useEffect(() => {
+  //   async function fetchLocations() {
+  //     const response = await getLocations();
 
-      if (response.success) {
-        const data = response.data as [
-          { city: string | null; country: string | null },
-        ];
-        setLocations(data.map((d) => d.city || d.country));
-      }
-    }
-    fetchLocations();
-  }, []);
+  //     if (response.success) {
+  //       const data = response.data as [
+  //         { city: string | null; country: string | null },
+  //       ];
+  //       setLocations(data.map((d) => d.city || d.country));
+  //     }
+  //   }
+  //   fetchLocations();
+  // }, []);
 
-  function handleLocationSelect(v: string) {
-    setLocation((prev) => [...prev, v]);
-  }
+  // function handleLocationSelect(v: string) {
+  //   setLocation((prev) => [...prev, v]);
+  // }
 
   async function handleUpgrade() {
     const data = {

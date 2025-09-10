@@ -46,6 +46,7 @@ const PropertyFees = ({
       ...prev,
       tenantOtherFeesTotal: total,
     }));
+    console.log(tot)
   }, [newListing.otherFees]);
 
   const [priceRange, setPriceRange] = useState([0]);
@@ -78,7 +79,7 @@ const PropertyFees = ({
   };
 
   const handleDeleteItem = (id: number) => {
-    const filteredFee = newListing.otherFees.filter((fee, i) => i !== id);
+    const filteredFee = newListing.otherFees.filter((_blank, i) => i !== id);
     setNewListing((prev: any) => ({
       ...prev,
       otherFees: filteredFee,

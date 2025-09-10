@@ -32,7 +32,6 @@ const PropertyDetails = ({
   // const [propertyAge, setPropertyAge] = useState("Renovated");
   // const [lotSize, setLotSize] = useState("");
   // const [floorArea, setFloorArea] = useState("");
-  const [yearBuilt, setYearBuilt] = useState("");
   // const [floorLevel, setFloorLevel] = useState("");
   const [selectedInteriorFeatures, setSelectedInteriorFeatures] = useState<
     string[]
@@ -47,10 +46,6 @@ const PropertyDetails = ({
     string[]
   >([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
-  const [selectedExteriorFlooring, setSelectedExteriorFlooring] =
-    useState<string>("");
-  const [selectedInteriorFlooring, setSelectedInteriorFlooring] =
-    useState<string>("");
 
   useEffect(() => {
     setSelectedKitchenFitting(newListing.kitchenFittings);
