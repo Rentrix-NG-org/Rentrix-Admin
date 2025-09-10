@@ -44,7 +44,10 @@ const SupervisorsReps = () => {
             name: user.name || "",
             role: user.role,
             lastActive: user.registrationDate || "",
-            location: user.locations?.[0]?.state || "No state",
+            location:
+              user.locations
+                ?.map((location: { state: string }) => location.state)
+                .join(", ") || "No state",
           });
         });
         setRefresh(false);
@@ -54,12 +57,12 @@ const SupervisorsReps = () => {
       }
     }
     fetchUsers();
-  }, [refresh, permissions]);
+  }, [permissions, refresh]);
 
   useEffect(() => {
     const searchedUsers = users.filter((user) => {
       const isFound = user.some((field) =>
-        field.toString().toLowerCase().includes(search.toLowerCase()),
+        field.toString().toLowerCase().includes(search.toLowerCase())
       );
       return isFound;
     });
@@ -131,7 +134,7 @@ const SupervisorsReps = () => {
 
   function handleTableSelection(
     row: string[],
-    selected: { value: string; index: number },
+    selected: { value: string; index: number }
   ) {
     switch (selected.value) {
       case "Supervisor":

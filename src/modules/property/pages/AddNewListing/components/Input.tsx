@@ -1,4 +1,4 @@
-import { Box, MenuItem, SxProps, Theme, Typography } from "@mui/material";
+import { Box, Menu, MenuItem, SxProps, Theme, Typography } from "@mui/material";
 import React, { CSSProperties, useRef, useState } from "react";
 import LineSeperator from "./LineSeperator";
 import ChevronArrowDown from "../assets/ChevronArrowDown";
@@ -27,6 +27,7 @@ interface InputProps {
   selected?: string[] | string;
   setSelected?: (option: any) => void;
   autoFocus?: boolean;
+  customRender?: HTMLElement | React.ReactNode | JSX.IntrinsicElements | null;
 }
 
 const Input = ({
@@ -50,14 +51,31 @@ const Input = ({
   selected,
   setSelected,
   autoFocus,
+  customRender = null,
 }: InputProps) => {
   const [focus, setFocus] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (
+    event: React.MouseEvent<HTMLDivElement | HTMLInputElement>
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   // const [selected, setSelected] = useState<string[]>([]);
   return (
-    <Box width="100%">
+    <Box width="100%" position='relative'>
       <Box
+        onClick={(e) => {
+          if (select) {
+            if (open) {
+              handleClose();
+            } else handleClick(e);
+          }
+        }}
         px={padding.mobile}
         py={{ xs: "14px", sm: "18px" }}
         borderRadius={radius.mini}
@@ -128,7 +146,7 @@ const Input = ({
         />
         {endIcon && <>{endIcon}</>}
         {select ? (
-          <Box sx={{ cursor: "pointer" }} onClick={() => setOpen(!open)}>
+          <Box sx={{ cursor: "pointer" }}>
             <Box
               display={{ xs: "none", sm: "flex" }}
               alignItems={"center"}
@@ -146,7 +164,57 @@ const Input = ({
           </Box>
         ) : null}
       </Box>
-      <Box
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            sx: {
+              width: anchorEl ? anchorEl.clientWidth : "auto",
+              maxHeight: "300px",
+              borderRadius: "12px",
+            },
+          },
+        }}
+        disableScrollLock
+      >
+        {customRender === null
+          ? options?.map((option: string) => (
+              <MenuItem
+                onClick={() => {
+                  if (onSelect) onSelect(option);
+                  if (!multichoice) handleClose();
+                  else {
+                    if (setSelected)
+                      setSelected((prev: any) =>
+                        prev.includes(option)
+                          ? prev.filter((x) => x !== option)
+                          : [...prev, option]
+                      );
+                  }
+                }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                {option}
+                {multichoice &&
+                  (selected?.includes(
+                    option.toLowerCase().split(" ").join("-")
+                  ) ? (
+                    <Checked />
+                  ) : (
+                    <EmptyCheckbox width="20px" height="20px" />
+                  ))}
+              </MenuItem>
+            ))
+          : customRender}
+        {/* </Box> */}
+      </Menu>
+      {/* <Box
         display={select && open && options ? "block" : "none"}
         width="100%"
         height="fit-content"
@@ -194,7 +262,7 @@ const Input = ({
               ))}
           </MenuItem>
         ))}
-      </Box>
+      </Box> */}
     </Box>
   );
 };

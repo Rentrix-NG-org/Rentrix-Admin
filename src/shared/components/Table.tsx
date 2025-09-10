@@ -253,7 +253,7 @@ const Select: FC<{
         }}
       >
         <Typography sx={{ color: color.value, fontSize: 12, fontWeight: 600 }}>
-          {cell.slice(0, 1).toUpperCase() + cell.slice(1) || options[0]}
+          {cell?.slice(0, 1).toUpperCase() + cell?.slice(1) || options[0]}
         </Typography>
         <ChevronLeftRounded
           sx={{

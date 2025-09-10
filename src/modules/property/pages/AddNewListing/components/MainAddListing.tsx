@@ -8,7 +8,7 @@ import { colors } from "@src/shared/constants/constants";
 import Input from "./Input";
 import CustomButton from "./Button";
 import { EditListingDetails } from "../../property.service";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomSwitch from "./CustomSwitch";
 
 const MainAddListing = ({
@@ -45,43 +45,42 @@ const MainAddListing = ({
   // };
 
   const isNameAndAddress =
-    newListing.title &&
+    newListing.name &&
     newListing.description &&
-    newListing.builtMonth &&
-    newListing.builtYear &&
-    (newListing.address ||
-      (newListing.location.country &&
-        newListing.location.city &&
-        newListing.location.nearestLandmark &&
-        newListing.location.streetName &&
-        newListing.location.propertyNumber));
+    newListing.country &&
+    newListing.city &&
+    newListing.lga &&
+    newListing.nearestLandMark &&
+    newListing.streetName &&
+    newListing.propertyNumber;
 
-  const isPropertyMedia = newListing.media.length;
+  const isPropertyMedia = newListing.media.find(
+    (x) => x.purpose === "PROPERTY_SHOWCASE"
+  );
+  const isPropertyDocuments = newListing.media.find(
+    (x) => x.purpose === "PROPERTY_DOCUMENT"
+  );
   const isPropertyDetails =
     newListing.type &&
     newListing.category &&
     newListing.propertyAge &&
-    newListing.fee.rentalPeriod &&
+    newListing.rentalPeriod &&
     newListing.furnishedType &&
     newListing.servicing &&
-    newListing.interiorFeatures.length &&
-    newListing.exteriorFeatures.length &&
     newListing.interiorFlooring &&
     newListing.exteriorFlooring &&
-    ((newListing.bedrooms && newListing.kitchenFittings.length) ||
-      newListing.parkingSpace) &&
+    (newListing.bedrooms || newListing.parkingSpace) &&
     newListing.bathrooms &&
     newListing.toilets &&
     newListing.fee &&
-    newListing.lotSize &&
-    newListing.floorArea &&
     newListing.floorLevel;
 
   const isPropertyFees =
-    newListing.fee.estateFee &&
-    newListing.fee.legalFee &&
-    newListing.fee.serviceFee &&
-    newListing.fee.cautionFee;
+    newListing.estateFee ||
+    newListing.legalFee ||
+    newListing.serviceFee ||
+    newListing.cautionFee;
+
   const subNavs = [
     {
       title: "Name and Address",
@@ -105,7 +104,7 @@ const MainAddListing = ({
     },
     {
       title: "Property Documents",
-      isCompleted: false,
+      isCompleted: isPropertyDocuments,
       onClick: () => onPageChange("property-document"),
     },
     {
@@ -139,6 +138,12 @@ const MainAddListing = ({
       //     },
     },
   ];
+
+  useEffect(() => {
+    if (newListing.representativeId) {
+      setHaveRentrixRep('Yes')
+    }
+  }, [newListing.representativeId])
 
   return (
     <Box>
@@ -193,7 +198,7 @@ const MainAddListing = ({
             select
             options={["Rented", "Listed", "Under-Review"]}
             placeholder="Property status"
-            value={newListing.status}
+            value={newListing.propertystatus}
             onSelect={(e) => {
               setNewListing((prev: INewListing) => ({
                 ...prev,
@@ -265,7 +270,7 @@ const MainAddListing = ({
               </Box>
             )}
           </Box>
-          <Box display="flex" flexDirection="column" gap="12px" mb="24px">
+          {/* <Box display="flex" flexDirection="column" gap="12px" mb="24px">
             <Typography fontSize={18} fontWeight={600} color={colors.textTitle}>
               Do you want to add a caretaker to this property?
             </Typography>
@@ -306,7 +311,7 @@ const MainAddListing = ({
               </Typography>
               <CustomSwitch value={isSuperAdmin} onChange={setIsSuperAdmin} />
             </Box>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
       <Box display="flex" alignItems="center" gap="12px">
@@ -337,3 +342,11 @@ const MainAddListing = ({
 };
 
 export default MainAddListing;
+
+export const addComma = (value: string | number) => {
+  const num =
+    typeof value === "number"
+      ? value
+      : parseInt(value.replace(/\D/g, "") || "0");
+  return num.toLocaleString();
+};

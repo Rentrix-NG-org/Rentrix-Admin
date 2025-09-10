@@ -77,7 +77,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
     const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
       return d.some((item) =>
-        item.toString().toLowerCase().includes(search.toLowerCase()),
+        item?.toString().toLowerCase().includes(search.toLowerCase()),
       );
     });
     setSearchFilter(filtered);
@@ -90,7 +90,7 @@ const LandlordAndTenant: React.FC<{ search: string; filter: string[] }> = ({
         filter.length === 0 ||
         filter.every((filterItem) =>
           d.some((item) =>
-            item.toString().toLowerCase().includes(filterItem.toLowerCase()),
+            item?.toString().toLowerCase().includes(filterItem.toLowerCase()),
           ),
         )
       );

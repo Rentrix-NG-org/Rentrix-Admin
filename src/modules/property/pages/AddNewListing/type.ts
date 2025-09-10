@@ -1,22 +1,24 @@
 export interface INewListing {
-  title: string;
+  name: string;
   description: string;
   builtMonth: string;
-  builtYear: number | null;
+  builtYear: number | string;
   currentlyLivedIn: boolean;
   hasManualAddress: boolean;
   address: string;
-  location: {
-    country: string;
-    city: string;
-    nearestLandmark: string;
-    streetName: string;
-    propertyNumber: number;
-  };
+  country: string;
+  state: string;
+  city: string;
+  lga: string;
+  nearestLandMark: string;
+  streetName: string;
+  propertyNumber: string;
   media: {
-    name?: string;
-    type?: string;
+    id: string;
+    name: string;
+    type: string;
     url: string;
+    purpose: string;
   }[];
   category: string;
   type: string;
@@ -25,33 +27,40 @@ export interface INewListing {
   toilets: string | number;
   parkingSpace: string | number;
   rentalPeriod: string;
-  fee: {
-    rentalPeriod: string;
-    platformFee: string;
-    legalFee: string;
-    serviceFee: string;
-    cautionFee: string;
-    estateFee: string;
-    currency: string;
-    otherFees: {
-      name: string;
-      fee: number;
-    }[];
-  };
+  fee: number;
   furnishedType: string;
   propertyAge: string;
-  lotSize: number | null;
-  floorArea: number | null;
-  floorLevel: number | null;
+  lotSize: number | undefined;
+  floorLevel: string;
+  floorArea: number | undefined;
   servicing: string;
   interiorFeatures: string[];
   exteriorFeatures: string[];
   buildingAmenities: string[];
+  facilities: string[];
   kitchenFittings: string[];
   interiorFlooring: string;
   exteriorFlooring: string;
-
+  platformFee: number;
+  legalFee: number;
+  serviceFee: number;
+  cautionFee: number;
+  estateFee: number;
+  otherFees: {
+    name: string;
+    fee: number;
+  }[];
   representativeId: string;
+  tenant: string;
+  tenants: any[];
   caretakerId: string;
-  status: string;
+  propertystatus: string;
+  currency: string;
+  wifiAccess: string;
+  leaseEndDate?: string;
+  leaseStartDate?: string;
+  dueDayOfPeriod: number;
+  isProrated: boolean;
+  tenantRentAmount?: number;
+  tenantOtherFeesTotal: number;
 }

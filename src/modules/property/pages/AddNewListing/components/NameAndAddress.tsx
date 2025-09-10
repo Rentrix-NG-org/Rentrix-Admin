@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { INewListing } from "../type";
 import { colors } from "@src/shared/constants/constants";
 import Input from "./Input";
 import CustomSwitch from "./CustomSwitch";
 import CustomButton from "./Button";
 import { DateInput } from "./DateInput";
+import { UserService } from "@src/modules/user/services/user.service";
 
 const NameAndAddress = ({
   onPageChange,
@@ -20,6 +21,37 @@ const NameAndAddress = ({
   // const [propertyDescription, setPropertyDescription] = useState("");
   // const [propertyLocation, setPropertyLocation] = useState("");
   // const [liveHere, setLiveHere] = useState(false);
+   const { getCitites, getStates, getLgas } =
+    UserService();
+  const [states, setStates] = useState<{ name: string }[] | []>([]);
+  const [cities, setCiites] = useState<{ name: string }[] | []>([]);
+  const [lgas, setLgas] = useState<{ name: string; id: string }[] | []>([]);
+
+  const getAllStates = async () => {
+    const res = await getStates();
+    if (res.status === 200) {
+      setStates(res.data);
+    }
+  };
+  const getAllCitites = async () => {
+    const res = await getCitites(newListing.state);
+    if (res.status === 200) {
+      setCiites(res.data);
+    }
+  };
+  const getAllLgas = async () => {
+    const res = await getLgas(newListing.city);
+    if (res.status === 200) {
+      setLgas(res.data);
+    }
+  };
+  useEffect(() => {
+    getAllStates();
+    if (newListing.state) getAllCitites();
+    if (newListing.city) {
+      getAllLgas();
+    }
+  }, [newListing.state, newListing.city]);
   const [enterAddress, setEnterAddress] = useState(true);
 
   return (
@@ -30,11 +62,11 @@ const NameAndAddress = ({
         </Typography>
         <Input
           placeholder="Property name"
-          value={newListing.title}
+          value={newListing.name}
           onChange={(e) =>
             setNewListing((prev: INewListing) => ({
               ...prev,
-              title: e.target.value,
+              name: e.target.value,
             }))
           }
         />
@@ -62,67 +94,79 @@ const NameAndAddress = ({
           <Box display="flex" flexDirection="column" gap="12px">
             <Input
               placeholder="Country"
-              select
-              options={["USA", "Nigeria"]}
-              value={newListing.location.country}
-              onSelect={(e) => {
+              // select
+              // options={["USA", "Nigeria"]}
+              value={"Nigeria"}
+              onChange={(e) =>
                 setNewListing((prev: INewListing) => ({
                   ...prev,
-                  location: { ...prev.location, country: e.target.value },
-                }));
-              }}
+                  country: e.target.value,
+                }))
+              }
+              // onSelect={(e) => {
+              //   setNewListing((prev: INewListing) => ({
+              //     ...prev,
+              //     country: e,
+              //   }));
+              // }}
             />
             <Input
               placeholder="State"
               select
-              options={["New York", "Lagos"]}
-              value={"Lagos"}
-              onSelect={() => {}}
+              options={states?.map((state) => state.name) ?? []}
+              value={newListing.state}
+              onSelect={(e) =>
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  state: e,
+                  city: "",
+                  lga: "",
+                }))
+              }
             />
             <Input
               placeholder="City"
-              value={newListing.location.city}
-              onChange={(e) =>
+              select
+              options={cities?.map((city) => city.name) ?? []}
+              value={newListing.city}
+              onSelect={(e) =>
                 setNewListing((prev: INewListing) => ({
                   ...prev,
-                  location: { ...prev.location, city: e.target.value },
+                  city: e,
+                  lga: "",
                 }))
               }
             />
             <Input
-              placeholder="Nearest Landmark"
-              value={newListing.location.nearestLandmark}
-              onChange={(e) =>
+              placeholder="LGA"
+              select
+              options={lgas?.map((lga) => lga.name) ?? []}
+              value={newListing.lga}
+              onSelect={(e) =>
                 setNewListing((prev: INewListing) => ({
                   ...prev,
-                  location: {
-                    ...prev.location,
-                    nearestLandmark: e.target.value,
-                  },
+                  lga: e,
                 }))
               }
             />
+
             <Input
               placeholder="Street Name"
-              value={newListing.location.streetName}
+              value={newListing.streetName}
               onChange={(e) =>
                 setNewListing((prev: INewListing) => ({
                   ...prev,
-                  location: { ...prev.location, streetName: e.target.value },
+                  streetName: e.target.value,
                 }))
               }
             />
             <Input
               placeholder="Property Number"
-              type="number"
-              value={String(newListing.location.propertyNumber)}
+              value={newListing.propertyNumber}
               onChange={(e) =>
                 setNewListing((prev: INewListing) => ({
                   ...prev,
-                  location: {
-                    ...prev.location,
-                    propertyNumber: e.target.value,
-                  },
+                  propertyNumber: e.target.value,
                 }))
               }
             />
@@ -152,40 +196,31 @@ const NameAndAddress = ({
         </Typography>
       </Box>
       <Box display="flex" flexDirection="column" gap="12px" mb="48px">
-        <Typography fontSize={18} fontWeight={600} color={colors.textTitle}>
-          When was this property built?
+        <Typography
+          fontSize={18}
+          fontWeight={600}
+          color={colors.textTitle}
+          mb="12px"
+        >
+          What is the nearest landmark to the property?
         </Typography>
-        <Box display="flex" alignItems="center" gap="12px">
-          <DateInput
-            label="Month"
-            type="month"
-            onChange={(e) =>
-              setNewListing((prev: INewListing) => ({
-                ...prev,
-                builtMonth: (
-                  e?.target as HTMLInputElement
-                )?.value.toLowerCase(),
-              }))
-            }
-          />
-          <DateInput
-            label="Year"
-            type="year"
-            onChange={(e) =>
-              setNewListing((prev: INewListing) => ({
-                ...prev,
-                builtYear: Number((e?.target as HTMLInputElement)?.value),
-              }))
-            }
-          />
-        </Box>
+        <Input
+          placeholder="Nearest Landmark"
+          value={newListing.nearestLandMark}
+          onChange={(e) =>
+            setNewListing((prev: INewListing) => ({
+              ...prev,
+              nearestLandMark: e.target.value,
+            }))
+          }
+        />
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Typography fontSize={16} color={colors.textTitle}>
-            Tenant is a user on Rentrix
+            I currently live here
           </Typography>
           <CustomSwitch
             value={newListing.currentlyLivedIn}
-            onChange={() => {
+            onChange={(e) => {
               // setLiveHere(e)
               setNewListing((prev: INewListing) => ({
                 ...prev,

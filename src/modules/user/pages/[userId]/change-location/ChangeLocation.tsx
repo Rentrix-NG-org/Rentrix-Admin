@@ -1,5 +1,7 @@
 import { LockOutlined } from "@mui/icons-material";
-import { Box, useTheme } from "@mui/material";
+import { Box, MenuItem, useTheme } from "@mui/material";
+import Checked from "@src/modules/property/pages/AddNewListing/assets/Checked";
+import EmptyCheckbox from "@src/modules/property/pages/AddNewListing/assets/EmptyCheckbox";
 import Input from "@src/modules/property/pages/AddNewListing/components/Input";
 import UserNav from "@src/modules/user/components/UserNav";
 import { UserService } from "@src/modules/user/services/user.service";
@@ -9,11 +11,44 @@ import { useParams } from "react-router";
 
 const ChangeLocation = () => {
   const [locations, setLocations] = useState<string[]>([]);
-  const [selected, setSelected] = useState("");
-  const { getLocations, updateLocations } = UserService();
-  const params = useParams();
+  const { getLocations, updateLocations, getCitites, getStates, getLgas } =
+  UserService();
+  const { userId } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedLgas, setSelectedLgas] = useState([]);
+  const [lgasToView, setLgasToView] = useState([]);
+  const [states, setStates] = useState<{ name: string }[] | []>([]);
+  const [cities, setCiites] = useState<{ name: string }[] | []>([]);
+  const [lgas, setLgas] = useState<{ name: string, id: string }[] | []>([]);
+
+  const getAllStates = async () => {
+    const res = await getStates();
+    if (res.status === 200) {
+      setStates(res.data);
+    }
+  };
+  const getAllCitites = async () => {
+    const res = await getCitites(selectedState);
+    if (res.status === 200) {
+      setCiites(res.data);
+    }
+  };
+  const getAllLgas = async () => {
+    const res = await getLgas(selectedCity);
+    if (res.status === 200) {
+      setLgas(res.data);
+    }
+  };
+  useEffect(() => {
+    getAllStates();
+    if (selectedState) getAllCitites();
+    if (selectedCity) {
+      getAllLgas();
+    }
+  }, [selectedState, selectedCity]);
 
   useEffect(() => {
     async function fetchLocation() {
@@ -29,10 +64,11 @@ const ChangeLocation = () => {
   }, []);
 
   async function handleUpdateLocation() {
-    if (!selected) {
+    if (selectedLgas.length === 0) {
       alert("Please select a location to continue");
     } else {
-      const response = await updateLocations(params?.userId || "", selected);
+      const user = JSON.parse(localStorage.getItem("user") ?? "");
+      const response = await updateLocations(userId || "", selectedLgas);
 
       if (response.success) {
         navigate(-1);
@@ -61,19 +97,74 @@ const ChangeLocation = () => {
           gap: "64px",
         }}
       >
-        <Input
-          value={selected || "Select Location"}
-          onSelect={(v) => {
-            setSelected(v);
-          }}
-          placeholder="Enter Location"
-          select
-          multichoice
-          selected={selected.toLowerCase().split(" ").join("-")}
-          options={locations}
-          startIcon={<LockOutlined sx={{ color: theme.palette.grey[500] }} />}
-        />
-
+        <Box display="flex" flexDirection={"column"} gap="20px">
+          <Input
+            value={selectedState || "Select State"}
+            onSelect={(v) => {
+              setSelectedState(v);
+              setSelectedCity('')
+              setSelectedLgas([]);
+              setLgasToView([]);
+            }}
+            placeholder="Enter State"
+            select
+            selected={selectedState}
+            options={states?.map((state) => state.name) ?? []}
+            startIcon={<LockOutlined sx={{ color: theme.palette.grey[500] }} />}
+          />
+          <Input
+            value={selectedCity || "Select City"}
+            onSelect={(v) => {
+              setSelectedCity(v);
+              setSelectedLgas([]);
+              setLgasToView([]);
+            }}
+            placeholder="Enter City"
+            select
+            selected={selectedCity}
+            options={cities?.map((city) => city.name) ?? []}
+            startIcon={<LockOutlined sx={{ color: theme.palette.grey[500] }} />}
+          />
+          <Input
+            value={lgasToView?.join(", ") || "Select Location"}
+            placeholder="Enter Location"
+            select
+            multichoice
+            selected={selectedLgas?.map((x) => x)}
+            options={lgas?.map((lga) => lga.name) ?? []}
+            customRender={lgas?.map((lga) => (
+              <MenuItem
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                onClick={() =>
+                 {
+                   setSelectedLgas((prev: any) =>
+                     prev.includes(lga.id)
+                       ? prev.filter((x) => x !== lga.id)
+                       : [...prev, lga.id]
+                   );
+                   setLgasToView((prev: any) =>
+                     prev.includes(lga.name)
+                       ? prev.filter((x) => x !== lga.name)
+                       : [...prev, lga.name]
+                   );
+                 }
+                }
+              >
+                {lga.name}
+                {selectedLgas?.includes(lga.id) ? (
+                  <Checked />
+                ) : (
+                  <EmptyCheckbox width="20px" height="20px" />
+                )}
+              </MenuItem>
+            ))}
+            startIcon={<LockOutlined sx={{ color: theme.palette.grey[500] }} />}
+          />
+        </Box>
         <Box
           component="button"
           onClick={handleUpdateLocation}
@@ -81,9 +172,10 @@ const ChangeLocation = () => {
             display: "flex",
             width: "100%",
             borderRadius: "100px",
-            background: selected
-              ? theme.palette.secondary.main
-              : theme.palette.grey[400],
+            background:
+              selectedLgas.length > 0
+                ? theme.palette.secondary.main
+                : theme.palette.grey[400],
             height: "60px",
             padding: "16px",
             justifyContent: "center",

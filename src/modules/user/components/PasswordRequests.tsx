@@ -14,7 +14,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
   search,
   filter,
 }) => {
-  const [users, setUsers] = useState<unknown[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
@@ -40,7 +40,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
           };
         });
         setRefresh(false);
-        setUsers(formatted as unknown[]);
+        setUsers(formatted as any[]);
         setIsLoading(false);
       }
     }
@@ -48,9 +48,9 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
   }, [refresh, permissions]);
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];
-    const filtered = arr.filter((d) => {
+    const filtered = arr?.filter((d) => {
       return d.some((item) =>
-        item.toString().toLowerCase().includes(search.toLowerCase()),
+        item?.toString().toLowerCase().includes(search.toLowerCase())
       );
     });
     setSearchFilter(filtered);
@@ -63,8 +63,8 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
         filter.length === 0 ||
         filter.every((filterItem) =>
           d.some((item) =>
-            item.toString().toLowerCase().includes(filterItem.toLowerCase()),
-          ),
+            item?.toString().toLowerCase().includes(filterItem.toLowerCase())
+          )
         )
       );
     });
@@ -73,7 +73,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
 
   async function handleUpdatePasswordRequest(
     userId: string,
-    approved: boolean,
+    approved: boolean
   ) {
     const response = await handlePasswordRequest({ userId, approved });
     if (response.success) {
@@ -88,7 +88,7 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
 
   function handleTableSelection(
     row: string[],
-    selected: { value: string; index: number },
+    selected: { value: string; index: number }
   ) {
     switch (selected.value) {
       case "Authenticate":
@@ -161,7 +161,9 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
                 component: (
                   <Box component="img" src={icons.eye} sx={{ width: 18 }} />
                 ),
-                onClick: (v) => {navigate(`/users/${v}/profile`)},
+                onClick: (v) => {
+                  navigate(`/users/${v}/profile`);
+                },
               },
               {
                 component: (

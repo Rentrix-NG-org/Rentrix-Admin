@@ -6,6 +6,8 @@ import MultiSelect from "./MultiSelect";
 import { colors, text } from "@src/shared/constants/constants";
 import CustomButton from "./Button";
 import PriceRange from "./PriceRange";
+import NairaIcon from "../assets/NairaIcon";
+import { addComma } from "./MainAddListing";
 
 const PropertyDetails = ({
   onPageChange,
@@ -41,17 +43,30 @@ const PropertyDetails = ({
   const [selectedKitchenFitting, setSelectedKitchenFitting] = useState<
     string[]
   >([]);
-  // const [selectedExteriorFlooring, setSelectedExteriorFlooring] =
-  //   useState<string>("");
-  // const [selectedInteriorFlooring, setSelectedInteriorFlooring] =
-  //   useState<string>("");
+  const [selectedBuildingAmenities, setSelectedBuildingAmenities] = useState<
+    string[]
+  >([]);
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  const [selectedExteriorFlooring, setSelectedExteriorFlooring] =
+    useState<string>("");
+  const [selectedInteriorFlooring, setSelectedInteriorFlooring] =
+    useState<string>("");
 
   useEffect(() => {
     setSelectedKitchenFitting(newListing.kitchenFittings);
     setSelectedExteriorFeatures(newListing.exteriorFeatures);
     setSelectedInteriorFeatures(newListing.interiorFeatures);
     setSelectedPropertyType(newListing.category);
-  }, [newListing]);
+    setSelectedBuildingAmenities(newListing.buildingAmenities);
+    setSelectedFacilities(newListing.facilities);
+  }, [
+    newListing.kitchenFittings,
+    newListing.exteriorFeatures,
+    newListing.interiorFeatures,
+    newListing.category,
+    newListing.buildingAmenities,
+    newListing.facilities,
+  ]);
   return (
     <Box>
       <Box mb="20px">
@@ -62,6 +77,17 @@ const PropertyDetails = ({
             setNewListing((prev: INewListing) => ({
               ...prev,
               category: e.toLowerCase(),
+              interiorFeatures: [],
+              exteriorFeatures: [],
+              exteriorFlooring: "",
+              interiorFlooring: "",
+              bedrooms: 0,
+              bathrooms: 0,
+              toilets: 0,
+              parkingSpace: 0,
+              kitchenFittings: [],
+              buildingAmenities: [],
+              type: "",
             }));
           }}
         />
@@ -163,28 +189,26 @@ const PropertyDetails = ({
           }}
         />
       </Box>
-      {selectedPropertyType === "Commercial" && (
-        <Box sx={{ mb: "20px" }}>
-          <Typography
-            fontSize={text.small}
-            color={colors.textBody}
-            fontWeight={text.weightSemiBold}
-            mb="12px"
-          >
-            Parking Space
-          </Typography>
-          <MultiSelect
-            options={[1, 2, 3, 4, "5+"]}
-            selected={newListing.parkingSpace}
-            onSelect={(e) => {
-              setNewListing((prev: INewListing) => ({
-                ...prev,
-                parkingSpace: typeof e === "string" ? e.toLowerCase() : e,
-              }));
-            }}
-          />
-        </Box>
-      )}
+      <Box sx={{ mb: "20px" }}>
+        <Typography
+          fontSize={text.small}
+          color={colors.textBody}
+          fontWeight={text.weightSemiBold}
+          mb="12px"
+        >
+          Car Space
+        </Typography>
+        <MultiSelect
+          options={[1, 2, 3, 4, "5+"]}
+          selected={newListing.parkingSpace}
+          onSelect={(e) => {
+            setNewListing((prev: INewListing) => ({
+              ...prev,
+              parkingSpace: typeof e === "string" ? e.toLowerCase() : e,
+            }));
+          }}
+        />
+      </Box>
       {/* <Box mb="16px">
         <MultiCheckbox
           options={
@@ -208,15 +232,15 @@ const PropertyDetails = ({
           fontWeight={text.weightSemiBold}
           mb="12px"
         >
-          Rental Period
+          Wifi Access
         </Typography>
         <MultiSelect
-          options={["Yearly", "Monthly"]}
-          selected={newListing.fee.rentalPeriod}
+          options={["Yes", "No"]}
+          selected={newListing.wifiAccess}
           onSelect={(e) => {
             setNewListing((prev: INewListing) => ({
               ...prev,
-              rentalPeriod: e.toLowerCase(),
+              wifiAccess: e.toLowerCase(),
             }));
           }}
         />
@@ -228,13 +252,48 @@ const PropertyDetails = ({
           fontWeight={text.weightSemiBold}
           mb="12px"
         >
-          Price Range
+          Rental Period
+        </Typography>
+        <MultiSelect
+          options={["Yearly", "Monthly", "Semi yearly", "Quarterly"]}
+          selected={newListing.rentalPeriod}
+          onSelect={(e) => {
+            setNewListing((prev: INewListing) => ({
+              ...prev,
+              rentalPeriod: e.toLowerCase().split(" ").join("-"),
+            }));
+          }}
+        />
+      </Box>
+      <Box sx={{ mb: "20px" }}>
+        <Typography
+          fontSize={text.small}
+          color={colors.textBody}
+          fontWeight={text.weightSemiBold}
+          mb="12px"
+        >
+          Rent
         </Typography>
         <PriceRange
           min={0}
-          max={100}
+          max={0}
           rangeValue={valueRange}
           onSlide={setValueRange}
+          updateRange={false}
+        />
+        <Input
+          value={addComma(String(newListing.fee))}
+          onChange={(e) =>
+            setNewListing((prev: INewListing) => ({
+              ...prev,
+              fee: Number(e.target.value.replace(/,/g, "")),
+              tenantRentAmount: Number(e.target.value.replace(/,/g, "")),
+            }))
+          }
+          startIcon={<NairaIcon />}
+          placeholder="0"
+          inputContainerStyles={{ width: "100%", mt: "20px" }}
+          type="text"
         />
       </Box>
       <Box sx={{ mb: "20px" }}>
@@ -285,7 +344,7 @@ const PropertyDetails = ({
             fontWeight={text.weightSemiBold}
             mb="12px"
           >
-            Property age
+            Property Condition
           </Typography>
           <MultiSelect
             options={["Renovated", "Old", "Newly Built"]}
@@ -305,6 +364,7 @@ const PropertyDetails = ({
             gap="16px"
             mt="20px"
             width="100%"
+            // flexWrap={{xs: 'wrap', sm: 'nowrap'}}
           >
             <Input
               type="number"
@@ -316,7 +376,7 @@ const PropertyDetails = ({
                 }))
               }
               placeholder="Lot size"
-              // inputContainerStyles={{ width: "100%" }}
+              
             />
             <Input
               type="number"
@@ -328,34 +388,69 @@ const PropertyDetails = ({
                 }))
               }
               placeholder="Floor Area"
-              // inputContainerStyles={{ width: "100%" }}
+              
             />
           </Box>
           <Typography fontSize={16} color={colors.textSubtitle} my="8px">
             Measurements are in square feet.
           </Typography>
           <Box display="flex" alignItems="flex-start" gap="16px" width="100%">
-            <Input
+            {/* <Input
               value={yearBuilt}
               select
               options={["2020", "2010", "2000"]}
               onSelect={setYearBuilt}
               placeholder="Year built"
-              // inputContainerStyles={{ width: "100%" }}
-            />
+              
+            /> */}
             <Input
-              options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+              options={Array.from(
+                { length: 30 },
+                (_, i) => new Date().getFullYear() - i
+              )}
               select
-              // type="number"
-              value={String(newListing.floorLevel)}
+              value={String(newListing.builtYear)}
               onSelect={(e) =>
                 setNewListing((prev: INewListing) => ({
                   ...prev,
-                  floorLevel: Number(e),
+                  builtYear: Number(e),
+                }))
+              }
+              placeholder="Year built"
+              
+            />
+            {/* <DateInput
+              label="Year built"
+              type="year"
+              past
+              onChange={(e) =>
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  builtYear: Number(e?.target?.value),
+                }))
+              }
+            /> */}
+            <Input
+              options={[
+                "N/A",
+                "Ground floor",
+                "1st floor ",
+                "2nd floor",
+                "3rd floor",
+                "4th floor",
+                "5th floor",
+                "5th floor +",
+              ]}
+              select
+              value={newListing.floorLevel}
+              onSelect={(e) =>
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  floorLevel: e,
                 }))
               }
               placeholder="Floor level"
-              // inputContainerStyles={{ width: "100%", flex: 1 }}
+              
             />
           </Box>
         </Box>
@@ -364,20 +459,88 @@ const PropertyDetails = ({
             Property Details
           </Typography>
           <Input
+            placeholder="Select available facilities"
+            select
+            value={newListing.facilities.join(", ")}
+            multichoice
+            selected={selectedFacilities}
+            setSelected={setSelectedFacilities}
+            onSelect={(e) => {
+              if (e.toLowerCase().split(" ").join("-") === "n/a") {
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  facilities: [e.toLowerCase().split(" ").join("-")],
+                }));
+                return;
+              } else {
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  facilities: newListing.facilities.filter(
+                    (x) => x.toLowerCase().split(" ").join("-") !== "n/a"
+                  ),
+                }));
+              }
+              setNewListing((prev: INewListing) => ({
+                ...prev,
+                facilities: prev.facilities.includes(
+                  e.toLowerCase().split(" ").join("-")
+                )
+                  ? prev.facilities.filter(
+                      (x) => x !== e.toLowerCase().split(" ").join("-")
+                    )
+                  : [...prev.facilities, e.toLowerCase().split(" ").join("-")],
+              }));
+            }}
+            options={
+              newListing.category === "residential"
+                ? [
+                    "n/a",
+                    "Constant water",
+                    "Regular power supply",
+                    "POP ceiling",
+                    "Gated Compound",
+                    "Self compound",
+                    "Pet-friendly",
+                    "Gym",
+                  ]
+                : [
+                    "n/a",
+                    "Constant water",
+                    "Regular power supply",
+                    "POP ceiling",
+                    "Gated Compound",
+                  ]
+            }
+          />
+          <Input
             placeholder="Select interior features"
             select
-            value=""
+            value={newListing.interiorFeatures.join(", ")}
             multichoice
             selected={selectedInteriorFeatures}
             setSelected={setSelectedInteriorFeatures}
             onSelect={(e) => {
+              if (e.toLowerCase().split(" ").join("-") === "n/a") {
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  interiorFeatures: [e.toLowerCase().split(" ").join("-")],
+                }));
+                return;
+              } else {
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  interiorFeatures: newListing.interiorFeatures.filter(
+                    (x) => x.toLowerCase().split(" ").join("-") !== "n/a"
+                  ),
+                }));
+              }
               setNewListing((prev: INewListing) => ({
                 ...prev,
                 interiorFeatures: prev.interiorFeatures.includes(
-                  e.toLowerCase().split(" ").join("-"),
+                  e.toLowerCase().split(" ").join("-")
                 )
                   ? prev.interiorFeatures.filter(
-                      (x) => x !== e.toLowerCase().split(" ").join("-"),
+                      (x) => x !== e.toLowerCase().split(" ").join("-")
                     )
                   : [
                       ...prev.interiorFeatures,
@@ -385,30 +548,54 @@ const PropertyDetails = ({
                     ],
               }));
             }}
-            options={[
-              "Furnished",
-              "Unfurnished",
-              "Built-in appliances",
-              "Air conditioning",
-              "Prepaid meter",
-              "Wardrobe",
-            ]}
+            options={
+              newListing.category === "residential"
+                ? [
+                    "n/a",
+                    "Built-in appliances",
+                    "Air conditioning",
+                    "Prepaid meter",
+                    "Wardrobe",
+                  ]
+                : [
+                    "n/a",
+                    "Modern finishes",
+                    "Conference rooms",
+                    "Private offices",
+                    "Open-plan areas",
+                    "Break rooms",
+                  ]
+            }
           />
           <Input
             placeholder="Select exterior features"
             select
-            value=""
+            value={newListing.exteriorFeatures.join(", ")}
             multichoice
             selected={selectedExteriorFeatures}
             setSelected={setSelectedExteriorFeatures}
             onSelect={(e) => {
+              if (e.toLowerCase().split(" ").join("-") === "n/a") {
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  exteriorFeatures: [e.toLowerCase().split(" ").join("-")],
+                }));
+                return;
+              } else {
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  exteriorFeatures: newListing.exteriorFeatures.filter(
+                    (x) => x.toLowerCase().split(" ").join("-") !== "n/a"
+                  ),
+                }));
+              }
               setNewListing((prev: INewListing) => ({
                 ...prev,
                 exteriorFeatures: prev.exteriorFeatures.includes(
-                  e.toLowerCase().split(" ").join("-"),
+                  e.toLowerCase().split(" ").join("-")
                 )
                   ? prev.exteriorFeatures.filter(
-                      (x) => x !== e.toLowerCase().split(" ").join("-"),
+                      (x) => x !== e.toLowerCase().split(" ").join("-")
                     )
                   : [
                       ...prev.exteriorFeatures,
@@ -417,31 +604,45 @@ const PropertyDetails = ({
               }));
             }}
             options={[
+              "n/a",
               "Garden",
               "CCTV",
               "Security House",
               "Generator",
               "Solar Panel",
-              "Security",
-              "Balcony",
+              "Security Personnel",
             ]}
           />
           {selectedPropertyType === "residential" && (
             <Input
               placeholder="Select kitchen fitting"
               select
-              value=""
+              value={newListing.kitchenFittings.join(", ")}
               multichoice
               selected={selectedKitchenFitting}
               setSelected={setSelectedKitchenFitting}
               onSelect={(e) => {
+                if (e.toLowerCase().split(" ").join("-") === "n/a") {
+                  setNewListing((prev: INewListing) => ({
+                    ...prev,
+                    kitchenFittings: [e.toLowerCase().split(" ").join("-")],
+                  }));
+                  return;
+                } else {
+                  setNewListing((prev: INewListing) => ({
+                    ...prev,
+                    kitchenFittings: newListing.kitchenFittings.filter(
+                      (x) => x.toLowerCase().split(" ").join("-") !== "n/a"
+                    ),
+                  }));
+                }
                 setNewListing((prev: INewListing) => ({
                   ...prev,
                   kitchenFittings: prev.kitchenFittings.includes(
-                    e.toLowerCase().split(" ").join("-"),
+                    e.toLowerCase().split(" ").join("-")
                   )
                     ? prev.kitchenFittings.filter(
-                        (x) => x !== e.toLowerCase().split(" ").join("-"),
+                        (x) => x !== e.toLowerCase().split(" ").join("-")
                       )
                     : [
                         ...prev.kitchenFittings,
@@ -450,11 +651,58 @@ const PropertyDetails = ({
                 }));
               }}
               options={[
+                "n/a",
                 "Exhaust hood",
                 "Gas hob",
                 "Extractor fan",
                 "Microwave",
                 "Oven",
+              ]}
+            />
+          )}
+          {selectedPropertyType === "commercial" && (
+            <Input
+              placeholder="Building Amenities"
+              select
+              value={newListing.buildingAmenities.join(", ")}
+              selected={selectedBuildingAmenities}
+              setSelected={setSelectedBuildingAmenities}
+              multichoice
+              onSelect={(e) => {
+                if (e.toLowerCase().split(" ").join("-") === "n/a") {
+                  setNewListing((prev: INewListing) => ({
+                    ...prev,
+                    buildingAmenities: [e.toLowerCase().split(" ").join("-")],
+                  }));
+                  return;
+                } else {
+                  setNewListing((prev: INewListing) => ({
+                    ...prev,
+                    buildingAmenities: newListing.buildingAmenities.filter(
+                      (x) => x.toLowerCase().split(" ").join("-") !== "n/a"
+                    ),
+                  }));
+                }
+                setNewListing((prev: INewListing) => ({
+                  ...prev,
+                  buildingAmenities: prev.buildingAmenities.includes(
+                    e.toLowerCase().split(" ").join("-")
+                  )
+                    ? prev.buildingAmenities.filter(
+                        (x) => x !== e.toLowerCase().split(" ").join("-")
+                      )
+                    : [
+                        ...prev.buildingAmenities,
+                        e.toLowerCase().split(" ").join("-"),
+                      ],
+                }));
+              }}
+              options={[
+                "n/a",
+                "Meeting rooms",
+                "Shared lounges",
+                "Gyms",
+                "Kitchen facility",
               ]}
             />
           )}
@@ -468,7 +716,13 @@ const PropertyDetails = ({
                 interiorFlooring: e.toLowerCase().split(" ").join("-"),
               }));
             }}
-            options={["Vinyl", "Rubber tiles", "Ceramic tiles", "Cemented"]}
+            options={[
+              "n/a",
+              "Vinyl",
+              "Rubber tiles",
+              "Ceramic tiles",
+              "Cemented",
+            ]}
           />
           <Input
             placeholder="Exterior flooring"
@@ -480,7 +734,7 @@ const PropertyDetails = ({
                 exteriorFlooring: e.toLowerCase().split(" ").join("-"),
               }));
             }}
-            options={["Interlocking", "Stamping", "Concrete"]}
+            options={["n/a", "Interlocking", "Stamping", "Concrete"]}
           />
         </Box>
       </Box>
@@ -489,6 +743,9 @@ const PropertyDetails = ({
           mt: "30px",
           bgcolor: colors.primary,
           color: colors.light,
+          "&:hover": {
+            bgcolor: colors.primary,
+          },
         }}
         variant="contained"
         onClick={() => onPageChange("main")}

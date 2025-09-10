@@ -24,8 +24,8 @@ export const UserService = () => {
         return {
           success: false,
           message: "failed",
-          data: []
-        }
+          data: [],
+        };
       }
     },
 
@@ -144,7 +144,7 @@ export const UserService = () => {
     },
     updateidentityStatus: async (userId: string, status: string) => {
       const response = await axios.patch(
-        `/admin/users/${userId}/identity/${status}`,
+        `/admin/users/${userId}/identity/${status}`
       );
       return {
         success: response.status === 200,
@@ -170,18 +170,21 @@ export const UserService = () => {
       };
     },
 
-    upgradeToRep: async (email: string, location: string) => {
-      if (!email) {
+    upgradeToRep: async (data: {
+      email: string;
+      lgaIds: string[];
+      maxListingsPerMonth: number;
+      commissionRate: number;
+      notes: string;
+    }) => {
+      if (!data.email) {
         return {
           success: false,
           message: "Email missing",
           data: null,
         };
       }
-      const response = await axios.patch(`/admin/rep-upgrade`, {
-        email,
-        location,
-      });
+      const response = await axios.patch(`/admin/rep-upgrade`, data);
 
       return {
         success: response.status === 200,
@@ -200,17 +203,21 @@ export const UserService = () => {
       };
     },
 
-    updateLocations: async (userId: string, location: string) => {
-      if (!userId) {
+    updateLocations: async (repId: string, lgaIds: string[]) => {
+      if (!repId) {
         return {
           success: false,
           message: "UserId missing",
           data: null,
         };
       }
-      const response = await axios.patch(`/admin/user/${userId}/location`, {
-        location,
-      });
+      const response = await axios.post(
+        `/admin/rentrix-rep/assign-multiple-lgas`,
+        {
+          repId,
+          lgaIds,
+        }
+      );
 
       return {
         success: response.status === 200,
@@ -315,7 +322,7 @@ export const UserService = () => {
 
     grantAccess: async (
       userId: string,
-      permissions: { name: string; checked: boolean }[],
+      permissions: { name: string; checked: boolean }[]
     ) => {
       if (!userId) {
         return {
@@ -326,7 +333,7 @@ export const UserService = () => {
       }
       const response = await axios.patch(
         `/admin/${userId}/grantAccess`,
-        permissions,
+        permissions
       );
 
       return {
@@ -365,6 +372,49 @@ export const UserService = () => {
         message: "Password reset requested",
         data: response.data,
       };
+    },
+
+    getStates: async () => {
+      try {
+        const response = await axios.get(`/country/states`);
+        return response;
+      } catch (error: any) {
+        console.log(error);
+        return {
+          data: {
+            message: error.response?.data?.message,
+          },
+          status: error.response?.data?.statusCode || 500,
+        };
+      }
+    },
+    getCitites: async (stateName: string) => {
+      try {
+        const response = await axios.get(`/city/state/${stateName}`);
+        return response;
+      } catch (error: any) {
+        console.log(error);
+        return {
+          data: {
+            message: error.response?.data?.message,
+          },
+          status: error.response?.data?.statusCode || 500,
+        };
+      }
+    },
+    getLgas: async (cityName: string) => {
+      try {
+        const response = await axios.get(`/city/${cityName}/lgas`);
+        return response;
+      } catch (error: any) {
+        console.log(error);
+        return {
+          data: {
+            message: error.response?.data?.message,
+          },
+          status: error.response?.data?.statusCode || 500,
+        };
+      }
     },
   };
 };
