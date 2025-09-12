@@ -46,7 +46,7 @@ const MainAddListing = ({
     newListing.description &&
     newListing.country &&
     newListing.city &&
-    newListing.lga &&
+    newListing.localGovernmentArea &&
     newListing.nearestLandMark &&
     newListing.streetName &&
     newListing.propertyNumber;
@@ -138,9 +138,9 @@ const MainAddListing = ({
 
   useEffect(() => {
     if (newListing.representativeId) {
-      setHaveRentrixRep('Yes')
+      setHaveRentrixRep("Yes");
     }
-  }, [newListing.representativeId])
+  }, [newListing.representativeId]);
 
   return (
     <Box>

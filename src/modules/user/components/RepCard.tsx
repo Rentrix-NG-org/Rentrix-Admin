@@ -221,20 +221,21 @@ const RepCard: React.FC<{
               letterSpacing: "-0.05px",
             }}
           >
-            Location :
-          </Typography>
-          <Typography
-            sx={{
-              color: theme.palette.grey[600],
-              textAlign: "center",
-              fontSize: "14px",
-              fontStyle: "normal",
-              fontWeight: 600,
-              lineHeight: "normal",
-              letterSpacing: "-0.05px",
-            }}
-          >
-            {location}
+            Location:{" "}
+            <Typography
+              sx={{
+                color: theme.palette.grey[600],
+                textAlign: "center",
+                fontSize: "14px",
+                fontStyle: "normal",
+                fontWeight: 600,
+                lineHeight: "normal",
+                letterSpacing: "-0.05px",
+                display: 'inline'
+              }}
+            >
+              {location}
+            </Typography>
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 0.2 }}>

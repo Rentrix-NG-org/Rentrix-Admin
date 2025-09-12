@@ -12,10 +12,25 @@ import { types } from "@src/modules/logs/types/log.types";
 import TabNavigation from "../../components/TabNavigation";
 
 const RepDetails = () => {
-  const { getUserRep } = UserService();
-  // const activityTypes = useMemo(() => types, []);
-
+  const { getUserRep, getAssignedLocations } = UserService();
   const params = useParams();
+  // const activityTypes = useMemo(() => types, []);
+  const [locations, setLocations] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchLocations() {
+      const response = await getAssignedLocations(params?.userId!);
+
+      if (response.data.success) {
+        const data = response.data.data.locations as [
+          { lga: { name: string | null } }
+        ];
+        setLocations(data.map((d) => d.lga.name));
+      }
+    }
+    fetchLocations();
+  }, []);
+
   const [rep, setRep] = useState({
     id: "",
     firstName: "",
@@ -121,10 +136,10 @@ const RepDetails = () => {
     tabSelected === "Activity Logs"
       ? activity_columns
       : tabSelected === "Properties"
-        ? properties_column
-        : tabSelected === "Inspection"
-          ? inspection_column
-          : [];
+      ? properties_column
+      : tabSelected === "Inspection"
+      ? inspection_column
+      : [];
 
   useEffect(() => {
     async function fetchUser() {
@@ -133,7 +148,7 @@ const RepDetails = () => {
         console.log(
           response.data,
           "yedk",
-          typeof response.data.sessionDuration,
+          typeof response.data.sessionDuration
         );
         setRep(response.data);
       }
@@ -224,7 +239,7 @@ const RepDetails = () => {
           phoneNumber={rep.phoneNumber}
           dateOfBirth={rep.dateOfBirth}
           location={
-            rep.locations.length ? rep.locations.join(", ") : "No Location"
+            locations.length ? locations.join(", ") : "No Location"
           }
           status={rep.account.status}
         />

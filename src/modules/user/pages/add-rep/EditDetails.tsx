@@ -35,14 +35,16 @@ const EditDetails = () => {
     location: "",
     status: "",
   });
-  const { getUser, getLgas, getCitites, getStates } = UserService();
+  const { getUser, getLgas, getCitites, getStates, getAssignedLocations } = UserService();
   // const [location, setLocation] = useState([]);
-  // const [locations, setLocations] = useState<string[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedLgas, setSelectedLgas] = useState([]);
   const [lgasToView, setLgasToView] = useState([]);
+  const [stateId, setStateId] = useState("");
+  const [cityId, setCityId] = useState("");
   const [states, setStates] = useState<{ name: string }[] | []>([]);
   const [cities, setCiites] = useState<{ name: string }[] | []>([]);
   const [lgas, setLgas] = useState<{ name: string; id: string }[] | []>([]);
@@ -54,13 +56,13 @@ const EditDetails = () => {
     }
   };
   const getAllCitites = async () => {
-    const res = await getCitites(selectedState);
+    const res = await getCitites(stateId!);
     if (res.status === 200) {
       setCiites(res.data);
     }
   };
   const getAllLgas = async () => {
-    const res = await getLgas(selectedCity);
+    const res = await getLgas(cityId!);
     if (res.status === 200) {
       setLgas(res.data);
     }
@@ -85,19 +87,19 @@ const EditDetails = () => {
     fetchUser();
   }, [params?.userId]);
 
-  // useEffect(() => {
-  //   async function fetchLocations() {
-  //     const response = await getLocations();
+  useEffect(() => {
+    async function fetchLocations() {
+      const response = await getAssignedLocations(params?.userId!);
 
-  //     if (response.success) {
-  //       const data = response.data as [
-  //         { city: string | null; country: string | null },
-  //       ];
-  //       setLocations(data.map((d) => d.city || d.country));
-  //     }
-  //   }
-  //   fetchLocations();
-  // }, []);
+      if (response.data.success) {
+        const data = response.data.data.locations as [
+          { lga: { name: string | null } }
+        ];
+        setLocations(data.map((d) => d.lga.name));
+      }
+    }
+    fetchLocations();
+  }, []);
 
   // function handleLocationSelect(v: string) {
   //   setLocation((prev) => [...prev, v]);
@@ -146,36 +148,60 @@ const EditDetails = () => {
           photoUrl={user.photoUrl}
           phoneNumber={user.phoneNumber}
           dateOfBirth={user.dateOfBirth}
-          location={user.location}
+          location={locations.join(', ')}
           status={user.status}
         />
 
         <Box display="flex" flexDirection={"column"} gap="20px">
           <Input
             value={selectedState || "Select State"}
-            onSelect={(v) => {
-              setSelectedState(v);
-              setSelectedCity('')
-              setSelectedLgas([]);
-              setLgasToView([]);
-            }}
             placeholder="Enter State"
             select
             selected={selectedState}
             options={states?.map((state) => state.name) ?? []}
+            customRender={states?.map((state) => (
+              <MenuItem
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  setSelectedState(state.name);
+                  setStateId(state.id);
+                  setSelectedCity("");
+                  setSelectedLgas([]);
+                  setLgasToView([]);
+                }}
+              >
+                {state.name}
+              </MenuItem>
+            ))}
             startIcon={<LocationOnOutlined />}
           />
           <Input
             value={selectedCity || "Select City"}
-            onSelect={(v) => {
-              setSelectedCity(v);
-              setSelectedLgas([])
-              setLgasToView([])
-            }}
             placeholder="Enter City"
             select
             selected={selectedCity}
             options={cities?.map((city) => city.name) ?? []}
+            customRender={cities?.map((city) => (
+              <MenuItem
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  setSelectedCity(city.name);
+                  setCityId(city.id);
+                  setSelectedLgas([]);
+                  setLgasToView([]);
+                }}
+              >
+                {city.name}
+              </MenuItem>
+            ))}
             startIcon={<LocationOnOutlined />}
           />
           <Input

@@ -9,7 +9,8 @@ export interface INewListing {
   country: string;
   state: string;
   city: string;
-  lga: string;
+  localGovernmentArea: string;
+  keyArea?: string;
   nearestLandMark: string;
   streetName: string;
   propertyNumber: string;
@@ -23,6 +24,7 @@ export interface INewListing {
   category: string;
   type: string;
   bedrooms: string | number;
+  bedroom?: string | number;
   bathrooms: string | number;
   toilets: string | number;
   parkingSpace: string | number;
@@ -63,4 +65,7 @@ export interface INewListing {
   isProrated: boolean;
   tenantRentAmount?: number;
   tenantOtherFeesTotal: number;
+  lga?: string;
+  stateId?: string;
+  cityId?: string;
 }

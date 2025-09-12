@@ -216,6 +216,8 @@ export const UserService = () => {
         {
           repId,
           lgaIds,
+          priority: 1,
+          notes: "Primary coverage area",
         }
       );
 
@@ -376,7 +378,7 @@ export const UserService = () => {
 
     getStates: async () => {
       try {
-        const response = await axios.get(`/country/states`);
+        const response = await axios.get(`/location/states?countryName=Nigeria`);
         return response;
       } catch (error: any) {
         console.log(error);
@@ -388,9 +390,9 @@ export const UserService = () => {
         };
       }
     },
-    getCitites: async (stateName: string) => {
+    getCitites: async (stateId: string) => {
       try {
-        const response = await axios.get(`/city/state/${stateName}`);
+        const response = await axios.get(`/location/cities?stateId=${stateId}`);
         return response;
       } catch (error: any) {
         console.log(error);
@@ -402,9 +404,37 @@ export const UserService = () => {
         };
       }
     },
-    getLgas: async (cityName: string) => {
+    getLgas: async (cityId: string) => {
       try {
-        const response = await axios.get(`/city/${cityName}/lgas`);
+        const response = await axios.get(`/location/lgas?cityId=${cityId}`);
+        return response;
+      } catch (error: any) {
+        console.log(error);
+        return {
+          data: {
+            message: error.response?.data?.message,
+          },
+          status: error.response?.data?.statusCode || 500,
+        };
+      }
+    },
+    getKeyAreas: async (lgaId: string) => {
+      try {
+        const response = await axios.get(`/location/key-areas?lgaId=${lgaId}`);
+        return response;
+      } catch (error: any) {
+        console.log(error);
+        return {
+          data: {
+            message: error.response?.data?.message,
+          },
+          status: error.response?.data?.statusCode || 500,
+        };
+      }
+    },
+    getAssignedLocations: async (userId: string) => {
+      try {
+        const response = await axios.get(`/admin/users/${userId}/rep-locations`);
         return response;
       } catch (error: any) {
         console.log(error);

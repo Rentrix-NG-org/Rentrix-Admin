@@ -27,7 +27,7 @@ const EditListing = () => {
     address: "",
     country: "Nigeria",
     city: "",
-    lga: "",
+    localGovernmentArea: "",
     nearestLandMark: "",
     streetName: "",
     propertyNumber: "",

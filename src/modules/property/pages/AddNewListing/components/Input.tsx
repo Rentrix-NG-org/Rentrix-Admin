@@ -1,5 +1,5 @@
 import { Box, Menu, MenuItem, SxProps, Theme, Typography } from "@mui/material";
-import React, { CSSProperties, useRef, useState } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import LineSeperator from "./LineSeperator";
 import ChevronArrowDown from "../assets/ChevronArrowDown";
 import Checked from "../assets/Checked";
@@ -64,6 +64,11 @@ const Input = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+   useEffect(() => {
+     if (select && value && !multichoice) {
+       handleClose();
+     }
+   }, [value]);
   // const [selected, setSelected] = useState<string[]>([]);
   return (
     <Box width="100%" position='relative'>

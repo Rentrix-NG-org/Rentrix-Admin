@@ -11,18 +11,20 @@ import { useParams } from "react-router";
 
 const ChangeLocation = () => {
   // const [locations, setLocations] = useState<string[]>([]);
-  const { updateLocations, getCitites, getStates, getLgas } =
-  UserService();
+  const { updateLocations, getCitites, getStates, getLgas, getLocations } =
+    UserService();
   const { userId } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedLgas, setSelectedLgas] = useState([]);
+  const [stateId, setStateId] = useState('');
+  const [cityId, setCityId] = useState('');
   const [lgasToView, setLgasToView] = useState([]);
   const [states, setStates] = useState<{ name: string }[] | []>([]);
   const [cities, setCiites] = useState<{ name: string }[] | []>([]);
-  const [lgas, setLgas] = useState<{ name: string, id: string }[] | []>([]);
+  const [lgas, setLgas] = useState<{ name: string; id: string }[] | []>([]);
 
   const getAllStates = async () => {
     const res = await getStates();
@@ -31,13 +33,13 @@ const ChangeLocation = () => {
     }
   };
   const getAllCitites = async () => {
-    const res = await getCitites(selectedState);
+    const res = await getCitites(stateId!);
     if (res.status === 200) {
       setCiites(res.data);
     }
   };
   const getAllLgas = async () => {
-    const res = await getLgas(selectedCity);
+    const res = await getLgas(cityId!);
     if (res.status === 200) {
       setLgas(res.data);
     }
@@ -50,18 +52,18 @@ const ChangeLocation = () => {
     }
   }, [selectedState, selectedCity]);
 
-  // useEffect(() => {
-  //   async function fetchLocation() {
-  //     const response = await getLocations();
-  //     if (response.success) {
-  //       const all_locations = (
-  //         response.data as { city: string; country: string }[]
-  //       ).map((d) => d.city || d.country);
-  //       setLocations(all_locations as string[]);
-  //     }
-  //   }
-  //   fetchLocation();
-  // }, []);
+  useEffect(() => {
+    async function fetchLocation() {
+      const response = await getLocations();
+      if (response.success) {
+        const all_locations = (
+          response.data as { city: string; country: string }[]
+        ).map((d) => d.city || d.country);
+        // setLocations(all_locations as string[]);
+      }
+    }
+    fetchLocation();
+  }, []);
 
   async function handleUpdateLocation() {
     if (selectedLgas.length === 0) {
@@ -70,7 +72,7 @@ const ChangeLocation = () => {
       // const user = JSON.parse(localStorage.getItem("user") ?? "");
       const response = await updateLocations(userId || "", selectedLgas);
 
-      if (response.success) {
+      if (!response.data?.errors) {
         navigate(-1);
       }
     }
@@ -100,29 +102,53 @@ const ChangeLocation = () => {
         <Box display="flex" flexDirection={"column"} gap="20px">
           <Input
             value={selectedState || "Select State"}
-            onSelect={(v) => {
-              setSelectedState(v);
-              setSelectedCity('')
-              setSelectedLgas([]);
-              setLgasToView([]);
-            }}
             placeholder="Enter State"
             select
             selected={selectedState}
             options={states?.map((state) => state.name) ?? []}
+            customRender={states?.map((state) => (
+              <MenuItem
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  setSelectedState(state.name);
+                  setStateId(state.id);
+                  setSelectedCity("");
+                  setSelectedLgas([]);
+                  setLgasToView([]);
+                }}
+              >
+                {state.name}
+              </MenuItem>
+            ))}
             startIcon={<LockOutlined sx={{ color: theme.palette.grey[500] }} />}
           />
           <Input
             value={selectedCity || "Select City"}
-            onSelect={(v) => {
-              setSelectedCity(v);
-              setSelectedLgas([]);
-              setLgasToView([]);
-            }}
             placeholder="Enter City"
             select
             selected={selectedCity}
             options={cities?.map((city) => city.name) ?? []}
+            customRender={cities?.map((city) => (
+              <MenuItem
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  setSelectedCity(city.name);
+                  setCityId(city.id);
+                  setSelectedLgas([]);
+                  setLgasToView([]);
+                }}
+              >
+                {city.name}
+              </MenuItem>
+            ))}
             startIcon={<LockOutlined sx={{ color: theme.palette.grey[500] }} />}
           />
           <Input
@@ -139,20 +165,18 @@ const ChangeLocation = () => {
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
-                onClick={() =>
-                 {
-                   setSelectedLgas((prev: any) =>
-                     prev.includes(lga.id)
-                       ? prev.filter((x) => x !== lga.id)
-                       : [...prev, lga.id]
-                   );
-                   setLgasToView((prev: any) =>
-                     prev.includes(lga.name)
-                       ? prev.filter((x) => x !== lga.name)
-                       : [...prev, lga.name]
-                   );
-                 }
-                }
+                onClick={() => {
+                  setSelectedLgas((prev: any) =>
+                    prev.includes(lga.id)
+                      ? prev.filter((x) => x !== lga.id)
+                      : [...prev, lga.id]
+                  );
+                  setLgasToView((prev: any) =>
+                    prev.includes(lga.name)
+                      ? prev.filter((x) => x !== lga.name)
+                      : [...prev, lga.name]
+                  );
+                }}
               >
                 {lga.name}
                 {selectedLgas?.includes(lga.id) ? (

@@ -133,14 +133,34 @@ const PropertyDetails = ({
             Bedrooms
           </Typography>
           <MultiSelect
-            options={["Studio", 1, 2, 3, 4, 5, "6+"]}
-            selected={newListing.bedrooms}
+            options={["Studio", 1, 2, 3, 4, 5, 6]}
+            selected={newListing.bedroom || ""}
             onSelect={(e) => {
               setNewListing((prev: INewListing) => ({
                 ...prev,
-                bedrooms: typeof e === "string" ? e.toLowerCase() : e,
+                bedrooms:
+                  e === "Studio"
+                    ? 100
+                    : typeof e === "string"
+                    ? e.toLowerCase()
+                    : e,
+                bedroom: typeof e === "string" ? e.toLowerCase() : e,
               }));
             }}
+          />
+          <Input
+            type="number"
+            value={String(newListing.bedrooms)}
+            onChange={(e) =>
+              setNewListing((prev: INewListing) => ({
+                ...prev,
+                bedrooms: Number(e.target.value),
+                bedroom:
+                  e.target.value === "100" ? "Studio" : Number(e.target.value),
+              }))
+            }
+            placeholder="Bedrooms"
+            inputContainerStyles={{ width: "100%", mt: 1 }}
           />
         </Box>
       )}
@@ -154,7 +174,7 @@ const PropertyDetails = ({
           Bathrooms
         </Typography>
         <MultiSelect
-          options={[1, 2, 3, 4, "5+"]}
+          options={[1, 2, 3, 4, 5]}
           selected={newListing.bathrooms}
           onSelect={(e) => {
             setNewListing((prev: INewListing) => ({
@@ -162,6 +182,18 @@ const PropertyDetails = ({
               bathrooms: typeof e === "string" ? e.toLowerCase() : e,
             }));
           }}
+        />
+        <Input
+          type="number"
+          value={String(newListing.bathrooms)}
+          onChange={(e) =>
+            setNewListing((prev: INewListing) => ({
+              ...prev,
+              bathrooms: Number(e.target.value),
+            }))
+          }
+          placeholder="Bathrooms"
+          inputContainerStyles={{ width: "100%", mt: 1 }}
         />
       </Box>
       <Box sx={{ mb: "20px" }}>
@@ -174,7 +206,7 @@ const PropertyDetails = ({
           Toilets
         </Typography>
         <MultiSelect
-          options={[1, 2, 3, 4, "5+"]}
+          options={[1, 2, 3, 4, 5]}
           selected={newListing.toilets}
           onSelect={(e) => {
             setNewListing((prev: INewListing) => ({
@@ -182,6 +214,18 @@ const PropertyDetails = ({
               toilets: typeof e === "string" ? e.toLowerCase() : e,
             }));
           }}
+        />
+        <Input
+          type="number"
+          value={String(newListing.toilets)}
+          onChange={(e) =>
+            setNewListing((prev: INewListing) => ({
+              ...prev,
+              toilets: Number(e.target.value),
+            }))
+          }
+          placeholder="Toilets"
+          inputContainerStyles={{ width: "100%", mt: 1 }}
         />
       </Box>
       <Box sx={{ mb: "20px" }}>
@@ -194,7 +238,7 @@ const PropertyDetails = ({
           Car Space
         </Typography>
         <MultiSelect
-          options={[1, 2, 3, 4, "5+"]}
+          options={[1, 2, 3, 4, 5]}
           selected={newListing.parkingSpace}
           onSelect={(e) => {
             setNewListing((prev: INewListing) => ({
@@ -202,6 +246,18 @@ const PropertyDetails = ({
               parkingSpace: typeof e === "string" ? e.toLowerCase() : e,
             }));
           }}
+        />
+        <Input
+          type="number"
+          value={String(newListing.parkingSpace)}
+          onChange={(e) =>
+            setNewListing((prev: INewListing) => ({
+              ...prev,
+              parkingSpace: Number(e.target.value),
+            }))
+          }
+          placeholder="Car Space"
+          inputContainerStyles={{ width: "100%", mt: 1 }}
         />
       </Box>
       {/* <Box mb="16px">
@@ -371,7 +427,6 @@ const PropertyDetails = ({
                 }))
               }
               placeholder="Lot size"
-              
             />
             <Input
               type="number"
@@ -383,7 +438,6 @@ const PropertyDetails = ({
                 }))
               }
               placeholder="Floor Area"
-              
             />
           </Box>
           <Typography fontSize={16} color={colors.textSubtitle} my="8px">
@@ -412,7 +466,6 @@ const PropertyDetails = ({
                 }))
               }
               placeholder="Year built"
-              
             />
             {/* <DateInput
               label="Year built"
@@ -445,7 +498,6 @@ const PropertyDetails = ({
                 }))
               }
               placeholder="Floor level"
-              
             />
           </Box>
         </Box>
