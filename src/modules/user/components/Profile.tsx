@@ -116,7 +116,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
               <Box
                 component="img"
                 src={user?.photoUrl || icons.profilehead}
-                sx={{ width: "100%" }}
+                sx={{ width: "100%", height: 200, objectFit: 'cover' }}
               />
             </Box>
           </Box>
@@ -247,10 +247,10 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
             borderRadius: "8px",
             gap: "28px",
             ml: 4,
-            cursor: user.identity?.identityUrl && identityLoaded ? 'pointer' : 'default',
+            cursor: user.identity?.nin && identityLoaded ? 'pointer' : 'default',
           }}
           onClick={() => {
-            if (user.identity?.identityUrl && identityLoaded) {
+            if (user.identity?.nin && identityLoaded) {
               setDocumentModalOpen(true);
             }
           }}
@@ -258,10 +258,10 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
           <Box
             component="img"
             onError={handleDocumentError}
-            src={user.identity?.identityUrl ?? icons.folder}
+            src={user.identity?.nin ?? icons.folder}
             sx={{
-              height: "auto",
-              objectFit: "contain",
+              height: "150px",
+              objectFit: "cover",
               width: identityLoaded ? "100%" : "82px",
               mt: "auto",
             }}
@@ -375,7 +375,7 @@ const Profile: React.FC<{ user: Partial<User> }> = ({ user }) => {
           >
             <Box
               component="img"
-              src={user.identity?.identityUrl}
+              src={user.identity?.nin}
               sx={{
                 width: '100%',
                 height: 'auto',

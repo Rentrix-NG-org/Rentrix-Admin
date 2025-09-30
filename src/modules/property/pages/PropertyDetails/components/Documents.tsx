@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import { images } from "@src/utils/images";
 import { useState } from "react";
 
 // Custom document modal component
@@ -43,6 +42,7 @@ const DocumentModal = ({
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
+          bgcolor: '#000'
         }}
       >
         <Box
@@ -58,7 +58,7 @@ const DocumentModal = ({
         >
           <Box
             component="img"
-            src={document || images.doc}
+            src={document}
             alt="Document"
             sx={{
               width: "auto",
@@ -76,7 +76,7 @@ const DocumentModal = ({
 };
 
 export const PropertyDocuments = ({
-  documents = ["", "", "", ""],
+  documents = [],
 }: {
   documents: string[];
 }) => {
@@ -103,10 +103,10 @@ export const PropertyDocuments = ({
           padding: "10px",
         }}
       >
-        {documents.map((document, index) => (
+        {documents?.map((document, index) => (
           <Box
             key={index}
-            onClick={() => handleOpenDocument(document || images.doc)}
+            onClick={() => handleOpenDocument(document || "")}
             sx={{
               flex: 1,
               display: "flex",
@@ -121,11 +121,12 @@ export const PropertyDocuments = ({
           >
             <Box
               component="img"
-              src={images.doc}
+              src={document}
               alt={`Document ${index + 1}`}
               sx={{
                 width: "100%",
-                objectFit: "contain",
+                height: "500px",
+                objectFit: "cover",
               }}
             />
           </Box>

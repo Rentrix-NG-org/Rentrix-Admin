@@ -35,6 +35,7 @@ interface Media {
   title: string;
   format: string;
   type: string;
+  purpose: string;
 }
 
 interface Fees {

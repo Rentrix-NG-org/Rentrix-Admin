@@ -115,6 +115,10 @@ const Transaction: React.FC<{
     failed: theme.palette.error.main,
     pending: theme.palette.warning.main,
   };
+    const formattedNumber = (number: number) => {
+      const format = new Intl.NumberFormat("en-US").format(number);
+      return format;
+    };
   return (
     <Box
       sx={{
@@ -169,6 +173,7 @@ const Transaction: React.FC<{
           ml: "auto",
           display: "flex",
           flexDirection: "column",
+          alignItems: 'flex-end',
           gap: "6px",
         }}
       >
@@ -190,9 +195,7 @@ const Transaction: React.FC<{
               letterSpacing: "-0.32px",
             }}
           >
-            {amount >= 1000000
-              ? `${(amount / 1000000).toFixed(1)}M`
-              : `${(amount / 1000).toFixed(1)}K`}
+            {formattedNumber(amount)}
           </Typography>
         </Box>
 

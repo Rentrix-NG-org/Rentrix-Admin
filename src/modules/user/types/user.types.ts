@@ -110,7 +110,7 @@ export interface User {
   id: string;
   firstName: string;
   lastName: string;
-  identity: { identityUrl: string; status: string };
+  identity: { identityUrl: string; status: string; nin: string };
   phoneNumber: string;
   dateOfBirth: string;
   account: Account;

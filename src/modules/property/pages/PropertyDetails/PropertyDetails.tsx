@@ -74,8 +74,8 @@ const PropertyDetails = () => {
                 listing?.status === "AVAILABLE" || approveStatus === "pending"
                   ? theme.palette.grey[400]
                   : approveStatus === "approved"
-                    ? theme.palette.success.main
-                    : theme.palette.secondary.main,
+                  ? theme.palette.success.main
+                  : theme.palette.secondary.main,
               color: "#fff",
               border: "none",
               borderRadius: "100px",
@@ -93,9 +93,9 @@ const PropertyDetails = () => {
             {approveStatus === "pending"
               ? "Approving..."
               : (listing && listing.status === "AVAILABLE") ||
-                  approveStatus === "approved"
-                ? "Approved!"
-                : "Approve"}
+                approveStatus === "approved"
+              ? "Approved!"
+              : "Approve"}
           </Button>
         </Box>
       </Box>
@@ -108,7 +108,11 @@ const PropertyDetails = () => {
           <Features listing={listing as IListing} />
         </Grid>
       </Grid>
-      <PropertyDocuments documents={["", "", "", ""]} />
+      <PropertyDocuments
+        documents={listing?.media
+          ?.filter((x) => x.purpose === "PROPERTY_DOCUMENT")
+          .map((y) => y.url)}
+      />
     </Box>
   );
 };

@@ -23,6 +23,7 @@ const Menu: React.FC<MenuProps> = ({ title, options, onCancel, sx, hideArrow }) 
         display: "flex",
         flexDirection: "column",
         gap: "12px",
+        zIndex: 5,
         ...sx,
       }}
     >

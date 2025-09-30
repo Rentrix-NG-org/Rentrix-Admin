@@ -22,10 +22,9 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
   const { permissions } = useUserContext();
 
   useEffect(() => {
+    console.log(permissions, "PERMISI");
     async function getUsers() {
-      const query = permissions.includes("password-request")
-        ? "password-request=true"
-        : "";
+      const query = "password-request=true";
       const response = await getAllUsers(query);
 
       if (response.success) {
@@ -44,7 +43,8 @@ const PasswordRequests: React.FC<{ search: string; filter: string[] }> = ({
         setIsLoading(false);
       }
     }
-    getUsers();
+    if (permissions.includes("password-request")) getUsers()
+    else setIsLoading(false);
   }, [refresh, permissions]);
   useEffect(() => {
     const arr = users.map((d) => Object.values(d)) as string[][];

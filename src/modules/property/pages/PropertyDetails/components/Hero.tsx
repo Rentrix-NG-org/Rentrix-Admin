@@ -178,13 +178,15 @@ const Hero = ({
     setModalOpen(true);
   };
 
+  const media = listing?.media?.filter((x) => x.purpose === 'PROPERTY_SHOWCASE') || []
+
   return (
     <Box sx={{ gap: "15px" }}>
       {/* Main Image Slider */}
       <Box sx={{ "&::-webkit-scrollbar": { display: "none" } }}>
-        {listing?.media.length !== 0 ? (
+        {media.length !== 0 ? (
           <Slider {...sliderSettings}>
-            {listing?.media?.map((media, index) => (
+            {media?.map((media, index) => (
               <Box key={media.url} sx={{ width: "100%" }}>
                 <Box
                   component="img"
@@ -269,7 +271,7 @@ const Hero = ({
           </Box>
 
           {/* Navigation Arrows - Positioned outside image */}
-          {listing?.media.length > 1 && (
+          {media.length > 1 && (
             <>
               <IconButton
                 onClick={() => setCurrentSlide(prev => Math.max(prev - 1, 0))}
@@ -313,7 +315,7 @@ const Hero = ({
           }}>
             <Box
               component="img"
-              src={listing?.media[currentSlide]?.url}
+              src={media[currentSlide]?.url}
               alt="Property preview"
               sx={{
                 maxWidth: '100%',
@@ -330,7 +332,7 @@ const Hero = ({
           </Box>
 
           {/* Slide Indicators - Positioned at bottom center */}
-          {listing?.media.length > 1 && (
+          {media.length > 1 && (
             <Box sx={{
               position: 'absolute',
               bottom: 24,
@@ -339,7 +341,7 @@ const Hero = ({
               display: 'flex',
               gap: 1
             }}>
-              {listing.media.map((_, index) => (
+              {media.map((_, index) => (
                 <Box
                   key={index}
                   onClick={() => setCurrentSlide(index)}
