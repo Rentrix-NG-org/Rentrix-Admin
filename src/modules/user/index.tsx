@@ -21,6 +21,8 @@ import AdminProfile from "../profile/AdminProfile";
 import ChangePassword from "../auth/ChangePassword";
 import UserProfile from "./pages/admins/Profile";
 import AdminEdit from "./pages/[userId]/edit/AdminEdit";
+import WithdrawalRequest from "./pages/withdrawal-request/WithdrawalRequest";
+import WithdrawalRequestDetails from "./pages/[id]/WithdrawalRequestDetails";
 
 export interface UserManagementModule {
   routes: (RouteObject & { title?: string })[];
@@ -87,7 +89,16 @@ export const UserManagementModule: UserManagementModule = {
           <PasswordRequests />
         </UserProvider>
       ),
-      title: "Landlords & Tenants",
+      title: "Password Requests",
+    },
+    {
+      path: "/users/withdrawal-requests",
+      element: (
+        <UserProvider>
+          <WithdrawalRequest />
+        </UserProvider>
+      ),
+      title: "Withdrawal Requests",
     },
     {
       path: "/users/create",
@@ -110,6 +121,14 @@ export const UserManagementModule: UserManagementModule = {
       element: (
         <UserProvider>
           <UserDetails />
+        </UserProvider>
+      ),
+    },
+    {
+      path: "/users/withdrawal-request/:id",
+      element: (
+        <UserProvider>
+          <WithdrawalRequestDetails />
         </UserProvider>
       ),
     },

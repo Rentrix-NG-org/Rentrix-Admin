@@ -7,6 +7,7 @@ import Admins from "../components/Admins";
 import PasswordRequests from "../components/PasswordRequests";
 import { useUserContext } from "../providers/user.context";
 import Loading from "@src/shared/components/Loading";
+import WithdrawalRequest from "../components/WithdrawalRequest";
 
 const UserManagement = () => {
   const [search, setSearch] = useState("");
@@ -58,7 +59,7 @@ const UserManagement = () => {
         <LandlordAndTenant search={search} filter={filter} />
       )}
       {permissions.some((p) =>
-        ["supervisor", "representative"].includes(p),
+        ["supervisor", "representative"].includes(p)
       ) && <SupervisorAndRep search={search} filter={filter} />}
       {permissions.some((p) => ["admin"].includes(p)) && (
         <Admins search={search} filter={filter} />
@@ -66,6 +67,7 @@ const UserManagement = () => {
       {permissions.some((p) => ["admin"].includes(p)) && (
         <PasswordRequests search={search} filter={filter} />
       )}
+      <WithdrawalRequest search={search} filter={filter} />
     </Box>
   );
 };

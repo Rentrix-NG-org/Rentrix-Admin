@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, MenuItem, Typography, useTheme } from "@mui/material";
 import UserNav from "../../components/UserNav";
 import TextInput from "@src/shared/components/TextInput";
 import SelectInput from "@src/shared/components/SelectInput";
@@ -10,12 +10,16 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../providers/user.context";
 import Unauthorized from "../../components/Unauthorized";
+import Input from "@src/modules/property/pages/AddNewListing/components/Input";
+import { MyLocationTwoTone } from "@mui/icons-material";
+import Checked from "@src/modules/property/pages/AddNewListing/assets/Checked";
+import EmptyCheckbox from "@src/modules/property/pages/AddNewListing/assets/EmptyCheckbox";
 
 const AddUser = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { permissions } = useUserContext();
-  const { addUser } = UserService();
+  const { addUser, getStates } = UserService();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -28,11 +32,23 @@ const AddUser = () => {
     phoneNumber: "",
     email: "",
     role: "",
-    location: "",
+    location: [],
   });
   const [formStatus, setFormStatus] = useState<
     "not-set" | "pending" | "success" | "failure"
   >("not-set");
+  const [states, setStates] = useState([]);
+
+  useEffect(() => {
+    const getAllStates = async () => {
+      const res = await getStates();
+      if (res.status === 200) {
+        setStates(res.data);
+      }
+    };
+
+    getAllStates();
+  }, []);
 
   useEffect(() => {
     if (formStatus === "success" || formStatus === "failure") {
@@ -74,7 +90,7 @@ const AddUser = () => {
       lastName: form.lastName,
       gender: form.gender.toLowerCase(),
       dateOfBirth: dayjs(
-        `${form.dateOfBirth.day}-${form.dateOfBirth.month}-${form.dateOfBirth.year}`,
+        `${form.dateOfBirth.day}-${form.dateOfBirth.month}-${form.dateOfBirth.year}`
       ).valueOf(),
       phoneNumber: form.phoneNumber,
       email: form.email,
@@ -82,7 +98,7 @@ const AddUser = () => {
         form.role === "rentrix-rep"
           ? "representative"
           : form.role.toLowerCase(),
-      location: form.location,
+      stateIds: form.location,
     };
 
     try {
@@ -99,7 +115,7 @@ const AddUser = () => {
     }
   }
 
-  if (!permissions.includes("user-creation")) {
+  if (!permissions?.includes("user-creation")) {
     return <Unauthorized />;
   }
   return (
@@ -116,42 +132,33 @@ const AddUser = () => {
       <UserNav routes={["User Management", "Add New Users"]} />
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
         <TextInput
-          containerSx={{
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background: theme.palette.grey[100],
-          }}
           icon={icons.user}
           onChange={(value) => {
             setForm((curr) => ({ ...curr, firstName: value }));
           }}
           label="First Name"
           required
+          value={form.firstName}
         />
         <TextInput
           onChange={(value) => {
             setForm((curr) => ({ ...curr, lastName: value }));
           }}
-          containerSx={{
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background: theme.palette.grey[100],
-          }}
           icon={icons.user}
           label="Surname"
           required
+          value={form.lastName}
         />
         <SelectInput
           onChange={(value) => {
             setForm((curr) => ({ ...curr, gender: value }));
-          }}
-          containerSx={{
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background: theme.palette.grey[100],
           }}
           icon={icons.usercircle}
           placeholderSx={{ color: theme.palette.grey[600] }}
           label="Gender"
           options={["Male", "Female"]}
           required
+          value={form.gender}
         />
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -177,12 +184,11 @@ const AddUser = () => {
                 }));
               }}
               containerSx={{
-                border: `1px solid ${theme.palette.grey[300]}`,
-                background: theme.palette.grey[100],
                 height: "auto",
               }}
               label="Day"
               options={days["January"] as unknown as string[]}
+              value={form.dateOfBirth.day}
             />
             <SelectInput
               placeholderSx={{ color: theme.palette.grey[600] }}
@@ -196,24 +202,21 @@ const AddUser = () => {
                 }));
               }}
               containerSx={{
-                border: `1px solid ${theme.palette.grey[300]}`,
-                background: theme.palette.grey[100],
                 height: "auto",
               }}
               label="Month"
               options={months}
+              value={form.dateOfBirth.month}
             />
             <SelectInput
               placeholderSx={{ color: theme.palette.grey[600] }}
               containerSx={{
-                border: `1px solid ${theme.palette.grey[300]}`,
-                background: theme.palette.grey[100],
                 height: "auto",
               }}
               label="Year"
               options={Array.from(
                 { length: new Date().getFullYear() - 1949 },
-                (_, i) => (1950 + i).toString(),
+                (_, i) => (1950 + i).toString()
               )}
               onChange={(value: string) => {
                 setForm((curr) => ({
@@ -221,6 +224,7 @@ const AddUser = () => {
                   dateOfBirth: { ...curr.dateOfBirth, year: parseInt(value) },
                 }));
               }}
+              value={form.dateOfBirth.year}
             />
           </Box>
         </Box>
@@ -229,25 +233,19 @@ const AddUser = () => {
           onChange={(value) => {
             setForm((curr) => ({ ...curr, phoneNumber: value }));
           }}
-          containerSx={{
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background: theme.palette.grey[100],
-          }}
           label="Phone Number"
           icon={icons.call}
           required
+          value={form.phoneNumber}
         />
         <TextInput
           onChange={(value) => {
             setForm((curr) => ({ ...curr, email: value }));
           }}
-          containerSx={{
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background: theme.palette.grey[100],
-          }}
           label="Email"
           icon={icons.mail}
           required
+          value={form.email}
         />
         <SelectInput
           value={form.role}
@@ -255,28 +253,46 @@ const AddUser = () => {
             setForm((curr) => ({ ...curr, role: value }));
           }}
           disabled
-          containerSx={{
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background: theme.palette.grey[100],
-          }}
           label="Role"
           icon={icons.usercircle}
           placeholderSx={{ color: theme.palette.grey[600] }}
           options={["Admin"]}
           required
         />
-        <SelectInput
-          onChange={(value) => {
-            setForm((curr) => ({ ...curr, location: value }));
-          }}
-          containerSx={{
-            border: `1px solid ${theme.palette.grey[300]}`,
-            background: theme.palette.grey[100],
-          }}
-          icon={icons.location}
-          typeable
+        <Input
           label="Location"
-          options={["12, Amirality Way, Ibadan"]}
+          placeholder="Select location"
+          select
+          options={states?.map((state: any) => state.name)}
+          value={states.filter((x) => form.location.includes(x.id)).map((y) => y.name).join(", ")}
+          selected={form.location}
+          multichoice
+          customRender={states?.map((e) => (
+            <MenuItem
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                setForm((curr) => ({
+                  ...curr,
+                  location: curr.location.includes(e.id)
+                    ? curr.location.filter((x) => x !== e.id)
+                    : [...curr.location, e.id],
+                }));
+              }}
+            >
+              {e.name}
+              {form.location?.includes(e.id) ? (
+                <Checked />
+              ) : (
+                <EmptyCheckbox width="20px" height="20px" />
+              )}
+            </MenuItem>
+          ))}
+          
+          startIcon={<MyLocationTwoTone sx={{ width: 18, height: 18 }} />}
         />
       </Box>
 
@@ -302,8 +318,8 @@ const AddUser = () => {
               formStatus === "success"
                 ? theme.palette.success.main
                 : formStatus === "failure"
-                  ? theme.palette.error.main
-                  : theme.palette.common.white,
+                ? theme.palette.error.main
+                : theme.palette.common.white,
             fontSize: "16px",
             fontWeight: 600,
             lineHeight: "150%",
@@ -312,8 +328,8 @@ const AddUser = () => {
           {formStatus === "success"
             ? "Saved"
             : formStatus === "failure"
-              ? "Failed"
-              : "Save"}
+            ? "Failed"
+            : "Save"}
         </Typography>
       </Box>
     </Box>

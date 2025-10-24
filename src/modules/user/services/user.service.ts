@@ -378,7 +378,9 @@ export const UserService = () => {
 
     getStates: async () => {
       try {
-        const response = await axios.get(`/location/states?countryName=Nigeria`);
+        const response = await axios.get(
+          `/location/states?countryName=Nigeria`
+        );
         return response;
       } catch (error: any) {
         console.log(error);
@@ -434,7 +436,9 @@ export const UserService = () => {
     },
     getAssignedLocations: async (userId: string) => {
       try {
-        const response = await axios.get(`/admin/users/${userId}/rep-locations`);
+        const response = await axios.get(
+          `/admin/users/${userId}/rep-locations`
+        );
         return response;
       } catch (error: any) {
         console.log(error);
@@ -445,6 +449,114 @@ export const UserService = () => {
           status: error.response?.data?.statusCode || 500,
         };
       }
+    },
+
+    getAllWithdrawalRequest: async (query?: string) => {
+      try {
+        const response = await axios.get(
+          `/withdrawal-requests/admin/all?${query}`
+        );
+
+        return {
+          success: response.data.success,
+          message: "Fetched",
+          data: response.data.data,
+        };
+      } catch (e) {
+        return {
+          success: e.status === 200,
+          message: e.response.data.message,
+        };
+      }
+    },
+
+    getWithdrawalRequestDetails: async (id: string) => {
+      const response = await axios.get(`/withdrawal-requests/admin/${id}`);
+
+      return {
+        success: response.status === 200,
+        message: "Fetched",
+        data: response.data.data,
+      };
+    },
+
+    approveWithdrawalRequest: async (
+      id: string,
+      data: { adminPin: string; notes?: string }
+    ) => {
+      try {
+        const response = await axios.patch(
+          `/withdrawal-requests/admin/${id}/approve`,
+          data
+        );
+
+        return {
+          success: response.data.statusCode === 200,
+          message: response.data.message,
+          data: response.data.data,
+        };
+      } catch (e) {
+        return {
+          success: e.status === 200,
+          message: e.response.data.message,
+        };
+      }
+    },
+
+    createPin: async (data: { pin: string; confirmPin: string }) => {
+      try {
+        const response = await axios.post(`/admin/set-pin`, data);
+
+        return {
+          success: response.data.statusCode === 201,
+          message: response.data.message,
+        };
+      } catch (e) {
+        return {
+          success: e.status === 200,
+          message: e.response.data.message,
+        };
+      }
+    },
+
+    changePin: async (data: { currentPin: string; newPin: string }) => {
+      try {
+        const response = await axios.patch(`/admin/change-forced-pin`, data);
+
+        return {
+          success: response.data.success,
+          message: response.data.message,
+        };
+      } catch (e) {
+        return {
+          success: e.status === 200,
+          message: e.response.data.message,
+        };
+      }
+    },
+
+    forcePinReset: async (adminId: string) => {
+      const response = await axios.patch(
+        `/admin/${adminId}/trigger-pin-change?adminId=${adminId}`
+      );
+
+      return {
+        success: response.data.success,
+        message: response.data.message,
+      };
+    },
+
+    checkPinStatus: async () => {
+      const response = await axios.get(`/admin/check-pin-status`);
+
+      return {
+        hasPin:
+          response.data.hasPin &&
+          response.data.pinStatus === "active" &&
+          !response.data.isBlocked &&
+          !response.data.forcedPinChange,
+        forcedPinChange: response.data.forcedPinChange,
+      };
     },
   };
 };

@@ -1,4 +1,11 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Snackbar,
+  SnackbarContent,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import UserNav from "../user/components/UserNav";
@@ -9,6 +16,9 @@ import CustomButton from "../property/pages/AddNewListing/components/Button";
 import moment from "moment";
 import { MediaService } from "@src/shared/services/media.service";
 import { UserService } from "../user/services/user.service";
+import Modal from "@src/shared/components/Modal";
+import OTPInput from "react-otp-input";
+import { colors, radius } from "@src/shared/constants/constants";
 
 export interface User {
   id: string;
@@ -37,17 +47,28 @@ const AdminProfile = () => {
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const { uploadFile } = MediaService();
-  const { updateUser } = UserService();
+  const { updateUser, checkPinStatus, createPin, changePin } = UserService();
   const theme = useTheme();
-  const date = user?.users[0]?.dateOfBirth
+  const date = user?.users[0]?.dateOfBirth;
   const formattedDob = moment(Number(date)).format("DD MMM YYYY");
+  const [showCreatePinModal, setShowCreatePinModal] = useState(false);
+  const [pin, setPin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
+  const [forcePinChange, setForcePinChange] = useState(false);
+  const [successful, setSuccessful] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage("");
+    }, 5000);
+  }, [message]);
 
   useEffect(() => {
     const getUser = localStorage.getItem("user");
     if (getUser) setUser(JSON.parse(getUser));
     else setUser(null);
   }, []);
-
 
   async function uploadImage() {
     const formData = new FormData();
@@ -61,7 +82,6 @@ const AdminProfile = () => {
     }
     return null;
   }
-
 
   const uploadProfilePicture = async () => {
     try {
@@ -92,7 +112,59 @@ const AdminProfile = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  const getPinStatus = async () => {
+    const res = await checkPinStatus();
+    if (res.hasPin) {
+      setShowCreatePinModal(false);
+      setForcePinChange(false);
+    } else if (res.forcedPinChange) {
+      setForcePinChange(true);
+      setShowCreatePinModal(false);
+      return;
+    } else {
+      setShowCreatePinModal(true);
+      setForcePinChange(false);
+      return;
+    }
+  };
+
+  useEffect(() => {
+    getPinStatus();
+  }, []);
+
+  const createAdminPin = async () => {
+    setLoading(true);
+    const res = await createPin({ pin, confirmPin });
+    if (res.success) {
+      setPin("");
+      setConfirmPin("");
+      setShowCreatePinModal(false);
+      setForcePinChange(false);
+      setSuccessful(true);
+    } else {
+      setSuccessful(false);
+    }
+    setMessage(res.message);
+    setLoading(false);
+  };
+
+  const changeAdminPin = async () => {
+    setLoading(true);
+    const res = await changePin({ currentPin: pin, newPin: confirmPin });
+    if (res.success) {
+      setPin("");
+      setConfirmPin("");
+      setShowCreatePinModal(false);
+      setForcePinChange(false);
+      setSuccessful(true);
+    } else {
+      setSuccessful(false);
+    }
+    setMessage(res.message);
+    setLoading(false);
+  };
 
   return (
     <Box mt="60px" px="20px">
@@ -107,7 +179,7 @@ const AdminProfile = () => {
           />
         </Box>
 
-        {image &&
+        {image && (
           <CustomButton
             disabled={loading}
             onClick={uploadProfilePicture}
@@ -124,9 +196,9 @@ const AdminProfile = () => {
               },
             }}
           >
-            {loading ? 'Saving....' : 'Save Profile Picture'}
+            {loading ? "Saving...." : "Save Profile Picture"}
           </CustomButton>
-        }
+        )}
         <Box
           width="fit-content"
           my="32px"
@@ -239,6 +311,169 @@ const AdminProfile = () => {
       >
         Change Password
       </CustomButton>
+      {(showCreatePinModal || forcePinChange) && (
+        <Modal
+          showIcon={false}
+          onCancel={() => {
+            setShowCreatePinModal(false);
+            setForcePinChange(false);
+          }}
+          onConfirm={() => {
+            if (forcePinChange) {
+              if (pin && confirmPin) changeAdminPin();
+              return;
+            }
+            if (pin && confirmPin && confirmPin === pin) createAdminPin();
+          }}
+          childrenSx={{ gap: 0.5 }}
+        >
+          <Box display="flex" alignItems="center" flexDirection={"column"}>
+            <Typography>
+              {forcePinChange ? "Change Pin" : "Create Pin"}
+            </Typography>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              mt="22px"
+            >
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  flexDirection={"column"}
+                  gap="16px"
+                >
+                  <Box>
+                    <Typography mb="12px">
+                      {forcePinChange ? "Current Pin" : "Pin"}
+                    </Typography>
+                    <OTPInput
+                      value={pin}
+                      onChange={setPin}
+                      containerStyle={{ border: "none" }}
+                      numInputs={6}
+                      renderSeparator={
+                        <Box width={{ xs: "8px", sm: "28px" }}></Box>
+                      }
+                      renderInput={(inputProps, index) => (
+                        <input
+                          key={index}
+                          {...inputProps}
+                          className="input"
+                          placeholder="*"
+                          autoComplete="one-time-code"
+                          name={`otp-${Math.random()}`}
+                          type="tel"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          style={{
+                            width: "64px",
+                            height: "64px",
+                            borderRadius: radius.rounded,
+                            backgroundColor: inputProps.value
+                              ? colors.success
+                              : colors.inputBackground,
+                            border: `1px solid ${
+                              inputProps.value
+                                ? colors.success400
+                                : colors.borderNeutral
+                            }`,
+                            textAlign: "center",
+                            fontSize: 28,
+                            color: "#111311",
+                          }}
+                        />
+                      )}
+                    />
+                  </Box>
+                  <Box>
+                    <Typography mb="12px">
+                      {forcePinChange ? "New Pin" : "Confirm Pin"}
+                    </Typography>
+                    <OTPInput
+                      value={confirmPin}
+                      onChange={setConfirmPin}
+                      containerStyle={{ border: "none" }}
+                      numInputs={6}
+                      renderSeparator={
+                        <Box width={{ xs: "8px", sm: "28px" }}></Box>
+                      }
+                      renderInput={(inputProps, index) => (
+                        <input
+                          key={index}
+                          {...inputProps}
+                          className="input"
+                          placeholder="*"
+                          autoComplete="one-time-code"
+                          name={`otp-${Math.random()}`}
+                          type="tel"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          style={{
+                            width: "64px",
+                            height: "64px",
+                            borderRadius: radius.rounded,
+                            backgroundColor: forcePinChange
+                              ? inputProps.value
+                                ? colors.success
+                                : colors.inputBackground
+                              : !inputProps.value
+                              ? colors.inputBackground
+                              : pin.includes(confirmPin)
+                              ? colors.success
+                              : theme.palette.error.light,
+                            border: forcePinChange
+                              ? `1px solid ${
+                                  inputProps.value
+                                    ? colors.success400
+                                    : colors.borderNeutral
+                                }`
+                              : `1px solid ${
+                                  !inputProps.value
+                                    ? colors.borderNeutral
+                                    : pin.includes(confirmPin)
+                                    ? colors.success400
+                                    : theme.palette.error.light
+                                }`,
+                            textAlign: "center",
+                            fontSize: 28,
+                            color: forcePinChange
+                              ? "#111311"
+                              : !pin.includes(confirmPin)
+                              ? "white"
+                              : "#111311",
+                          }}
+                        />
+                      )}
+                    />
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          </Box>
+        </Modal>
+      )}
+      <Snackbar
+        open={message && message.length ? true : false}
+        autoHideDuration={5000}
+        // message={message}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <SnackbarContent
+          message={message}
+          sx={{
+            bgcolor: successful ? "#099137" : "red",
+            color: "white",
+            zIndex: 9999,
+          }}
+        />
+      </Snackbar>
     </Box>
   );
 };

@@ -4,9 +4,11 @@ import { icons } from "@src/utils/icons";
 const Modal: React.FC<{
   onCancel: VoidFunction;
   onConfirm: VoidFunction;
+  showIcon?: boolean;
+  showActions?: boolean;
   children: React.ReactNode;
   childrenSx?: SxProps;
-}> = ({ onCancel, onConfirm, children, childrenSx }) => {
+}> = ({ onCancel, onConfirm, showIcon = true, showActions = true, children, childrenSx }) => {
   const theme = useTheme();
   return (
     <Box sx={{ position: "fixed", inset: 0, zIndex: 99999 }}>
@@ -22,7 +24,8 @@ const Modal: React.FC<{
         sx={{
           position: "absolute",
           width: 739,
-          height: 353,
+          height: "fit-content",
+          maxHeight: "800px",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
@@ -40,11 +43,13 @@ const Modal: React.FC<{
           }}
         >
           <Box></Box>
-          <Box
-            component="img"
-            src={icons.info}
-            sx={{ width: 56, transform: "translateX(10px)" }}
-          />
+          {showIcon && (
+            <Box
+              component="img"
+              src={icons.info}
+              sx={{ width: 56, transform: "translateX(10px)" }}
+            />
+          )}
           <Box
             component="button"
             onClick={onCancel}
@@ -65,72 +70,74 @@ const Modal: React.FC<{
           {children}
         </Box>
         <Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "24px",
-              marginTop: "48px",
-            }}
-          >
+          {showActions && (
             <Box
-              component="button"
-              onClick={onCancel}
               sx={{
-                borderRadius: "100px",
-                width: 317.5,
-                padding: "16px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: theme.palette.grey[100],
-                border: "none",
-                cursor: "pointer",
+                gap: "24px",
+                marginTop: "48px",
               }}
             >
-              <Typography
+              <Box
+                component="button"
+                onClick={onCancel}
                 sx={{
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: 600,
-                  lineHeight: "140%",
-                  letterSpacing: "-0.32px",
-                  color: theme.palette.primary.main,
+                  borderRadius: "100px",
+                  width: 317.5,
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: theme.palette.grey[100],
+                  border: "none",
+                  cursor: "pointer",
                 }}
               >
-                Cancel
-              </Typography>
-            </Box>
-            <Box
-              component="button"
-              onClick={onConfirm}
-              sx={{
-                borderRadius: "100px",
-                width: 317.5,
-                padding: "16px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: theme.palette.primary.main,
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <Typography
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: 600,
+                    lineHeight: "140%",
+                    letterSpacing: "-0.32px",
+                    color: theme.palette.primary.main,
+                  }}
+                >
+                  Cancel
+                </Typography>
+              </Box>
+              <Box
+                component="button"
+                onClick={onConfirm}
                 sx={{
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: 600,
-                  lineHeight: "140%",
-                  letterSpacing: "-0.32px",
-                  color: theme.palette.common.white,
+                  borderRadius: "100px",
+                  width: 317.5,
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: theme.palette.primary.main,
+                  border: "none",
+                  cursor: "pointer",
                 }}
               >
-                Confirm
-              </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: 600,
+                    lineHeight: "140%",
+                    letterSpacing: "-0.32px",
+                    color: theme.palette.common.white,
+                  }}
+                >
+                  Confirm
+                </Typography>
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
       </Box>
     </Box>

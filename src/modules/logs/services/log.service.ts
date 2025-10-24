@@ -4,17 +4,20 @@ import { PasswordResetStatus } from "../types/log.types";
 
 export const LogService = () => {
   return {
-    getAllLoginLogs: async (query: { page: number, limit: number }, isFailed?: boolean) => {
+    getAllLoginLogs: async (
+      query: { page: number; limit: number },
+      isFailed?: boolean
+    ) => {
       try {
-        let response: AxiosResponse<any, any>
-        
-        if(isFailed){
+        let response: AxiosResponse<any, any>;
+
+        if (isFailed) {
           response = await axios.get(`/admin/logs/failed/logins`, {
-            params: query
+            params: query,
           });
-        }else {
+        } else {
           response = await axios.get(`/admin/logs/login/logs`, {
-            params: query
+            params: query,
           });
         }
 
@@ -24,11 +27,11 @@ export const LogService = () => {
           data: response.data.data,
           pagination: {
             page: Number(response.data.page),
-            totalPages: Number(response.data.totalPages)
-          }
+            totalPages: Number(response.data.totalPages),
+          },
         };
       } catch (error) {
-        console.log('errorhiggfaugifuhiuhifr', error)
+        console.log("errorhiggfaugifuhiuhifr", error);
         return {
           success: false,
           message: String(error) || "Failed to fetch logs",
@@ -36,10 +39,14 @@ export const LogService = () => {
         };
       }
     },
-    getPasswordRequestsLogs: async (query?: { page?: number, limit?: number, status: PasswordResetStatus }) => {
+    getPasswordRequestsLogs: async (query?: {
+      page?: number;
+      limit?: number;
+      status: PasswordResetStatus;
+    }) => {
       try {
         const response = await axios.get(`/admin/password-reset-logs`, {
-          params: query
+          params: query,
         });
         return {
           success: true,
@@ -47,8 +54,8 @@ export const LogService = () => {
           data: response.data.data,
           pagination: {
             page: Number(response.data.page),
-            totalPages: Number(response.data.totalPages)
-          }
+            totalPages: Number(response.data.totalPages),
+          },
         };
       } catch (error) {
         return {
@@ -66,6 +73,63 @@ export const LogService = () => {
           success: response.status === 200,
           message: "Fetched",
           data: response.data,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: String(error) || "Failed to fetch logs",
+          data: null,
+        };
+      }
+    },
+    getPaymentCompletionLogs: async (query?: string) => {
+      try {
+        const response = await axios.get(
+          `/admin/dashboard/payment-completion?${query}`
+        );
+
+        return {
+          success: response.status === 200,
+          message: "Fetched",
+          data: response.data.data,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: String(error) || "Failed to fetch logs",
+          data: null,
+        };
+      }
+    },
+    getRefundRequestLogs: async (query?: string) => {
+      try {
+        const response = await axios.get(
+          `/admin/dashboard/refund-requests?${query}`
+        );
+
+        return {
+          success: response.status === 200,
+          message: "Fetched",
+          data: response.data.data,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: String(error) || "Failed to fetch logs",
+          data: null,
+        };
+      }
+    },
+    getWalletTransactionLogs: async (query?: string) => {
+      try {
+        const response = await axios.get(
+          `/admin/dashboard/wallet-transactions?${query}`
+        );
+
+        return {
+          success: response.status === 200,
+          message: "Fetched",
+          data: response.data.data,
         };
       } catch (error) {
         return {

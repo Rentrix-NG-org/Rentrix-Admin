@@ -1,5 +1,6 @@
 import { Box, SxProps, Typography, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { colors } from "../constants/constants";
 
 const TextInput: React.FC<{
   label: string;
@@ -32,14 +33,16 @@ const TextInput: React.FC<{
   return (
     <Box
       sx={{
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: value
+          ? `1px solid ${colors.secondary}`
+          : `1px solid ${colors.borderNeutral}`,
         height: 50,
         borderRadius: "10px",
         position: "relative",
         paddingX: "16px",
         display: "flex",
         alignItems: "center",
-        background: theme.palette.grey[100],
+        background: colors.offWhite,
         boxSizing: "border-box",
         "&::before": {
           content: '""',

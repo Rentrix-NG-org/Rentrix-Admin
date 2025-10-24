@@ -14,6 +14,7 @@ import CustomButton from "../property/pages/AddNewListing/components/Button";
 import { useNavigate } from "react-router";
 import axiosInstance from "@src/core/axios";
 import axios from "axios";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 
 const Login = () => {
   const theme = useTheme();
@@ -26,6 +27,7 @@ const Login = () => {
   const [__, setBearerToken] = useState("");
   const [message, setMessage] = useState("");
   const [statusCode, setStatusCode] = useState(null);
+  const [showPassword, setShowPassword] = useState(false)
   useEffect(() => {
     setTimeout(() => {
       setMessage("");
@@ -143,10 +145,41 @@ const Login = () => {
               name="password"
               placeholder="Enter your password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              endIcon={
+                password.length > 0 && (
+                  <>
+                    {!showPassword ? (
+                      <Box
+                        display={"flex"}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                        onClick={() => setShowPassword(true)}
+                        sx={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <VisibilityOutlined />
+                      </Box>
+                    ) : (
+                      <Box
+                        display={{ xs: "none", sm: "flex" }}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                        onClick={() => setShowPassword(false)}
+                        sx={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <VisibilityOffOutlined />
+                      </Box>
+                    )}
+                  </>
+                )
+              }
               startIcon={
                 <>
                   <Box
@@ -218,7 +251,7 @@ const Login = () => {
           message={message}
           sx={{
             bgcolor:
-              statusCode === 201 || statusCode === 200 ? "099137" : "red",
+              statusCode === 201 || statusCode === 200 ? "#099137" : "red",
             color: "white",
             zIndex: 9999,
           }}

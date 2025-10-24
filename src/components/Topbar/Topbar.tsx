@@ -30,7 +30,7 @@ const Topbar = () => {
         height: "fit-content",
         position: "sticky",
         top: 0,
-        zIndex: 99999,
+        zIndex: 999,
         background: theme.palette.common.white,
         padding: "20px 80px",
         boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.05)",
@@ -63,12 +63,14 @@ const Topbar = () => {
               value: "Profile",
               onClick: () => {
                 navigate("/profile");
+                setMenuOpen(false);
               },
             },
             {
               value: "Log Out",
               onClick: () => {
                 logout();
+                setMenuOpen(false);
               },
             },
           ]}

@@ -55,7 +55,8 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
             name: user.name,
             role: user.role,
             registrationDate: user.registrationDate,
-            location: user.locations?.map((l) => l.state)?.join(", ") || "None",
+            location:
+              user.locations?.map((l) => l.lgaName)?.join(", ") || "None",
           };
         });
         setRefresh(false);
@@ -69,7 +70,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
     const arr = users.map((d) => Object.values(d)) as string[][];
     const filtered = arr.filter((d) => {
       return d.some((item) =>
-        item?.toString().toLowerCase().includes(search.toLowerCase()),
+        item?.toString().toLowerCase().includes(search.toLowerCase())
       );
     });
     setSearchFilter(filtered);
@@ -82,8 +83,8 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
         filter.length === 0 ||
         filter.every((filterItem) =>
           d.some((item) =>
-            item?.toString().toLowerCase().includes(filterItem.toLowerCase()),
-          ),
+            item?.toString().toLowerCase().includes(filterItem.toLowerCase())
+          )
         )
       );
     });
@@ -106,7 +107,7 @@ const SupervisorAndRep: React.FC<{ search: string; filter: string[] }> = ({
 
   function handleTableSelection(
     row: string[],
-    selected: { value: string; index: number },
+    selected: { value: string; index: number }
   ) {
     switch (selected.value) {
       case "Supervisor":

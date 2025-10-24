@@ -37,6 +37,14 @@ import AgeRestrictionInfo from "./pages/account-mgmt/age-restriction/[logId]/Log
 import AdminLogins from "./pages/user-auth/admin-login/AdminLogins";
 import { UserProvider } from "../user/providers/user.provider";
 import PasswordRequests from "./pages/admin-menu/password-requests/Password-Requests";
+import PaymentCompletion from "./pages/payment/completion/PaymentCompletion";
+import WalletTransactions from "./pages/payment/walletTransactions/WalletTransactions";
+import WithdrawalRequests from "./pages/payment/withdrawalRequests/WithdrawalRequests";
+import RefundRequests from "./pages/payment/refundRequests/RefundRequests";
+import PaymentCompletionInfo from "./pages/payment/completion/[logId]/LogInfo";
+import WalletTransactionsInfo from "./pages/payment/walletTransactions/[logId]/LogInfo";
+import WithdrawalRequestInfo from "./pages/payment/withdrawalRequests/[logId]/LogInfo";
+import RequestRefundInfo from "./pages/payment/refundRequests/[logId]/LogInfo";
 
 export interface LogsModule {
   routes: (RouteObject & { title?: string })[];
@@ -187,6 +195,46 @@ export const LogsModule: LogsModule = {
       title: "Payment Initiation Info",
     },
     {
+      path: "/logs/payment/completion",
+      element: <PaymentCompletion />,
+      title: "Payment Completion Logs",
+    },
+    {
+      path: "/logs/payment/completion/:logId",
+      element: <PaymentCompletionInfo />,
+      title: "Payment Initiation Info",
+    },
+    {
+      path: "/logs/payment/wallet-transactions",
+      element: <WalletTransactions />,
+      title: "Wallet Transaction Logs",
+    },
+    {
+      path: "/logs/payment/wallet-transactions/:logId",
+      element: <WalletTransactionsInfo />,
+      title: "Payment Initiation Info",
+    },
+    {
+      path: "/logs/payment/withdrawal-requests",
+      element: <WithdrawalRequests />,
+      title: "Wallet Transaction Logs",
+    },
+    {
+      path: "/logs/payment/withdrawal-requests/:logId",
+      element: <WithdrawalRequestInfo />,
+      title: "Payment Initiation Info",
+    },
+    {
+      path: "/logs/payment/refund-requests",
+      element: <RefundRequests />,
+      title: "Wallet Transaction Logs",
+    },
+    {
+      path: "/logs/payment/refund-requests/:logId",
+      element: <RequestRefundInfo />,
+      title: "Payment Initiation Info",
+    },
+    {
       path: "/logs/property-management",
       element: <PropertyManagement />,
       title: "Property Management Logs",
@@ -232,9 +280,9 @@ export const LogsModule: LogsModule = {
         <UserProvider>
           <AdminLogins />
         </UserProvider>
-        ),
+      ),
       title: "Admin Login/Logout Logs",
-    }
+    },
   ],
   name: "Logs",
   enabled: true,

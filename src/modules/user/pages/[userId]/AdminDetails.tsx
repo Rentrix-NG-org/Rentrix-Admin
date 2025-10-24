@@ -7,6 +7,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router";
+import { colors } from "@src/shared/constants/constants";
+import { User } from "@src/modules/profile/AdminProfile";
 
 type ActivityType =
   | "login-event"
@@ -38,6 +40,7 @@ const AdminDetails = () => {
     account: { email: "", status: "", logs: [] },
     logs: [],
     locations: [],
+    id: "",
   });
   const [logs, setLogs] = useState([
     {
@@ -113,7 +116,7 @@ const AdminDetails = () => {
           status={admin.account.status}
         />
 
-        <Options />
+        <Options adminId={admin.id} />
       </Box>
       <LogTable columns={columns} data={logs} />
     </Box>
@@ -121,9 +124,12 @@ const AdminDetails = () => {
 };
 export default AdminDetails;
 
-const Options = () => {
+const Options = ({ adminId }: { adminId: string }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { forcePinReset } = UserService();
+  const [user, setUser] = useState<User | null>(null);
+  const [buttonTitle, setButtonTitle] = useState('Push Request')
   const buttons: {
     title: string;
     route?: string;
@@ -137,6 +143,20 @@ const Options = () => {
     },
     { title: "Grant Access", route: "grant-access", icon: icons.lock },
   ];
+
+  useEffect(() => {
+    const getUser = localStorage.getItem("user");
+    if (getUser) setUser(JSON.parse(getUser));
+    else setUser(null);
+  }, []);
+
+  const pushPinRequest = async () => {
+    const res = await forcePinReset(adminId);
+    if (res.success) {
+      setButtonTitle("Request Sent");
+    } else setButtonTitle('Request Failed')
+  };
+
   return (
     <Box
       sx={{
@@ -179,6 +199,50 @@ const Options = () => {
           </Typography>
         </Box>
       ))}
+      {user?.users[0].type === "super-admin" && (
+        <>
+          <Typography
+            fontSize={14}
+            fontWeight={600}
+            color={colors.textTitle}
+            textAlign="center"
+          >
+            Request for Reset pin for Wallet Request Approval
+          </Typography>
+          <Box
+            sx={{
+              height: "60px",
+              width: "100%",
+              border: "none",
+              borderRadius: "100px",
+              padding: "16px",
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: theme.palette.grey[200],
+              justifyContent: "center",
+              cursor: "pointer",
+              gap: "8px",
+            }}
+            component="button"
+            onClick={() => pushPinRequest()}
+          >
+            <Box
+              component="img"
+              src={icons.lock}
+              sx={{ width: 18, height: 18 }}
+            />
+
+            <Typography
+              sx={{
+                fontWeight: 600,
+                color: theme.palette.grey[800],
+              }}
+            >
+              {buttonTitle}
+            </Typography>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

@@ -129,7 +129,8 @@ const GrantAccess = () => {
             "User Creation",
             "User Upgrade",
             "Admin",
-            "Password Request"
+            "Password Request",
+            "Withdrawal Approval"
           ]}
         />
         <Input

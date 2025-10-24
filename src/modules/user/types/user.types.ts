@@ -1,6 +1,7 @@
 interface Account {
   email: string;
   status: "active" | "suspended";
+  users: any[]
 }
 
 interface MediaType {
@@ -120,4 +121,6 @@ export interface User {
   transactions: TransactionType[];
   logs: LogType[];
   roleRegistrationDates: object;
+  tenant: any;
+  landlord: any;
 }

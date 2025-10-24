@@ -4,6 +4,7 @@ import { ActivityType } from "@src/shared/types/shared.types";
 export interface Account {
   id: string;
   user: User;
+  users?: User[];
   createdAt: string;
 }
 
@@ -30,7 +31,13 @@ export interface Listing {
   fee: Fee;
 }
 
-export interface Log {
+interface Wallet {
+  wallet?: {
+    account: Account;
+  };
+}
+
+export interface Log extends Wallet {
   id: string;
   userId: string;
   description: string;
@@ -50,15 +57,15 @@ export interface Log {
   status: string;
   route?: string;
   location: string;
-  username?: string
+  username?: string;
   reason?: string;
   deviceType?: string;
   email?: string;
   processedBy?: process;
   getPasswordRequestsLogs: (query?: {
-    page?: number,
-    limit?: number,
-    status?: PasswordResetStatus
+    page?: number;
+    limit?: number;
+    status?: PasswordResetStatus;
   }) => Promise<{
     success: boolean;
     message: string;
@@ -71,8 +78,8 @@ export interface Log {
 }
 
 interface process {
-  name?: string,
-  id?: number
+  name?: string;
+  id?: number;
 }
 
 export interface Admin {
@@ -84,8 +91,8 @@ export interface Admin {
 
 export type paginationType = {
   page: number;
-  totalPage: number
-}
+  totalPage: number;
+};
 
 export const types: Record<ActivityType, string> = {
   [ActivityType.LOGIN]: "Login Event",

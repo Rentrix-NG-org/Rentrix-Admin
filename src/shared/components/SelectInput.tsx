@@ -1,6 +1,7 @@
 import { ChevronLeftRounded } from "@mui/icons-material";
 import { Box, SxProps, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { colors } from "../constants/constants";
 
 const SelectInput: React.FC<{
   label: string;
@@ -81,8 +82,10 @@ const SelectInput: React.FC<{
       sx={{
         display: "flex",
         width: "100%",
-        border: `1px solid ${theme.palette.primary.main}`,
-        background: theme.palette.grey[100],
+        border: selected
+          ? `1px solid ${colors.secondary}`
+          : `1px solid ${colors.borderNeutral}`,
+        background: colors.offWhite,
         borderRadius: "10px",
         alignItems: "center",
         position: "relative",
@@ -245,13 +248,14 @@ const SelectInput: React.FC<{
           zIndex: 99,
           top: 56,
           padding: "16px",
-          background: theme.palette.background.default,
+          background: '#fff',
           flexDirection: "column",
           gap: 0.5,
           borderRadius: "10px",
           maxHeight: 180,
           overflowY: "scroll",
           alignItems: "flex-start",
+          boxShadow: 5
         }}
       >
         {filterOptions.map((option) => (

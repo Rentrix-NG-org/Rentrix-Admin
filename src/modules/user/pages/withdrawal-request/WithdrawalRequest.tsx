@@ -8,56 +8,54 @@ import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import { UserService } from "../../services/user.service";
 import UserNav from "../../components/UserNav";
-import Loading from "@src/shared/components/Loading";
-import { useUserContext } from "../../providers/user.context";
+// import { useUserContext } from "../../providers/user.context";
+import { addComma } from "@src/modules/property/pages/AddNewListing/components/MainAddListing";
+import dayjs from "dayjs";
 
-const { getAllUsers, changeRoles } = UserService();
-
-const SupervisorsReps = () => {
+const WithdrawalRequest = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
   const [refresh, setRefresh] = useState(false);
   const [users, setUsers] = useState<string[][]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const { permissions } = useUserContext();
+  // const { permissions } = useUserContext();
   const navigate = useNavigate();
   const theme = useTheme();
+  const { getAllWithdrawalRequest } = UserService();
+  // const [user, setUser] = useState<{ users: any[] | null }>(null);
+  // const adminId = user?.users[0]?.id;
 
   useEffect(() => {
+    // const getUser = localStorage.getItem("user");
+    // if (getUser) setUser(JSON.parse(getUser));
+    // else setUser(null);
+
     async function fetchUsers() {
-      let query = "";
-      if (permissions.includes("representative")) {
-        query += "representative=true";
-      }
-      if (permissions.includes("supervisor")) {
-        if (query) {
-          query += "&supervisor=true";
-        } else {
-          query = "supervisor=true";
-        }
-      }
-      const response = await getAllUsers(query);
+      const response = await getAllWithdrawalRequest(
+        "page=1&limit=10"
+      );
       if (response.success) {
-        const formatted = (response.data.users as any[]).map((user) => {
+        const formatted = (response.data.requests as any[]).map((request) => {
           return Object.values({
-            userId: user.id,
-            name: user.name || "",
-            role: user.role,
-            lastActive: user.registrationDate || "",
-            location:
-              user.locations
-                ?.map((location: { lgaName: string }) => location.lgaName)
-                .join(", ") || "No state",
+            userId: `${request.requestedByUserTypeId}, ${request.requestedByUserType}`,
+            name: `${request.wallet.account.users[0].firstName} ${request.wallet.account.users[0].lastName}`,
+            amount: addComma(Number(request.amount)),
+            transactionId: request.id,
+            createdAt: dayjs(Number(request.createdAt)).format(
+              "YYYY-MM-DD HH:mm:ss"
+            ),
+            device: request.device || "Unknown",
+            status:
+              request.status.charAt(0).toUpperCase() + request.status.slice(1),
           });
         });
         setRefresh(false);
+
         setFilter(formatted);
         setUsers(formatted);
-        setIsLoading(false);
       }
     }
     fetchUsers();
-  }, [permissions, refresh]);
+  }, [refresh]);
 
   useEffect(() => {
     const searchedUsers = users.filter((user) => {
@@ -73,30 +71,51 @@ const SupervisorsReps = () => {
 
   const columns: Column[] = [
     {
-      header: "USER ID",
+      header: "User ID & Acc Type",
       label: "userId",
       type: "text",
     },
     {
-      header: "NAME",
+      header: "User Name",
       label: "name",
       type: "text",
     },
     {
-      header: "ROLE",
-      label: "role",
-      type: "select",
-      options: ["Supervisor", "Representative"],
-    },
-    {
-      header: "LAST ACTIVE",
-      label: "lastActive",
+      header: "AMOUNT",
+      label: "amount",
       type: "text",
     },
     {
-      header: "LOCATION",
-      label: "location",
+      header: "TRANSACTION ID",
+      label: "transactionId",
       type: "text",
+    },
+    {
+      header: "Timestamp ",
+      label: "timestamp",
+      type: "text",
+    },
+    {
+      header: "Device & IP Address",
+      label: "device",
+      type: "text",
+    },
+    {
+      header: "STATUS",
+      label: "status",
+      type: "custom-text",
+      colors: {
+        successful: theme.palette.success.main,
+        pending: theme.palette.warning.main,
+        failed: theme.palette.error.main,
+      },
+      sx: {
+        fontWeight: 600,
+        fontSize: 12,
+        padding: "6px 16px",
+        borderRadius: "10px",
+        letterSpacing: "0.5px",
+      },
     },
     {
       header: "ACTIONS",
@@ -105,12 +124,6 @@ const SupervisorsReps = () => {
       component: [
         {
           component: <Box component="img" src={icons.eye} sx={{ width: 18 }} />,
-          onClick: () => {},
-        },
-        {
-          component: (
-            <Box component="img" src={icons.edit} sx={{ width: 18 }} />
-          ),
           onClick: () => {},
         },
         {
@@ -132,29 +145,6 @@ const SupervisorsReps = () => {
     }
   }
 
-  function handleTableSelection(
-    row: string[],
-    selected: { value: string; index: number }
-  ) {
-    switch (selected.value) {
-      case "Supervisor":
-        handleChangeRoles(row[0], { role: selected.value.toLowerCase() });
-        break;
-      case "Representative":
-        handleChangeRoles(row[0], { role: "representative" });
-        break;
-    }
-  }
-
-  async function handleChangeRoles(id: string, data: any) {
-    const response = await changeRoles(id, data);
-    if (response.success) {
-      setRefresh(true);
-    }
-  }
-
-  if (isLoading) return <Loading />;
-
   return (
     <Box
       sx={{
@@ -164,7 +154,7 @@ const SupervisorsReps = () => {
         gap: "24px",
       }}
     >
-      <UserNav routes={["User Management", "View All"]} />
+      <UserNav routes={["Withdrawal Request", "View All"]} />
       <Box
         sx={{ display: "flex", alignItems: "center", gap: "30px", ml: "auto" }}
       >
@@ -190,15 +180,13 @@ const SupervisorsReps = () => {
             letterSpacing: "-0.4px",
           }}
         >
-          Supervisors &amp; Rentrix Reps
+          Withdrawal Requests
         </Typography>
       </Box>
 
       <Table
-        onSelect={handleTableSelection}
-        onRowClick={(v) => {
-          navigate(`/users/${v[0]}/rentrix-rep`);
-        }}
+        onSelect={() => {}}
+        onRowClick={(row) => navigate(`/users/withdrawal-request/${row[3]}`)}
         columns={columns}
         limit={users.length}
         data={filter}
@@ -206,4 +194,4 @@ const SupervisorsReps = () => {
     </Box>
   );
 };
-export default SupervisorsReps;
+export default WithdrawalRequest;

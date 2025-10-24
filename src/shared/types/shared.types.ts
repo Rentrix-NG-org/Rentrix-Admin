@@ -11,7 +11,11 @@ export interface BaseColumn {
   label: string;
   type: ColumnType;
   options?: string[];
-  component?: { component: React.ReactNode; onClick: (v: string) => void }[];
+  component?: {
+    component: React.ReactNode;
+    onClick: (v: string, row?: string[]) => void;
+    customAction?: boolean;
+  }[];
 }
 
 interface CustomText extends BaseColumn {

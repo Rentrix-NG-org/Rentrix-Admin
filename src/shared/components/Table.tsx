@@ -4,6 +4,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { useMenuPosition } from "../hooks/shared.hooks";
 import PaginationControl from "@src/modules/user/components/PaginationControl";
 import { Column } from "../types/shared.types";
+import { colors } from "../constants/constants";
 
 interface TableProps {
   onSelect: (row: string[], selected: { value: string; index: number }) => void;
@@ -73,105 +74,130 @@ const Table: React.FC<TableProps> = ({
           </Typography>
         ))}
       </Box>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
-        }}
-      >
-        {paginatedRows.map(
-          (row, rowIndex) =>
-            Array.isArray(row) &&
-            row.map((cell, cellIndex) =>
-              columns[cellIndex]?.type === "select" ? (
-                <Select
-                  cell={cell}
-                  selected={cell}
-                  onSelect={(title) => {
-                    onSelect(row, { value: title, index: cellIndex });
-                  }}
-                  column={columns[cellIndex].header}
-                  key={`${rowIndex}-${cellIndex}`}
-                  options={columns[cellIndex].options as string[]}
-                />
-              ) : columns[cellIndex]?.type === "custom-text" ? (
-                <Box
-                  sx={{
-                    padding: "28px 32px",
-                    borderBottom: `1px solid ${theme.palette.grey.A100}`,
-                    minWidth: "200px",
-                  }}
-                >
+      {paginatedRows.length > 0 ? (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+          }}
+        >
+          {paginatedRows.map(
+            (row, rowIndex) =>
+              Array.isArray(row) &&
+              row.map((cell, cellIndex) =>
+                columns[cellIndex]?.type === "select" ? (
+                  <Select
+                    cell={cell}
+                    selected={cell}
+                    onSelect={(title) => {
+                      onSelect(row, { value: title, index: cellIndex });
+                    }}
+                    column={columns[cellIndex].header}
+                    key={`${rowIndex}-${cellIndex}`}
+                    options={columns[cellIndex].options as string[]}
+                  />
+                ) : columns[cellIndex]?.type === "custom-text" ? (
+                  <Box
+                    sx={{
+                      padding: "28px 32px",
+                      borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                      minWidth: "200px",
+                    }}
+                  >
+                    <Typography
+                      // component="button"
+                      onClick={() => onRowClick(row)}
+                      key={`${rowIndex}-${cellIndex}`}
+                      sx={{
+                        textWrap: "nowrap",
+                        border: `1px solid ${
+                          columns[cellIndex].colors?.[
+                            cell ? cell.toLowerCase() : ""
+                          ]
+                        }`,
+                        color:
+                          columns[cellIndex].colors?.[
+                            cell ? cell.toLowerCase() : ""
+                          ],
+                        width: "fit-content",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        borderRadius: "10px",
+                        padding: "6px 16px",
+                      }}
+                    >
+                      {cell && cell.length > 25
+                        ? cell.slice(0, 25).toUpperCase() + "..."
+                        : cell
+                        ? cell.toUpperCase()
+                        : ""}
+                    </Typography>
+                  </Box>
+                ) : columns[cellIndex]?.type === "action" ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      px: "31px",
+                      gap: 2,
+                      minWidth: "200px",
+                      borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                    }}
+                  >
+                    {columns[cellIndex]?.component?.map((x) => (
+                      <Box
+                        // component="button"
+                        onClick={() =>
+                          x.customAction
+                            ? x.onClick("", row)
+                            : x.onClick(String(row[0]))
+                        }
+                        sx={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          p: 0,
+                        }}
+                      >
+                        {x.component}
+                      </Box>
+                    ))}
+                  </Box>
+                ) : (
                   <Typography
                     // component="button"
                     onClick={() => onRowClick(row)}
                     key={`${rowIndex}-${cellIndex}`}
                     sx={{
                       textWrap: "nowrap",
-                      border: `1px solid ${columns[cellIndex].colors?.[cell ? cell.toLowerCase() : ""]}`,
-                      color:
-                        columns[cellIndex].colors?.[
-                          cell ? cell.toLowerCase() : ""
-                        ],
-                      width: "fit-content",
-                      fontSize: 12,
-                      fontWeight: 600,
-                      borderRadius: "10px",
-                      padding: "6px 16px",
+                      padding: "28px 32px",
+                      border: "none",
+                      borderBottom: `1px solid ${theme.palette.grey.A100}`,
+                      minWidth: "200px",
                     }}
                   >
-                    {cell && cell.length > 25
-                      ? cell.slice(0, 25).toUpperCase() + "..."
-                      : cell
-                        ? cell.toUpperCase()
-                        : ""}
+                    {cell?.length > 25 ? cell?.slice(0, 25) + "..." : cell}
                   </Typography>
-                </Box>
-              ) : columns[cellIndex]?.type === "action" ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    px: "31px",
-                    gap: 2,
-                    minWidth: "200px",
-                    borderBottom: `1px solid ${theme.palette.grey.A100}`,
-                  }}
-                >
-                  {columns[cellIndex]?.component?.map((x) => (
-                    <Box
-                      // component="button"
-                      onClick={() => x.onClick(String(row[0]))}
-                      sx={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        p: 0,
-                      }}
-                    >
-                      {x.component}
-                    </Box>
-                  ))}
-                </Box>
-              ) : (
-                <Typography
-                  // component="button"
-                  onClick={() => onRowClick(row)}
-                  key={`${rowIndex}-${cellIndex}`}
-                  sx={{
-                    textWrap: "nowrap",
-                    padding: "28px 32px",
-                    border: "none",
-                    borderBottom: `1px solid ${theme.palette.grey.A100}`,
-                    minWidth: "200px",
-                  }}
-                >
-                  {cell?.length > 25 ? cell?.slice(0, 25) + "..." : cell}
-                </Typography>
-              ),
-            ),
-        )}
-      </Box>
+                )
+              )
+          )}
+        </Box>
+      ) : (
+        <Box
+          height="200px"
+          display="flex"
+          alignItems="center"
+          justifyContent={"center"}
+        >
+          <Typography
+            fontSize={24}
+            color={colors.textSubtitle}
+            fontWeight={600}
+          >
+            Table is empty
+          </Typography>
+        </Box>
+      )}
 
       {showPagination && (
         <PaginationControl

@@ -14,10 +14,11 @@ const colors = {
   success: "#B5E3C4",
   success400: "#0F973D",
   successDark: "#099137",
-  warning500: '#F3A218',
-  warning50: '#FEF6E7',
+  warning500: "#F3A218",
+  warning50: "#FEF6E7",
   offWhite: "#F6F7F8",
   textPrimary: "#F7F8F7",
+  error: "#DD524D",
 };
 
 const padding = {

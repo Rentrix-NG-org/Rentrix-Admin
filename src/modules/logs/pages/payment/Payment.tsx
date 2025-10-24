@@ -6,10 +6,14 @@ const PaymentTransactions = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const categories = [
-    { name: "Payment Initiation", route: "initiation" },
-    { name: "Payment Completion", route: "" },
-    { name: "Refund Requests (Manual Entry)", route: "" },
-    { name: "Wallet Transactions", route: "" },
+    // { name: "Payment Initiation", route: "initiation" },
+    { name: "Payment Completion", route: "completion" },
+    {
+      name: "Wallet Transactions(Deposit/Withdrawal)",
+      route: "wallet-transactions",
+    },
+    { name: "Withdrawal Requests (Approved)", route: "withdrawal-requests" },
+    { name: "Refund Requests (Manual entry)", route: "refund-requests" },
   ];
 
   return (
@@ -21,13 +25,7 @@ const PaymentTransactions = () => {
         gap: "31px",
       }}
     >
-      <UserNav
-        routes={[
-          "Logs",
-          "Administrative Actions Logs",
-          "User Role Assignment/Changes",
-        ]}
-      />
+      <UserNav routes={["Logs", "Payment & Transaction Logs"]} />
 
       <Box
         sx={{
@@ -48,7 +46,7 @@ const PaymentTransactions = () => {
             onClick={() => navigate(category.route)}
             sx={{
               border: `1px solid ${theme.palette.grey[300]}`,
-              padding: "28px 43px",
+              padding: "16px",
               width: "224px",
               display: "flex",
               alignItems: "center",
@@ -57,7 +55,8 @@ const PaymentTransactions = () => {
               justifyContent: "center",
               height: "71px",
               background: "none",
-              whiteSpace: "nowrap",
+              lineHeight: "110%",
+              // whiteSpace: "nowrap",
               color: theme.palette.common.black,
               "&:hover": {
                 background: theme.palette.secondary.main,
