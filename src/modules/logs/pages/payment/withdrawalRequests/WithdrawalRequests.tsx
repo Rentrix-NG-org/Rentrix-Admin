@@ -1,5 +1,4 @@
 import { Box, useTheme } from "@mui/material";
-import LogHeader from "@src/modules/logs/components/LogHeader";
 // import { LogService } from "@src/modules/logs/services/log.service";
 // import { Log } from "@src/modules/logs/types/log.types";
 import { addComma } from "@src/modules/property/pages/AddNewListing/components/MainAddListing";
@@ -24,9 +23,6 @@ const WithdrawalRequests = () => {
   const [search, setSearch] = useState("");
   const [searchFilter, setSearchFilter] = useState<string[][]>([]);
   const [filter, setFilter] = useState<string[]>([]);
-  const [logIds, setLogIds] = useState<
-    { logId: string; adminId: string; timestamp: string }[]
-  >([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -55,17 +51,6 @@ const WithdrawalRequests = () => {
 
         setLogs(formatted);
         setIsLoading(false);
-
-        const allIds = response.data.requests.map((request: any) => {
-          return {
-            logId: request.id,
-            adminId: request.wallet.account.id,
-            timestamp: dayjs(Number(request.createdAt)).format(
-              "YYYY-MM-DD HH:mm:ss"
-            ),
-          };
-        });
-        setLogIds(allIds);
       }
     }
     fetchLogs();

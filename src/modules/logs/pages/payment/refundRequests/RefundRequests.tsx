@@ -9,16 +9,11 @@ import { Column } from "@src/shared/types/shared.types";
 import { icons } from "@src/utils/icons";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 
 const RefundRequests = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const { getRefundRequestLogs } = LogService();
   const [logs, setLogs] = useState<string[][]>([]);
-  const [logIds, setLogIds] = useState<
-    { logId: string; adminId: string; timestamp: string }[]
-  >([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -139,16 +134,7 @@ const RefundRequests = () => {
 
       <Table
         onSelect={() => {}}
-        onRowClick={(v) => {
-          console.log(v);
-          const id = logIds.find(
-            (l) => l.adminId === v[0] && l.timestamp === v[4]
-          );
-
-          if (id) {
-            navigate(id.logId);
-          }
-        }}
+        onRowClick={() => {}}
         columns={column}
         data={logs}
       />

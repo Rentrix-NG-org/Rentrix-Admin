@@ -1,5 +1,4 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import { addComma } from "@src/modules/property/pages/AddNewListing/components/MainAddListing";
 // import { LogService } from "@src/modules/logs/services/log.service";
 // import { Log } from "@src/modules/logs/types/log.types";
 import UserNav from "@src/modules/user/components/UserNav";

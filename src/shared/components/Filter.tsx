@@ -57,7 +57,7 @@ const Filter: React.FC<{
           {placeholder}
         </Typography>
       </Box>
-      {isModalOpen && <Modal onFilter={onFilter} filters={filters!} onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <Modal onFilter={onFilter} filters={filters!} />}
     </Box>
   );
 };
@@ -65,8 +65,7 @@ const Filter: React.FC<{
 const Modal: React.FC<{
   onFilter: (value: string[]) => void;
   filters: Filters[];
-  onClose: () => void;
-}> = ({ onFilter, filters, onClose }) => {
+}> = ({ onFilter, filters }) => {
   const theme = useTheme();
   const [filterState, setFilterState] = useState<{
     [key: number]: { isShown: boolean; selected: string };

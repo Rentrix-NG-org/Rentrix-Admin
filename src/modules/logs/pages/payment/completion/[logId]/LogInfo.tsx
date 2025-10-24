@@ -5,7 +5,6 @@ import { useLocation } from "react-router";
 
 const PaymentCompletionInfo = () => {
   const location = useLocation()
-  const theme = useTheme();
   const [log, setLog] = useState(null);
 
 
