@@ -1,7 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 import LogHeader from "@src/modules/logs/components/LogHeader";
 import { LogService } from "@src/modules/logs/services/log.service";
-import { Log } from "@src/modules/logs/types/log.types";
 import { addComma } from "@src/modules/property/pages/AddNewListing/components/MainAddListing";
 import UserNav from "@src/modules/user/components/UserNav";
 import Loading from "@src/shared/components/Loading";
@@ -17,9 +16,6 @@ const WalletTransactions = () => {
   const navigate = useNavigate();
   const { getWalletTransactionLogs } = LogService();
   const [logs, setLogs] = useState<string[][]>([]);
-  const [logIds, setLogIds] = useState<
-    { logId: string; adminId: string; timestamp: string }[]
-  >([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
