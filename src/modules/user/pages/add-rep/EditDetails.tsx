@@ -35,7 +35,8 @@ const EditDetails = () => {
     location: "",
     status: "",
   });
-  const { getUser, getLgas, getCitites, getStates, getAssignedLocations } = UserService();
+  const { getUser, getLgas, getCitites, getStates, getAssignedLocations } =
+    UserService();
   // const [location, setLocation] = useState([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -46,7 +47,7 @@ const EditDetails = () => {
   const [stateId, setStateId] = useState("");
   const [cityId, setCityId] = useState("");
   const [states, setStates] = useState<{ name: string }[] | []>([]);
-  const [cities, setCiites] = useState<{ name: string }[] | []>([]);
+  const [cities, setCiites] = useState<{ name: string; id: string }[] | []>([]);
   const [lgas, setLgas] = useState<{ name: string; id: string }[] | []>([]);
 
   const getAllStates = async () => {
@@ -56,24 +57,27 @@ const EditDetails = () => {
     }
   };
   const getAllCitites = async () => {
+    console.log(cityId)
     const res = await getCitites(stateId!);
     if (res.status === 200) {
       setCiites(res.data);
     }
   };
   const getAllLgas = async () => {
-    const res = await getLgas(cityId!);
-    if (res.status === 200) {
-      setLgas(res.data);
+    let lgasData: any[] = [];
+    for (let i = 0; i < cities.length; i++) {
+      const res = await getLgas(cities[i].id);
+      if (res.status === 200) {
+        lgasData = [...lgasData, ...res.data];
+        setLgas(lgasData);
+      }
     }
   };
   useEffect(() => {
     getAllStates();
     if (selectedState) getAllCitites();
-    if (selectedCity) {
-      getAllLgas();
-    }
-  }, [selectedState, selectedCity]);
+    if (cities.length > 0) getAllLgas();
+  }, [selectedState, cities.length]);
   const params = useParams();
   const navigate = useNavigate();
 
@@ -148,7 +152,11 @@ const EditDetails = () => {
           photoUrl={user.photoUrl}
           phoneNumber={user.phoneNumber}
           dateOfBirth={user.dateOfBirth}
-          location={locations.join(', ')}
+          location={
+            locations.join(", ").length > 25
+              ? locations.join(", ").slice(0, 25) + "..."
+              : locations.join(", ")
+          }
           status={user.status}
         />
 

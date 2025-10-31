@@ -23,7 +23,7 @@ const ChangeLocation = () => {
   const [cityId, setCityId] = useState('');
   const [lgasToView, setLgasToView] = useState([]);
   const [states, setStates] = useState<{ name: string }[] | []>([]);
-  const [cities, setCiites] = useState<{ name: string }[] | []>([]);
+  const [cities, setCiites] = useState<{ name: string; id: string }[] | []>([]);
   const [lgas, setLgas] = useState<{ name: string; id: string }[] | []>([]);
 
   const getAllStates = async () => {
@@ -39,18 +39,23 @@ const ChangeLocation = () => {
     }
   };
   const getAllLgas = async () => {
-    const res = await getLgas(cityId!);
-    if (res.status === 200) {
-      setLgas(res.data);
+    let lgasData: any[] = [];
+    for (let i = 0; i < cities.length; i++) {
+      const res = await getLgas(cities[i].id);
+      if (res.status === 200) {
+        lgasData = [...lgasData, ...res.data];
+        setLgas(lgasData);
+      }
     }
   };
+  console.log(cityId)
   useEffect(() => {
     getAllStates();
     if (selectedState) getAllCitites();
-    if (selectedCity) {
+    if (cities.length > 0) {
       getAllLgas();
     }
-  }, [selectedState, selectedCity]);
+  }, [selectedState, cities.length]);
 
   // useEffect(() => {
   //   async function fetchLocation() {

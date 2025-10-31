@@ -239,7 +239,11 @@ const RepDetails = () => {
           phoneNumber={rep.phoneNumber}
           dateOfBirth={rep.dateOfBirth}
           location={
-            locations.length ? locations.join(", ") : "No Location"
+            locations.length
+              ? locations.join(", ").length > 25
+                ? locations.join(", ").slice(0, 25) + "..."
+                : locations.join(", ")
+              : "No Location"
           }
           status={rep.account.status}
         />
