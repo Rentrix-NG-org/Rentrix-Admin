@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import Search from "@src/shared/components/Search";
@@ -12,12 +12,15 @@ import { useUserContext } from "../../providers/user.context";
 import Loading from "@src/shared/components/Loading";
 import Modal from "@src/shared/components/Modal";
 
-const { getAllUsers, updateUser } = UserService();
+const { getAllUsers, updateUser, deleteUserById } = UserService();
 
 const LandlordsTenants = () => {
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [open, setOpen] = useState({ email: "", userId: "", state: false });
+  const [confirmationInput, setConfirmationInput] = useState("");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string[][]>([]);
-  const [users, setUsers] = useState<string[][]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [refresh, setRefresh] = useState(false);
 
   const [modal, setModal] = useState<{
@@ -54,8 +57,10 @@ const LandlordsTenants = () => {
             role: user.role,
             status: user.status || "",
             registrationDate: user.registrationDate || "",
+            email: user.email || "",
           });
         });
+        console.log(formatted, 'ASDFGHJ');
         setFilter(formatted);
         setUsers(formatted);
         setIsLoading(false);
@@ -68,7 +73,7 @@ const LandlordsTenants = () => {
   useEffect(() => {
     const searchedUsers = users.filter((user) => {
       const isFound = user.some((field) =>
-        field.toString().toLowerCase().includes(search.toLowerCase()),
+        field.toString().toLowerCase().includes(search.toLowerCase())
       );
       return isFound;
     });
@@ -76,6 +81,29 @@ const LandlordsTenants = () => {
   }, [search, users]);
 
   useEffect(() => {}, [filter, users]);
+
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      setDeleteLoading(true);
+      console.log("Deleting user with userId:", userId);
+      if (!userId) {
+        console.error("userId is required to delete a user.");
+        return;
+      }
+      const response = await deleteUserById(userId);
+      if (response.success) {
+        setRefresh(true);
+        setOpen({ email: "", userId: "", state: false });
+        console.log("User deleted successfully");
+      } else {
+        console.error("Failed to delete user:", response.message);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
 
   const columns: Column[] = [
     {
@@ -106,6 +134,11 @@ const LandlordsTenants = () => {
       type: "text",
     },
     {
+      header: "EMAIL",
+      label: "email",
+      type: "text",
+    },
+    {
       header: "ACTIONS",
       label: "actions",
       type: "action",
@@ -122,7 +155,12 @@ const LandlordsTenants = () => {
         },
         {
           component: <Box component="img" src={icons.bin} sx={{ width: 18 }} />,
-          onClick: () => {},
+          onClick: (userId) => {
+            const selectedUser = users?.find((u) => u[0] === userId);
+            const userEmail = selectedUser[5];
+            // console.log("Selected user email:", userEmail);
+            setOpen({ email: userEmail, userId: userId, state: true });
+          },
         },
       ],
     },
@@ -149,7 +187,7 @@ const LandlordsTenants = () => {
 
   function handleTableSelection(
     row: string[],
-    selected: { value: string; index: number },
+    selected: { value: string; index: number }
   ) {
     switch (selected.value) {
       case "Suspended":
@@ -194,6 +232,66 @@ const LandlordsTenants = () => {
         gap: "24px",
       }}
     >
+      <Dialog
+        open={open.state}
+        onClose={() => {
+          setOpen({ email: "", userId: "", state: false });
+          setConfirmationInput("");
+        }}
+        aria-labelledby="delete-confirmation-title"
+        aria-describedby="delete-confirmation-description"
+      >
+        <DialogTitle id="delete-confirmation-title">Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-confirmation-description">
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Typography>
+                To confirm deletion, please type{" "}
+                <Typography
+                  component="span"
+                  sx={{ color: theme.palette.error.main, fontWeight: 600 }}
+                >
+                  delete {open.email}
+                </Typography>{" "}
+                below:
+              </Typography>
+              <TextField
+                fullWidth
+                value={confirmationInput}
+                onChange={(e) => setConfirmationInput(e.target.value)}
+                placeholder={`delete ${open.email}`}
+                size="small"
+                autoFocus
+              />
+            </Box>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpen({ email: "", userId: "", state: false });
+              setConfirmationInput("");
+            }}
+            color="primary"
+            disabled={deleteLoading}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleDeleteUser(open.userId)}
+            color="error"
+            variant="contained"
+            disabled={
+              deleteLoading || confirmationInput !== `delete ${open.email}`
+            }
+            startIcon={
+              deleteLoading && <CircularProgress size={18} color="inherit" />
+            }
+          >
+            {deleteLoading ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogActions>
+      </Dialog>
       <UserNav routes={["User Management", "View All"]} />
 
       <Box
